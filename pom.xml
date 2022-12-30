@@ -71,6 +71,9 @@
                 <requireMavenVersion>
                   <version>3.6.2</version>
                 </requireMavenVersion>
+                <requireJavaVersion>
+                  <version>17</version>
+                </requireJavaVersion>
               </rules>
             </configuration>
           </execution>
@@ -81,7 +84,7 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.10.1</version>
         <configuration>
-          <release>11</release>
+          <release>17</release>
           <annotationProcessorPaths>
             <path>
               <groupId>info.picocli</groupId>
