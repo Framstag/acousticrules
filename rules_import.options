@@ -1,0 +1,45 @@
+-p rules/TestImprovements.json
+-p rules/TestBugs.json
+-p rules/Performance.json
+-p rules/GoodCode.json
+-p rules/Obsoletes.json
+
+-p rules/Java8Improvements.json
+-p rules/Java8Bugs.json
+-p rules/Java9Improvements.json
+-p rules/Java9Bugs.json
+-p rules/Java10Improvements.json
+-p rules/Java10Bugs.json
+-p rules/Java11Improvements.json
+-p rules/Java11Bugs.json
+-p rules/Java12Improvements.json
+-p rules/Java12Bugs.json
+-p rules/Java14Improvements.json
+-p rules/Java14Bugs.json
+-p rules/Java15Improvements.json
+-p rules/Java15Bugs.json
+
+-p rules/CPP11Improvements.json
+-p rules/CPP11Bugs.json
+-p rules/CPP14Improvements.json
+-p rules/CPP14Bugs.json
+-p rules/CPP17Improvements.json
+-p rules/CPP17Bugs.json
+-p rules/CPP20Improvements.json
+-p rules/CPP20Bugs.json
+
+-p rules/CPPCoreGuidelines.json
+-p rules/Misra.json
+-p rules/MisraCPP2008.json
+
+-p rules/AndroidImprovements.json
+-p rules/AndroidBugs.json
+
+-p rules/AWSImprovements.json
+-p rules/AWSBugs.json
+
+-p rules/SpringImprovements.json
+-p rules/SpringBugs.json
+
+-p rules/Bugs.json
+-p rules/Security.json

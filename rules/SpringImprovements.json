@@ -1,0 +1,44 @@
+{
+  "name": "Spring Improvements",
+  "selectors": [
+    {
+      "@processor": "SelectWithTag",
+      "tags": [
+        "spring",
+        "hibernate"
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "@processor": "DropWithType",
+      "types": [
+        "BUG"
+      ]
+    },
+    {
+      "@processor": "DropWithTag",
+      "tags": [
+        "cwe",
+        "owasp-a1",
+        "owasp-a2",
+        "owasp-a3",
+        "owasp-a4",
+        "owasp-a5",
+        "owasp-a6",
+        "owasp-a7",
+        "owasp-a8",
+        "owasp-a9",
+        "owasp-a10",
+        "owasp-m1",
+        "owasp-m2",
+        "owasp-m3",
+        "owasp-m4",
+        "owasp-m5"
+      ]
+    },
+    {
+      "@processor": "RemoveDeprecated"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "name": "AWS Bugs",
+  "selectors": [
+    {
+      "@processor": "SelectWithTag",
+      "tags": [
+        "aws"
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "@processor": "DropNotWithType",
+      "types": [
+        "BUG"
+      ]
+    },
+    {
+      "@processor": "RemoveDeprecated"
+    }
+  ],
+  "modifier": [
+    {
+      "@processor": "ChangeSeverity",
+      "from": "MAJOR",
+      "to": "BLOCKER"
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "name": "Bugs",
+  "selectors": [
+    {
+      "@processor": "SelectWithType",
+      "types": [
+        "BUG"
+      ]
+    },
+    {
+      "@processor": "SelectWithTag",
+      "tags": [
+        "error-handling",
+        "overflow",
+        "deadlock",
+        "leak",
+        "denial-of-service",
+        "lock-in",
+        "multi-threading",
+        "unpredictable"
+      ]
+    },
+    {
+      "@processor": "SelectWithKey",
+      "keys": [
+        "java:S5164"
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "@processor": "DropWithTag",
+      "tags": [
+        "cert",
+        "cwe",
+        "owasp-a1",
+        "owasp-a2",
+        "owasp-a3",
+        "owasp-a4",
+        "owasp-a5",
+        "owasp-a6",
+        "owasp-a7",
+        "owasp-a8",
+        "owasp-a9",
+        "owasp-a10",
+        "owasp-m1",
+        "owasp-m2",
+        "owasp-m3",
+        "owasp-m4",
+        "owasp-m5"
+      ]
+    },
+    {
+      "@processor": "DropWithTag",
+      "tags": [
+        "tests",
+        "junit",
+        "assertj"
+      ]
+    },
+    {
+      "@processor": "DropWithTag",
+      "tags": [
+        "spring",
+        "hibernate"
+      ]
+    },
+    {
+      "@processor": "DropWithTag",
+      "tags": [
+        "performance"
+      ]
+    },
+    {
+      "@processor": "DropWithTag",
+      "tags": [
+        "java8",
+        "java9",
+        "java10",
+        "java11",
+        "java12",
+        "java14",
+        "java15"
+      ]
+    },
+    {
+      "@processor": "DropWithTag",
+      "tags": [
+        "since-c++11",
+        "since-c++14",
+        "since-c++17",
+        "since-c++20"
+      ]
+    },
+    {
+      "@processor": "DropWithTag",
+      "tags": [
+        "cppcoreguidelines",
+        "based-on-misra",
+        "misra-c++2008"
+      ]
+    },
+    {
+      "@processor": "RemoveDeprecated"
+    }
+  ]
+}

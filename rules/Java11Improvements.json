@@ -1,0 +1,29 @@
+{
+  "name": "Java 11 Improvements",
+  "selectors": [
+    {
+      "@processor": "SelectWithTag",
+      "tags": [
+        "java11"
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "@processor": "DropWithType",
+      "types": [
+        "BUG"
+      ]
+    },
+    {
+      "@processor": "DropWithTag",
+      "tags": [
+        "cert",
+        "cwe"
+      ]
+    },
+    {
+      "@processor": "RemoveDeprecated"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "Java 12 Bugs",
+  "selectors": [
+    {
+      "@processor": "SelectWithTag",
+      "tags": [
+        "java12"
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "@processor": "DropNotWithType",
+      "types": [
+        "BUG"
+      ]
+    },
+    {
+      "@processor": "RemoveDeprecated"
+    }
+  ]
+}

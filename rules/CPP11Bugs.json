@@ -1,0 +1,28 @@
+{
+  "name": "C++11 Bugs",
+  "selectors": [
+    {
+      "@processor": "SelectWithTag",
+      "tags": [
+        "since-c++11"
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "@processor": "DropNotWithType",
+      "types": [
+        "BUG"
+      ]
+    },
+    {
+      "@processor": "DropWithTag",
+      "tags": [
+        "cppcoreguidelines"
+      ]
+    },
+    {
+      "@processor": "RemoveDeprecated"
+    }
+  ]
+}

@@ -1,0 +1,128 @@
+{
+  "name": "Good Code",
+  "selectors": [
+    {
+      "@processor": "SelectWithType",
+      "reason": "We are interested in code smells",
+      "types": [
+        "CODE_SMELL"
+      ]
+    },
+    {
+      "@processor": "SelectWithTag",
+      "reason": "Also categories that are not bugs but should improve code",
+      "tags": [
+        "unused",
+        "brain-overload",
+        "confusing",
+        "clumsy",
+        "convention",
+        "api-design",
+        "suspicious",
+        "redundant",
+        "design",
+        "pitfall"
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "@processor": "DropWithTag",
+      "reason": "Specific frameworks ahve their own group",
+      "tags": [
+        "struts",
+        "spring"
+      ]
+    },
+    {
+      "@processor": "DropWithTag",
+      "reason": "These are categories that signal bugs, too",
+      "tags": [
+        "error-handling",
+        "overflow",
+        "deadlock",
+        "leak",
+        "denial-of-service",
+        "lock-in",
+        "multi-threading",
+        "unpredictable"
+      ]
+    },
+    {
+      "@processor": "DropWithTag",
+      "reason": "These categories have their own group",
+      "tags": [
+        "performance",
+        "obsolete"
+      ]
+    },
+    {
+      "@processor": "DropWithTag",
+      "reason": "Tests have their own group",
+      "tags": [
+        "tests",
+        "junit",
+        "assertj"
+      ]
+    },
+    {
+      "@processor": "DropWithTag",
+      "reason": "Security has its own group",
+      "tags": [
+        "cert",
+        "cwe"
+      ]
+    },
+    {
+      "@processor": "DropWithTag",
+      "reason": "JDKs have their own group",
+      "tags": [
+        "java8",
+        "java9",
+        "java10",
+        "java11",
+        "java12",
+        "java14",
+        "java15"
+      ]
+    },
+    {
+      "@processor": "DropWithTag",
+      "reason": "C++ language versions have their own group",
+      "tags": [
+        "since-c++11",
+        "since-c++14",
+        "since-c++17",
+        "since-c++20"
+      ]
+    },
+    {
+      "@processor": "DropWithTag",
+      "reason": "Drop rules from specific guide lines",
+      "tags": [
+        "cppcoreguidelines",
+        "based-on-misra",
+        "misra-c++2008"
+      ]
+    },
+    {
+      "@processor": "DropWithTag",
+      "reason": "Specific platforms have their own group",
+      "tags": [
+        "android",
+        "aws"
+      ]
+    },
+    {
+      "@processor": "DropWithType",
+      "reason": "Bugs have their own group with higher criticality",
+      "types": [
+        "BUG"
+      ]
+    },
+    {
+      "@processor": "RemoveDeprecated"
+    }
+  ]
+
+}

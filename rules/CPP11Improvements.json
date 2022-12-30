@@ -1,0 +1,29 @@
+{
+  "name": "C++11 Improvements",
+  "selectors": [
+    {
+      "@processor": "SelectWithTag",
+      "tags": [
+        "since-c++11"
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "@processor": "DropWithType",
+      "types": [
+        "BUG"
+      ]
+    },
+    {
+      "@processor": "DropWithTag",
+      "tags": [
+        "cert",
+        "cppcoreguidelines"
+      ]
+    },
+    {
+      "@processor": "RemoveDeprecated"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "Misra",
+  "selectors": [
+    {
+      "@processor": "SelectWithTag",
+      "tags": [
+        "based-on-misra"
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "@processor": "DropWithTag",
+      "tags": [
+        "cppcoreguidelines"
+      ]
+    },
+    {
+      "@processor": "RemoveDeprecated"
+    }
+  ]
+}

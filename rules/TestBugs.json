@@ -1,0 +1,26 @@
+{
+  "name": "Test Bugs",
+  "selectors": [
+    {
+      "@processor": "SelectWithTag",
+      "reason": "Rule regarding testing and rules regarding concrete test frameworks",
+      "tags": [
+        "tests",
+        "junit",
+        "assertj"
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "@processor": "DropNotWithType",
+      "reason": "We are only interested in bugs",
+      "types": [
+        "BUG"
+      ]
+    },
+    {
+      "@processor": "RemoveDeprecated"
+    }
+  ]
+}

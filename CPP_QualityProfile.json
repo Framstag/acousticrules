@@ -1,0 +1,282 @@
+{
+  "language": "cpp",
+  "name": "Framstag",
+  "output_filename": "CPP_QualityProfile.xml",
+  "documentation_filename": "CPP_QualityProfile.md",
+  "groups": [
+    {
+      "name": "Test Improvements",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "reason": "Test improvements are important",
+          "from": "INFO",
+          "to": "MINOR"
+        }
+      ]
+    },
+    {
+      "name": "Test Bugs",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "reason": "Test bugs are important",
+          "from": "MINOR",
+          "to": "MAJOR"
+        }
+      ]
+    },
+    {
+      "name": "Performance",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "reason": "We do not want performance relevant problems",
+          "from": "MINOR",
+          "to": "MAJOR"
+        }
+      ]
+    },
+    {
+      "name": "Good Code",
+      "filters": [
+        {
+          "@processor": "DropWithKey",
+          "reason": "We do not restrict the use of // or /* ... */ commands",
+          "keys": [
+            "cpp:S1708",
+            "cpp:S139"
+          ]
+        },
+        {
+          "@processor": "DropWithKey",
+          "reason": "We are in a library/framework context",
+          "keys": [
+            "cpp:S5536"
+          ]
+        },
+        {
+          "@processor": "DropWithKey",
+          "reason": "We do not see this as a real problem, dropping the rule",
+          "keys": [
+            "cpp:S1915"
+          ]
+        }
+      ],
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "reason": "If it is not too important and is not in another group.",
+          "from": "MAJOR",
+          "to": "MINOR"
+        },
+        {
+          "@processor": "SetSeverity",
+          "reason": "We will not actively work on this",
+          "keys": [
+            "cpp:S1773"
+          ],
+          "to": "INFO"
+        },
+        {
+          "@processor": "SetParamForKey",
+          "reason": "Our function names are upper case",
+          "key": "cpp:S100",
+          "param": "format",
+          "value": "^[A-Z][a-zA-Z0-9]*$"
+        },
+        {
+          "@processor": "SetParamForKey",
+          "reason": "We support modern, wide displays",
+          "key": "cpp:S103",
+          "param": "maximumLineLength",
+          "value": "120"
+        },
+        {
+          "@processor": "SetParamForKey",
+          "reason": "We do not have a strict naming scheme for Enums, but at least they all should start upper case",
+          "key": "cpp:S2343",
+          "param": "format",
+          "value": "^[A-Z][a-zA-Z0-9]*$"
+        }
+      ]
+    },
+    {
+      "name": "Obsoletes",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "from": "MINOR",
+          "to": "MAJOR"
+        }
+      ]
+    },
+    {
+      "name": "C++11 Improvements",
+      "filters": [
+        {
+          "@processor": "DropWithKey",
+          "reason": "Avoiding lambdas is not a helpful warning in our code",
+          "keys": [
+            "cpp:S1750"
+          ]
+        }
+      ],
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "reason": "Language based improvements are important, raise severity",
+          "from": "MINOR",
+          "to": "MAJOR"
+        }
+      ]
+    },
+    {
+      "name": "C++11 Bugs",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "from": "MAJOR",
+          "to": "BLOCKER"
+        }
+      ]
+    },
+    {
+      "name": "C++14 Improvements",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "reason": "Language based improvements are important, raise severity",
+          "from": "MINOR",
+          "to": "MAJOR"
+        }
+      ]
+    },
+    {
+      "name": "C++14 Bugs",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "from": "MAJOR",
+          "to": "BLOCKER"
+        }
+      ]
+    },
+    {
+      "name": "C++17 Improvements",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "reason": "Language based improvements are important, raise severity",
+          "from": "MINOR",
+          "to": "MAJOR"
+        },
+        {
+          "@processor": "SetSeverity",
+          "reason": "For normal getters this does not have any side-effects, reduce severity",
+          "keys": [
+            "cpp:S6007"
+          ],
+          "to": "INFO"
+        }
+      ]
+    },
+    {
+      "name": "C++17 Bugs",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "from": "MAJOR",
+          "to": "BLOCKER"
+        }
+      ]
+    },
+    {
+      "name": "C++ Core Guidelines",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "reason": "It is about good practices not bugs, so reduce severity for MAJOR",
+          "from": "MAJOR",
+          "to": "MINOR"
+        },
+        {
+          "@processor": "SetSeverity",
+          "reason": "Important but not critical, reduce severity",
+          "keys": [
+            "cpp:S3656"
+          ],
+          "to": "MAJOR"
+        }
+      ]
+    },
+    {
+      "name": "Misra",
+      "filters": [
+        {
+          "@processor": "DropWithKey",
+          "reason": "We do not restrict the use of // or /* ... */ commands",
+          "keys": [
+            "cpp:S787"
+          ]
+        },
+        {
+          "@processor": "DropWithKey",
+          "reason": "While a long term goal, this is currently not target  in general",
+          "keys": [
+            "cpp:S813"
+          ]
+        }
+      ],
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "reason": "It is about good practices not bugs, so reduce severity for MAJOR",
+          "from": "MAJOR",
+          "to": "MINOR"
+        }
+      ]
+    },
+    {
+      "name": "Misra C++ 2008",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "reason": "It is about good practices not bugs, so reduce severity for MAJOR",
+          "from": "MAJOR",
+          "to": "MINOR"
+        }
+      ]
+    },
+    {
+      "name": "Bugs",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "from": "MINOR",
+          "to": "BLOCKER"
+        },
+        {
+          "@processor": "ChangeSeverity",
+          "from": "MAJOR",
+          "to": "BLOCKER"
+        },
+        {
+          "@processor": "ChangeSeverity",
+          "from": "CRITICAL",
+          "to": "BLOCKER"
+        }
+      ]
+    },
+    {
+      "name": "Security",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "from": "MINOR",
+          "to": "MAJOR"
+        }
+      ]
+    }
+  ]
+}

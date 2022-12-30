@@ -1,0 +1,29 @@
+{
+  "name": "C++17 Improvements",
+  "selectors": [
+    {
+      "@processor": "SelectWithTag",
+      "tags": [
+        "since-c++17"
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "@processor": "DropWithType",
+      "types": [
+        "BUG"
+      ]
+    },
+    {
+      "@processor": "DropWithTag",
+      "tags": [
+        "cert",
+        "cppcoreguidelines"
+      ]
+    },
+    {
+      "@processor": "RemoveDeprecated"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "name": "Java 10 Improvements",
+  "selectors": [
+    {
+      "@processor": "SelectWithTag",
+      "tags": [
+        "java10"
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "@processor": "DropWithType",
+      "types": [
+        "BUG"
+      ]
+    },
+    {
+      "@processor": "DropWithTag",
+      "tags": [
+        "cert",
+        "cwe"
+      ]
+    },
+    {
+      "@processor": "RemoveDeprecated"
+    }
+  ],
+  "modifier": [
+    {
+      "@processor": "ChangeSeverity",
+      "from": "MINOR",
+      "to": "MAJOR"
+    }
+  ]
+}

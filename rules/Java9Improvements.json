@@ -1,0 +1,42 @@
+{
+  "name": "Java 9 Improvements",
+  "selectors": [
+    {
+      "@processor": "SelectWithTag",
+      "tags": [
+        "java9"
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "@processor": "DropWithType",
+      "types": [
+        "BUG"
+      ]
+    },
+    {
+      "@processor": "DropWithTag",
+      "tags": [
+        "cert",
+        "cwe"
+      ]
+    },
+    {
+      "@processor": "DropWithTag",
+      "tags": [
+        "java8"
+      ]
+    },
+    {
+      "@processor": "RemoveDeprecated"
+    }
+  ],
+  "modifier": [
+    {
+      "@processor": "ChangeSeverity",
+      "from": "MINOR",
+      "to": "MAJOR"
+    }
+  ]
+}

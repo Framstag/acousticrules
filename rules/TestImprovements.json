@@ -1,0 +1,33 @@
+{
+  "name": "Test Improvements",
+  "selectors": [
+    {
+      "@processor": "SelectWithTag",
+      "reason": "Rule regarding testing and rules regarding concrete test frameworks",
+      "tags": [
+        "tests",
+        "junit",
+        "assertj"
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "@processor": "DropWithTag",
+      "reason": "Spring has its own group",
+      "tags": [
+        "spring"
+      ]
+    },
+    {
+      "@processor": "DropWithType",
+      "reason": "Bugs are in another group",
+      "types": [
+        "BUG"
+      ]
+    },
+    {
+      "@processor": "RemoveDeprecated"
+    }
+  ]
+}

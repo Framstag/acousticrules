@@ -1,0 +1,29 @@
+{
+  "name": "Java 10 Bugs",
+  "selectors": [
+    {
+      "@processor": "SelectWithTag",
+      "tags": [
+        "java10"
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "@processor": "DropNotWithType",
+      "types": [
+        "BUG"
+      ]
+    },
+    {
+      "@processor": "RemoveDeprecated"
+    }
+  ],
+  "modifier": [
+    {
+      "@processor": "ChangeSeverity",
+      "from": "MAJOR",
+      "to": "BLOCKER"
+    }
+  ]
+}

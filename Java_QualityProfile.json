@@ -1,0 +1,194 @@
+{
+  "language": "java",
+  "name": "Framstag",
+  "output_filename": "Java_QualityProfile.xml",
+  "documentation_filename": "Java_QualityProfile.md",
+  "groups": [
+    {
+      "name": "Test Improvements",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "reason": "Test improvements are important",
+          "from": "INFO",
+          "to": "MINOR"
+        }
+      ]
+    },
+    {
+      "name": "Test Bugs",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "reason": "Test bugs are important",
+          "from": "MINOR",
+          "to": "MAJOR"
+        }
+      ]
+    },
+    {
+      "name": "Performance",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "reason": "We do not want performance relevant problems",
+          "from": "MINOR",
+          "to": "MAJOR"
+        }
+      ]
+    },
+    {
+      "name": "Good Code",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "reason": "If it is not too important and is not in another group..",
+          "from": "MAJOR",
+          "to": "MINOR"
+        }
+      ]
+    },
+    {
+      "name": "Obsoletes",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "from": "MINOR",
+          "to": "MAJOR"
+        }
+      ]
+    },
+    {
+      "name": "Java 8 Improvements",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "from": "MINOR",
+          "to": "MAJOR"
+        }
+      ]
+    },
+    {
+      "name": "Java 8 Bugs",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "from": "MAJOR",
+          "to": "BLOCKER"
+        }
+      ]
+    },
+    {
+      "name": "Java 9 Improvements",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "from": "MINOR",
+          "to": "MAJOR"
+        }
+      ]
+
+    },
+    {
+      "name": "Java 9 Bugs",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "from": "MAJOR",
+          "to": "BLOCKER"
+        }
+      ]
+    },
+    {
+      "name": "Java 10 Improvements",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "from": "MINOR",
+          "to": "MAJOR"
+        }
+      ]
+
+    },
+    {
+      "name": "Java 10 Bugs",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "from": "MAJOR",
+          "to": "BLOCKER"
+        }
+      ]
+    },
+    {
+      "name": "Java 11 Improvements",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "from": "MINOR",
+          "to": "MAJOR"
+        }
+      ]
+    },
+    {
+      "name": "Java 11 Bugs",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "from": "MAJOR",
+          "to": "BLOCKER"
+        }
+      ]
+    },
+    {
+      "name": "Spring Improvements",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "from": "MAJOR",
+          "to": "MINOR"
+        }
+      ]
+    },
+    {
+      "name": "Spring Bugs",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "from": "MAJOR",
+          "to": "BLOCKER"
+        }
+      ]
+    },
+    {
+      "name": "Bugs",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "from": "MINOR",
+          "to": "BLOCKER"
+        },
+        {
+          "@processor": "ChangeSeverity",
+          "from": "MAJOR",
+          "to": "BLOCKER"
+        },
+        {
+          "@processor": "ChangeSeverity",
+          "from": "CRITICAL",
+          "to": "BLOCKER"
+        }
+      ]
+    },
+    {
+      "name": "Security",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "from": "MINOR",
+          "to": "MAJOR"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "name": "Android Bugs",
+  "selectors": [
+    {
+      "@processor": "SelectWithTag",
+      "tags": [
+        "android"
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "@processor": "DropNotWithType",
+      "types": [
+        "BUG"
+      ]
+    },
+    {
+      "@processor": "RemoveDeprecated"
+    }
+  ],
+  "modifier": [
+    {
+      "@processor": "ChangeSeverity",
+      "from": "MAJOR",
+      "to": "BLOCKER"
+    }
+  ]
+}
