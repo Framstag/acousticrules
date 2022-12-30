@@ -39,6 +39,15 @@
     },
     {
       "name": "Good Code",
+      "filters": [
+        {
+          "@processor": "DropWithKey",
+          "reason": "This is not our formatting",
+          "keys": [
+            "java:S1106"
+          ]
+        }
+      ],
       "modifier": [
         {
           "@processor": "ChangeSeverity",
