@@ -46,6 +46,13 @@
           "keys": [
             "java:S1106"
           ]
+        },
+        {
+          "@processor": "DropWithKey",
+          "reason": "Done via IntelliJ",
+          "keys": [
+            "java:S1451"
+          ]
         }
       ],
       "modifier": [

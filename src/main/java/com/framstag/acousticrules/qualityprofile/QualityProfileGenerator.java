@@ -1,17 +1,18 @@
 /*
-  Copyright 2022 Tim Teulings
-
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
+ * AcousticRuler
+ * Copyright 2022 Tim Teulings
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.framstag.acousticrules.qualityprofile;
 
@@ -33,8 +34,69 @@ public class QualityProfileGenerator {
 
   private static final Logger logger = LoggerFactory.getLogger(QualityProfileGenerator.class);
 
+  public void write(QualityProfile qualityProfile, Map<String, Set<Rule>> rulesByGroup) throws FileNotFoundException, XMLStreamException {
+    var outputFactory = XMLOutputFactory.newDefaultFactory();
+
+    var writer = outputFactory.createXMLStreamWriter(new FileOutputStream(qualityProfile.getOutputFilename().toFile()),
+      StandardCharsets.UTF_8.name());
+
+    writer.writeStartDocument(StandardCharsets.UTF_8.name(),"1.0");
+    writeLn(writer);
+
+    writer.writeStartElement("profile");
+    writeLn(writer);
+
+    writeIndent(writer,2);
+    writer.writeStartElement("name");
+    writer.writeCharacters(qualityProfile.getName());
+    writer.writeEndElement();
+    writeLn(writer);
+
+    writeIndent(writer,2);
+    writer.writeStartElement("language");
+    writer.writeCharacters(qualityProfile.getLanguage());
+    writer.writeEndElement();
+    writeLn(writer);
+    writeLn(writer);
+
+    writeIndent(writer,2);
+    writer.writeStartElement("rules");
+    writeLn(writer);
+
+    for (QualityGroup group : qualityProfile.getGroups()) {
+      if (!rulesByGroup.containsKey(group.getName())) {
+        logger.error("Quality profile requests dump of group '{}', but this group does not exist", group.getName());
+        break;
+      }
+
+      logger.info("Writing group '{}'...", group.getName());
+
+      writeIndent(writer,4);
+      writer.writeComment(" Group " + group.getName()+" ");
+      writeLn(writer);
+      writeLn(writer);
+
+      Set<Rule> groupRules=rulesByGroup.get(group.getName());
+
+      for (Rule rule : groupRules) {
+        writeRule(writer, rule, 4);
+        writeLn(writer); // TODO: Not on the last rule
+      }
+    }
+
+    writeIndent(writer,2);
+    writer.writeEndElement();
+    writeLn(writer);
+
+    writer.writeEndDocument();
+  }
+
+  private void writeLn(XMLStreamWriter writer) throws XMLStreamException {
+    writer.writeCharacters("\n");
+  }
+
   private void writeIndent(XMLStreamWriter writer, int spaceCount) throws XMLStreamException {
-    for (int count=1; count<=spaceCount; count++) {
+    for (var count = 1; count<=spaceCount; count++) {
       writer.writeCharacters(" ");
     }
   }
@@ -122,66 +184,5 @@ public class QualityProfileGenerator {
     writeIndent(writer, indent);
     writer.writeEndElement();
     writeLn(writer);
-  }
-
-  private void writeLn(XMLStreamWriter writer) throws XMLStreamException {
-    writer.writeCharacters("\n");
-  }
-
-  public void write(QualityProfile qualityProfile, Map<String, Set<Rule>> rulesByGroup) throws FileNotFoundException, XMLStreamException {
-    XMLOutputFactory outputFactory = XMLOutputFactory.newDefaultFactory();
-
-    XMLStreamWriter writer = outputFactory.createXMLStreamWriter(new FileOutputStream(qualityProfile.getOutputFilename().toFile()),
-      StandardCharsets.UTF_8.name());
-
-    writer.writeStartDocument(StandardCharsets.UTF_8.name(),"1.0");
-    writeLn(writer);
-
-    writer.writeStartElement("profile");
-    writeLn(writer);
-
-    writeIndent(writer,2);
-    writer.writeStartElement("name");
-    writer.writeCharacters(qualityProfile.getName());
-    writer.writeEndElement();
-    writeLn(writer);
-
-    writeIndent(writer,2);
-    writer.writeStartElement("language");
-    writer.writeCharacters(qualityProfile.getLanguage());
-    writer.writeEndElement();
-    writeLn(writer);
-    writeLn(writer);
-
-    writeIndent(writer,2);
-    writer.writeStartElement("rules");
-    writeLn(writer);
-
-    for (QualityGroup group : qualityProfile.getGroups()) {
-      if (!rulesByGroup.containsKey(group.getName())) {
-        logger.error("Quality profile requests dump of group '{}', but this group does not exist", group.getName());
-        break;
-      }
-
-      logger.info("Writing group '{}'...", group.getName());
-
-      writeIndent(writer,4);
-      writer.writeComment(" Group " + group.getName()+" ");
-      writeLn(writer);
-      writeLn(writer);
-
-      Set<Rule> groupRules=rulesByGroup.get(group.getName());
-
-      for (Rule rule : groupRules) {
-        writeRule(writer, rule, 4);
-        writeLn(writer); // TODO: Not on the last rule
-      }
-    }
-
-    writeIndent(writer,2);
-    writer.writeEndElement();
-    writeLn(writer);
-
-    writer.writeEndDocument();
   }
 }
