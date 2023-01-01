@@ -21,7 +21,7 @@ import com.framstag.acousticrules.rules.Rule;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class DropNotWithType extends Filter {
+public class DropNotWithType extends AbstractFilter {
   private Set<String> types;
 
   public Set<String> getTypes() {

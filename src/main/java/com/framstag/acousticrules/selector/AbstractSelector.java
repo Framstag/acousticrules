@@ -14,22 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.framstag.acousticrules.selector;
 
-package com.framstag.acousticrules.modifier;
+public abstract class AbstractSelector implements Selector {
+  private String reason;
 
-import com.framstag.acousticrules.rules.Rule;
-import jakarta.json.bind.annotation.JsonbSubtype;
-import jakarta.json.bind.annotation.JsonbTypeInfo;
+  @Override
+  public String getReason() {
+    return reason;
+  }
 
-@JsonbTypeInfo(key = "@processor", value = {
-  @JsonbSubtype(alias = "ChangeSeverity", type = ChangeSeverity.class),
-  @JsonbSubtype(alias = "SetSeverity", type = SetSeverity.class),
-  @JsonbSubtype(alias = "SetParamForKey", type = SetParamForKey.class)
-})
-public interface Modifier {
-  String getReason();
+  public void setReason(String reason) {
+    this.reason = reason;
+  }
 
-  String getDescription();
-
-  boolean modify(Rule rule);
 }

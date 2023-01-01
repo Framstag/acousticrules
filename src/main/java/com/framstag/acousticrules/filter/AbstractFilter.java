@@ -14,24 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.framstag.acousticrules.filter;
 
-import com.framstag.acousticrules.rules.Rule;
-import jakarta.json.bind.annotation.JsonbSubtype;
-import jakarta.json.bind.annotation.JsonbTypeInfo;
+public abstract class AbstractFilter implements Filter {
+  private String reason;
 
-@JsonbTypeInfo(key = "@processor", value = {
-  @JsonbSubtype(alias = "DropWithTag", type = DropWithTag.class),
-  @JsonbSubtype(alias = "DropWithKey", type = DropWithKey.class),
-  @JsonbSubtype(alias = "DropWithType", type = DropWithType.class),
-  @JsonbSubtype(alias = "DropNotWithType", type = DropNotWithType.class),
-  @JsonbSubtype(alias = "RemoveDeprecated", type = RemoveDeprecated.class)
-})
-public interface Filter {
-  String getReason();
+  @Override
+  public String getReason() {
+    return reason;
+  }
 
-  String getDescription();
+  public void setReason(String reason) {
+    this.reason = reason;
+  }
 
-  boolean filter(Rule rule);
 }

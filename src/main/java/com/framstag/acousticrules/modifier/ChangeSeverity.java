@@ -19,7 +19,7 @@ package com.framstag.acousticrules.modifier;
 import com.framstag.acousticrules.rules.Rule;
 import com.framstag.acousticrules.rules.Severity;
 
-public class ChangeSeverity extends Modifier {
+public class ChangeSeverity extends AbstractModifier {
   private Severity from;
   private Severity to;
 

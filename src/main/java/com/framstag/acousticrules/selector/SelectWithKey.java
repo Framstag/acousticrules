@@ -21,7 +21,7 @@ import com.framstag.acousticrules.rules.Rule;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class SelectWithKey extends Selector {
+public class SelectWithKey extends AbstractSelector {
   private Set<String> keys;
 
   public Set<String> getKeys() {

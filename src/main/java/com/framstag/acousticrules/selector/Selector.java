@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.framstag.acousticrules.selector;
 
 import com.framstag.acousticrules.rules.Rule;
@@ -25,18 +26,10 @@ import jakarta.json.bind.annotation.JsonbTypeInfo;
   @JsonbSubtype(alias = "SelectWithTag", type = SelectWithTag.class),
   @JsonbSubtype(alias = "SelectWithType", type = SelectWithType.class)
 })
-public abstract class Selector {
-  private String reason;
+public interface Selector {
+  String getReason();
 
-  public String getReason() {
-    return reason;
-  }
+  String getDescription();
 
-  public void setReason(String reason) {
-    this.reason = reason;
-  }
-
-  public abstract String getDescription();
-
-  public abstract boolean select(Rule rule);
+  boolean select(Rule rule);
 }

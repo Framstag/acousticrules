@@ -18,7 +18,7 @@ package com.framstag.acousticrules.modifier;
 
 import com.framstag.acousticrules.rules.Rule;
 
-public class SetParamForKey extends Modifier {
+public class SetParamForKey extends AbstractModifier {
   private String key;
 
   private String param;

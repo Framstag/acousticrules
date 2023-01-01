@@ -19,7 +19,7 @@ package com.framstag.acousticrules.filter;
 import com.framstag.acousticrules.rules.Rule;
 import com.framstag.acousticrules.rules.Status;
 
-public class RemoveDeprecated extends Filter {
+public class RemoveDeprecated extends AbstractFilter {
   @Override
   public String getDescription() {
     return "Removing deprecated rules";

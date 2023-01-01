@@ -22,7 +22,7 @@ import com.framstag.acousticrules.rules.Severity;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class SetSeverity extends Modifier {
+public class SetSeverity extends AbstractModifier {
   private Set<String> keys;
   private Severity to;
 
