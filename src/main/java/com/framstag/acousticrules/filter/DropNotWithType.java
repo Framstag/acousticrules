@@ -24,10 +24,6 @@ import java.util.stream.Collectors;
 public class DropNotWithType extends AbstractFilter {
   private Set<String> types;
 
-  public Set<String> getTypes() {
-    return types;
-  }
-
   public void setTypes(Set<String> types) {
     this.types = types;
   }

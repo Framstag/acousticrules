@@ -24,10 +24,6 @@ import java.util.stream.Collectors;
 public class SelectWithType extends AbstractSelector {
   private Set<String> types;
 
-  public Set<String> getTypes() {
-    return types;
-  }
-
   public void setTypes(Set<String> types) {
     this.types = types;
   }

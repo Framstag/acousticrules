@@ -23,16 +23,8 @@ public class ChangeSeverity extends AbstractModifier {
   private Severity from;
   private Severity to;
 
-  public Severity getFrom() {
-    return from;
-  }
-
   public void setFrom(Severity from) {
     this.from = from;
-  }
-
-  public Severity getTo() {
-    return to;
   }
 
   public void setTo(Severity to) {

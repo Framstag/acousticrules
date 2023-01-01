@@ -24,10 +24,6 @@ import java.util.stream.Collectors;
 public class SelectWithTag extends AbstractSelector {
   private Set<String> tags;
 
-  public Set<String> getTags() {
-    return tags;
-  }
-
   public void setTags(Set<String> tags) {
     this.tags = tags;
   }

@@ -26,16 +26,8 @@ public class SetSeverity extends AbstractModifier {
   private Set<String> keys;
   private Severity to;
 
-  public Set<String> getKeys() {
-    return keys;
-  }
-
   public void setKeys(Set<String> keys) {
     this.keys = keys;
-  }
-
-  public Severity getTo() {
-    return to;
   }
 
   public void setTo(Severity to) {

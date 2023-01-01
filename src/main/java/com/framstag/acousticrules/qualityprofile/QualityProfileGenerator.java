@@ -73,7 +73,7 @@ public class QualityProfileGenerator {
 
       log.info("Writing group '{}'...", group.getName());
 
-      writeIndent(writer, 2*INDENT);
+      writeIndent(writer, INDENT+INDENT);
       writer.writeComment(" Group " + group.getName() + " ");
       writeLn(writer);
       writeLn(writer);
@@ -81,7 +81,7 @@ public class QualityProfileGenerator {
       Set<Rule> groupRules = rulesByGroup.get(group.getName());
 
       for (Rule rule : groupRules) {
-        writeRule(writer, rule, 2*INDENT);
+        writeRule(writer, rule, INDENT+INDENT);
         // TODO: Not on the last rule
         writeLn(writer);
       }
@@ -104,7 +104,7 @@ public class QualityProfileGenerator {
     }
   }
 
-  private void writeRule(XMLStreamWriter writer, Rule rule, int indent) throws XMLStreamException {
+  private static void writeRule(XMLStreamWriter writer, Rule rule, int indent) throws XMLStreamException {
     writeIndent(writer, indent);
     writer.writeStartElement("rule");
     writeLn(writer);
@@ -143,7 +143,7 @@ public class QualityProfileGenerator {
       writeLn(writer);
 
       for (Parameter parameter : rule.getParams()) {
-        writeParameter(writer, indent + 2, parameter);
+        writeParameter(writer, indent + INDENT, parameter);
       }
 
       writeIndent(writer, indent);
@@ -166,7 +166,7 @@ public class QualityProfileGenerator {
     writer.writeStartElement("parameter");
     writeLn(writer);
 
-    writeIndent(writer, indent + 2);
+    writeIndent(writer, indent + INDENT);
     writer.writeStartElement("key");
     writer.writeCharacters(parameter.getKey());
     writer.writeEndElement();

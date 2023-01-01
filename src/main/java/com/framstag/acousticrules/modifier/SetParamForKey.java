@@ -25,24 +25,12 @@ public class SetParamForKey extends AbstractModifier {
 
   private String value;
 
-  public String getKey() {
-    return key;
-  }
-
   public void setKey(String key) {
     this.key = key;
   }
 
-  public String getParam() {
-    return param;
-  }
-
   public void setParam(String param) {
     this.param = param;
-  }
-
-  public String getValue() {
-    return value;
   }
 
   public void setValue(String value) {

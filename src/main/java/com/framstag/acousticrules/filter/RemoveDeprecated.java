@@ -27,10 +27,6 @@ public class RemoveDeprecated extends AbstractFilter {
 
   @Override
   public boolean filter(Rule rule) {
-    if (rule.getStatus()== Status.DEPRECATED) {
-      return true;
-    }
-
-    return false;
+    return rule.getStatus() == Status.DEPRECATED;
   }
 }
