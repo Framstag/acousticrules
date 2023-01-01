@@ -32,7 +32,7 @@ import java.util.Set;
 
 public class QualityProfileGenerator {
 
-  private static final Logger logger = LoggerFactory.getLogger(QualityProfileGenerator.class);
+  private static final Logger log = LoggerFactory.getLogger(QualityProfileGenerator.class);
 
   public void write(QualityProfile qualityProfile, Map<String, Set<Rule>> rulesByGroup) throws FileNotFoundException, XMLStreamException {
     var outputFactory = XMLOutputFactory.newDefaultFactory();
@@ -65,11 +65,11 @@ public class QualityProfileGenerator {
 
     for (QualityGroup group : qualityProfile.getGroups()) {
       if (!rulesByGroup.containsKey(group.getName())) {
-        logger.error("Quality profile requests dump of group '{}', but this group does not exist", group.getName());
+        log.error("Quality profile requests dump of group '{}', but this group does not exist", group.getName());
         break;
       }
 
-      logger.info("Writing group '{}'...", group.getName());
+      log.info("Writing group '{}'...", group.getName());
 
       writeIndent(writer,4);
       writer.writeComment(" Group " + group.getName()+" ");

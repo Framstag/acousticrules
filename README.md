@@ -92,3 +92,12 @@ The current command lines for generating a C++ quality profile are:
 
 where `cpp_rules1.json` and `cpp_rules2.json` are the C++ rules downloaded
 via the Sonar REST API.
+
+## Error handling
+
+Currently, there is none. I plan to either do schema validation or use
+Bean Validation API in the context of JSON data loading to add simple
+input validation.
+
+Up to that time you will get Null-Pointer Exception and low level JSON
+deserialisation errors.

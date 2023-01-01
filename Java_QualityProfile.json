@@ -61,6 +61,13 @@
           "reason": "If it is not too important and is not in another group..",
           "from": "MAJOR",
           "to": "MINOR"
+        },
+        {
+          "@processor": "SetParamForKey",
+          "reason": "Our function names are upper case",
+          "key": "java:S1312",
+          "param": "format",
+          "value": "log"
         }
       ]
     },

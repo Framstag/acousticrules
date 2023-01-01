@@ -16,7 +16,6 @@
  */
 package com.framstag.acousticrules.processing;
 
-import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
 import org.eclipse.yasson.YassonConfig;
@@ -27,7 +26,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class ProcessingGroupLoader {
-  private static final Logger logger = LoggerFactory.getLogger(ProcessingGroupLoader.class);
+  private static final Logger log = LoggerFactory.getLogger(ProcessingGroupLoader.class);
 
   public ProcessingGroup load(Path filename) {
     var jsonbConfig = new JsonbConfig();
@@ -38,7 +37,7 @@ public class ProcessingGroupLoader {
       var configFileContent = Files.readString(filename);
       return jsonb.fromJson(configFileContent, ProcessingGroup.class);
     } catch (Exception e) {
-      logger.error("Cannot read processing instructions",e);
+      log.error("Cannot read processing instructions",e);
       return null;
     }
   }

@@ -16,7 +16,6 @@
  */
 package com.framstag.acousticrules.rules;
 
-import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
 import org.slf4j.Logger;
@@ -26,7 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class RuleSetLoader {
-  private static final Logger logger = LoggerFactory.getLogger(RuleSetLoader.class);
+  private static final Logger log = LoggerFactory.getLogger(RuleSetLoader.class);
 
   public RuleSet load(Path filename) {
     var jsonbConfig = new JsonbConfig();
@@ -36,7 +35,7 @@ public class RuleSetLoader {
       var configFileContent = Files.readString(filename);
       return jsonb.fromJson(configFileContent, RuleSet.class);
     } catch (Exception e) {
-      logger.error("Cannot read rules",e);
+      log.error("Cannot read rules",e);
       return null;
     }
   }

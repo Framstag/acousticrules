@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 
 public class MarkdownDocGenerator {
 
-  private static final Logger logger = LoggerFactory.getLogger(MarkdownDocGenerator.class);
+  private static final Logger log = LoggerFactory.getLogger(MarkdownDocGenerator.class);
 
   public void writeMarkdown(QualityProfile qualityProfile, Path filename, Map<String, Set<Rule>> rulesByGroup) throws IOException {
     try (var writer = new FileWriter(filename.toString())) {
@@ -45,11 +45,11 @@ public class MarkdownDocGenerator {
 
       for (QualityGroup group : qualityGroupList) {
         if (!rulesByGroup.containsKey(group.getName())) {
-          logger.error("Quality profile requests dump of group '{}', but this group does not exist", group.getName());
+          log.error("Quality profile requests dump of group '{}', but this group does not exist", group.getName());
           break;
         }
 
-        logger.info("Writing group '{}'...", group.getName());
+        log.info("Writing group '{}'...", group.getName());
 
         writer.write("## ");
         writer.write(group.getName());

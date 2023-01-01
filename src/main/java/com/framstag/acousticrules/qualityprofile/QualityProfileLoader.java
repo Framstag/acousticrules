@@ -16,7 +16,6 @@
  */
 package com.framstag.acousticrules.qualityprofile;
 
-import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
 import org.eclipse.yasson.YassonConfig;
@@ -27,7 +26,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class QualityProfileLoader {
-  private static final Logger logger = LoggerFactory.getLogger(QualityProfileLoader.class);
+  private static final Logger log = LoggerFactory.getLogger(QualityProfileLoader.class);
 
   public QualityProfile load(Path filename) {
     var jsonbConfig = new JsonbConfig();
@@ -38,7 +37,7 @@ public class QualityProfileLoader {
       var configFileContent = Files.readString(filename);
       return jsonb.fromJson(configFileContent, QualityProfile.class);
     } catch (Exception e) {
-      logger.error("Cannot read quality profile definition",e);
+      log.error("Cannot read quality profile definition",e);
       return null;
     }
   }
