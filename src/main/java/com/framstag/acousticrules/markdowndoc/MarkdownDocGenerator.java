@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
@@ -35,13 +36,17 @@ public class MarkdownDocGenerator {
 
   private static final Logger log = LoggerFactory.getLogger(MarkdownDocGenerator.class);
 
-  public void writeMarkdown(QualityProfile qualityProfile, Path filename, Map<String, Set<Rule>> rulesByGroup) throws IOException {
-    try (var writer = new FileWriter(filename.toString())) {
+  public void writeMarkdown(QualityProfile qualityProfile,
+                            Path filename,
+                            Map<String, Set<Rule>> rulesByGroup) throws IOException {
+    try (var writer = new FileWriter(filename.toString(), StandardCharsets.UTF_8)) {
       writer.write("# Documentation");
       writer.write(System.lineSeparator());
       writer.write(System.lineSeparator());
 
-      List<QualityGroup> qualityGroupList = qualityProfile.getGroups().stream().sorted(Comparator.comparing(QualityGroup::getName)).collect(Collectors.toList());
+      List<QualityGroup> qualityGroupList = qualityProfile.getGroups().stream()
+        .sorted(Comparator.comparing(QualityGroup::getName))
+        .collect(Collectors.toList());
 
       for (QualityGroup group : qualityGroupList) {
         if (!rulesByGroup.containsKey(group.getName())) {
