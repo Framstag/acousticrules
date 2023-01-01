@@ -20,11 +20,11 @@ public abstract class AbstractFilter implements Filter {
   private String reason;
 
   public String getReasonString(String prefix) {
-    String reason = getReason();
-    if (reason == null) {
+    String reasonValue = getReason();
+    if (reasonValue == null) {
       return "";
     } else {
-      return prefix + reason;
+      return prefix + reasonValue;
     }
   }
 
