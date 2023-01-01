@@ -21,14 +21,12 @@ import com.framstag.acousticrules.rules.Rule;
 import jakarta.json.bind.annotation.JsonbSubtype;
 import jakarta.json.bind.annotation.JsonbTypeInfo;
 
-import java.io.Serializable;
-
 @JsonbTypeInfo(key = "@processor", value = {
   @JsonbSubtype(alias = "ChangeSeverity", type = ChangeSeverity.class),
   @JsonbSubtype(alias = "SetSeverity", type = SetSeverity.class),
   @JsonbSubtype(alias = "SetParamForKey", type = SetParamForKey.class)
 })
-public interface Modifier extends Serializable {
+public interface Modifier {
   String getReason();
 
   String getReasonString(String prefix);

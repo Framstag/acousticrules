@@ -21,8 +21,6 @@ import com.framstag.acousticrules.rules.Rule;
 import jakarta.json.bind.annotation.JsonbSubtype;
 import jakarta.json.bind.annotation.JsonbTypeInfo;
 
-import java.io.Serializable;
-
 @JsonbTypeInfo(key = "@processor", value = {
   @JsonbSubtype(alias = "DropWithTag", type = DropWithTag.class),
   @JsonbSubtype(alias = "DropWithKey", type = DropWithKey.class),
@@ -30,7 +28,7 @@ import java.io.Serializable;
   @JsonbSubtype(alias = "DropNotWithType", type = DropNotWithType.class),
   @JsonbSubtype(alias = "RemoveDeprecated", type = RemoveDeprecated.class)
 })
-public interface Filter extends Serializable {
+public interface Filter {
   String getReason();
 
   String getReasonString(String prefix);
