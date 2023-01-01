@@ -30,7 +30,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class MarkdownDocGenerator {
 
@@ -45,8 +44,7 @@ public class MarkdownDocGenerator {
       writer.write(System.lineSeparator());
 
       List<QualityGroup> qualityGroupList = qualityProfile.getGroups().stream()
-        .sorted(Comparator.comparing(QualityGroup::getName))
-        .collect(Collectors.toList());
+        .sorted(Comparator.comparing(QualityGroup::getName)).toList();
 
       for (QualityGroup group : qualityGroupList) {
         if (!rulesByGroup.containsKey(group.getName())) {
@@ -68,7 +66,7 @@ public class MarkdownDocGenerator {
 
         Set<Rule> rules = rulesByGroup.get(group.getName());
 
-        List<Rule> rulesList = rules.stream().sorted(Comparator.comparing(Rule::getKey)).collect(Collectors.toList());
+        List<Rule> rulesList = rules.stream().sorted(Comparator.comparing(Rule::getKey)).toList();
 
         for (Rule rule : rulesList) {
           writer.write("|");

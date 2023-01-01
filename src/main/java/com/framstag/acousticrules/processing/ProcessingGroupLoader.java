@@ -30,14 +30,14 @@ public class ProcessingGroupLoader {
 
   public ProcessingGroup load(Path filename) {
     var jsonbConfig = new JsonbConfig();
-    jsonbConfig.setProperty(YassonConfig.FAIL_ON_UNKNOWN_PROPERTIES,Boolean.TRUE);
+    jsonbConfig.setProperty(YassonConfig.FAIL_ON_UNKNOWN_PROPERTIES, Boolean.TRUE);
 
     try (var jsonb = JsonbBuilder.create(jsonbConfig)) {
 
       var configFileContent = Files.readString(filename);
       return jsonb.fromJson(configFileContent, ProcessingGroup.class);
     } catch (Exception e) {
-      log.error("Cannot read processing instructions",e);
+      log.error("Cannot read processing instructions", e);
       return null;
     }
   }
