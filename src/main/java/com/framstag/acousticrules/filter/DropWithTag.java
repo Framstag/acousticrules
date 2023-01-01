@@ -25,7 +25,7 @@ public class DropWithTag extends AbstractFilter {
   private Set<String> tags;
 
   public void setTags(Set<String> tags) {
-    this.tags = tags;
+    this.tags = Set.copyOf(tags);
   }
 
   @Override

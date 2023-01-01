@@ -21,12 +21,14 @@ import com.framstag.acousticrules.rules.Rule;
 import jakarta.json.bind.annotation.JsonbSubtype;
 import jakarta.json.bind.annotation.JsonbTypeInfo;
 
+import java.io.Serializable;
+
 @JsonbTypeInfo(key = "@processor", value = {
   @JsonbSubtype(alias = "SelectWithKey", type = SelectWithKey.class),
   @JsonbSubtype(alias = "SelectWithTag", type = SelectWithTag.class),
   @JsonbSubtype(alias = "SelectWithType", type = SelectWithType.class)
 })
-public interface Selector {
+public interface Selector extends Serializable {
   String getReason();
 
   String getDescription();

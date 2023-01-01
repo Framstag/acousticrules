@@ -25,7 +25,7 @@ public class DropNotWithType extends AbstractFilter {
   private Set<String> types;
 
   public void setTypes(Set<String> types) {
-    this.types = types;
+    this.types = Set.copyOf(types);
   }
 
   @Override

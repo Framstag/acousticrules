@@ -25,7 +25,7 @@ public class SelectWithKey extends AbstractSelector {
   private Set<String> keys;
 
   public void setKeys(Set<String> keys) {
-    this.keys = keys;
+    this.keys = Set.copyOf(keys);
   }
 
   @Override
