@@ -16,6 +16,7 @@
  */
 package com.framstag.acousticrules.rules;
 
+import java.util.Collections;
 import java.util.List;
 
 public class RuleSet {
@@ -23,11 +24,11 @@ public class RuleSet {
   private List<Rule> rules;
 
   public List<Rule> getRules() {
-    return rules;
+    return Collections.unmodifiableList(rules);
   }
 
   public void setRules(List<Rule> rules) {
-    this.rules = rules;
+    this.rules = List.copyOf(rules);
   }
 
   public boolean hasRules() {

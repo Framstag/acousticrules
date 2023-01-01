@@ -20,6 +20,7 @@ import com.framstag.acousticrules.filter.Filter;
 import com.framstag.acousticrules.modifier.Modifier;
 import com.framstag.acousticrules.selector.Selector;
 
+import java.util.Collections;
 import java.util.List;
 
 public class ProcessingGroup {
@@ -38,26 +39,26 @@ public class ProcessingGroup {
   }
 
   public List<Selector> getSelectors() {
-    return selectors;
+    return Collections.unmodifiableList(selectors);
   }
 
   public void setSelectors(List<Selector> selectors) {
-    this.selectors = selectors;
+    this.selectors = List.copyOf(selectors);
   }
 
   public List<Filter> getFilters() {
-    return filters;
+    return Collections.unmodifiableList(filters);
   }
 
   public void setFilters(List<Filter> filters) {
-    this.filters = filters;
+    this.filters = List.copyOf(filters);
   }
 
   public List<Modifier> getModifier() {
-    return modifier;
+    return Collections.unmodifiableList(modifier);
   }
 
   public void setModifier(List<Modifier> modifier) {
-    this.modifier = modifier;
+    this.modifier = List.copyOf(modifier);
   }
 }

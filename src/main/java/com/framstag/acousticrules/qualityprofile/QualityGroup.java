@@ -19,14 +19,16 @@ package com.framstag.acousticrules.qualityprofile;
 import com.framstag.acousticrules.filter.Filter;
 import com.framstag.acousticrules.modifier.Modifier;
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 public class QualityGroup {
   private String name;
 
-  private List<Filter> filters;
+  private List<Filter> filters = new LinkedList<>();
 
-  private List<Modifier> modifier;
+  private List<Modifier> modifier = new LinkedList<>();
 
   public String getName() {
     return name;
@@ -37,18 +39,18 @@ public class QualityGroup {
   }
 
   public List<Filter> getFilters() {
-    return filters;
+    return Collections.unmodifiableList(filters);
   }
 
   public void setFilters(List<Filter> filters) {
-    this.filters = filters;
+    this.filters = List.copyOf(filters);
   }
 
   public List<Modifier> getModifier() {
-    return modifier;
+    return Collections.unmodifiableList(modifier);
   }
 
   public void setModifier(List<Modifier> modifier) {
-    this.modifier = modifier;
+    this.modifier = List.copyOf(modifier);
   }
 }

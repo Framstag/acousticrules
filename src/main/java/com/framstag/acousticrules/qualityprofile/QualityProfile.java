@@ -19,6 +19,7 @@ package com.framstag.acousticrules.qualityprofile;
 import jakarta.json.bind.annotation.JsonbProperty;
 
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
 
 public class QualityProfile {
@@ -69,10 +70,10 @@ public class QualityProfile {
   }
 
   public List<QualityGroup> getGroups() {
-    return groups;
+    return Collections.unmodifiableList(groups);
   }
 
   public void setGroups(List<QualityGroup> groups) {
-    this.groups = groups;
+    this.groups = List.copyOf(groups);
   }
 }
