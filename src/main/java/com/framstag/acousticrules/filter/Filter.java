@@ -33,6 +33,8 @@ import java.io.Serializable;
 public interface Filter extends Serializable {
   String getReason();
 
+  String getReasonString(String prefix);
+
   String getDescription();
 
   boolean filter(Rule rule);

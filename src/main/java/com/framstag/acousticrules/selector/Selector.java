@@ -31,6 +31,8 @@ import java.io.Serializable;
 public interface Selector extends Serializable {
   String getReason();
 
+  String getReasonString(String prefix);
+
   String getDescription();
 
   boolean select(Rule rule);

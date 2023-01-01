@@ -31,6 +31,8 @@ import java.io.Serializable;
 public interface Modifier extends Serializable {
   String getReason();
 
+  String getReasonString(String prefix);
+
   String getDescription();
 
   boolean modify(Rule rule);

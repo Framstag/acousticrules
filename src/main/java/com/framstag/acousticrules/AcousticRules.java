@@ -190,7 +190,7 @@ public class AcousticRules implements Callable<Integer> {
         Set<Rule> selectedRules = new HashSet<>();
         log.info("Selector: {} {}",
           selector.getDescription(),
-          (selector.getReason() != null) ? ("- " + selector.getReason()) : "");
+          selector.getReasonString("- "));
         for (var rule : rules) {
           boolean selected = selector.select(rule);
 
@@ -213,7 +213,7 @@ public class AcousticRules implements Callable<Integer> {
         List<Rule> filteredRules = new LinkedList<>();
         log.info("Filter: {} {}",
           filter.getDescription(),
-          (filter.getReason() != null) ? ("- " + filter.getReason()) : "");
+          filter.getReasonString("- "));
         for (var rule : new ArrayList<>(groupRuleSet)) {
           boolean filtered = filter.filter(rule);
 
@@ -359,7 +359,7 @@ public class AcousticRules implements Callable<Integer> {
 
           log.info("Modifier: {} {}",
             modifier.getDescription(),
-            (modifier.getReason() != null) ? ("- " + modifier.getReason()) : "");
+            modifier.getReasonString("- "));
           for (var rule : rules) {
             if (modifier.modify(rule)) {
               modifiedCount++;

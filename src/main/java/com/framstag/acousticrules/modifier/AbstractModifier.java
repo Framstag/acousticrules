@@ -24,6 +24,15 @@ public abstract class AbstractModifier implements Modifier {
     return reason;
   }
 
+  public String getReasonString(String prefix) {
+    String reason = getReason();
+    if (reason == null) {
+      return "";
+    } else {
+      return prefix + reason;
+    }
+  }
+
   public void setReason(String reason) {
     this.reason = reason;
   }
