@@ -16,6 +16,7 @@
  */
 package com.framstag.acousticrules.rules;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Rule {
@@ -89,19 +90,19 @@ public class Rule {
   }
 
   public List<String> getSysTags() {
-    return sysTags;
+    return Collections.unmodifiableList(sysTags);
   }
 
   public void setSysTags(List<String> sysTags) {
-    this.sysTags = sysTags;
+    this.sysTags = List.copyOf(sysTags);
   }
 
   public List<Parameter> getParams() {
-    return params;
+    return Collections.unmodifiableList(params);
   }
 
   public void setParams(List<Parameter> params) {
-    this.params = params;
+    this.params = List.copyOf(params);
   }
 
   public void setParam(String key, String value) {
