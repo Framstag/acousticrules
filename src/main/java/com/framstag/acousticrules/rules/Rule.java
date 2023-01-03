@@ -18,8 +18,9 @@ package com.framstag.acousticrules.rules;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
-public class Rule {
+public class Rule implements Comparable<Rule> {
 
   private String key;
   private String name;
@@ -122,5 +123,29 @@ public class Rule {
 
   public boolean hasParams() {
     return params != null && !params.isEmpty();
+  }
+
+  @Override
+  public int compareTo(Rule other) {
+    return key.compareTo(other.key);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(key);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    var rule = (Rule) o;
+    return key.equals(rule.key);
   }
 }

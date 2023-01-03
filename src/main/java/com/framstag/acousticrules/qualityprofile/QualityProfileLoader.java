@@ -16,6 +16,7 @@
  */
 package com.framstag.acousticrules.qualityprofile;
 
+import com.framstag.acousticrules.exceptions.ParameterException;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
 import org.eclipse.yasson.YassonConfig;
@@ -32,13 +33,15 @@ public class QualityProfileLoader {
     var jsonbConfig = new JsonbConfig();
     jsonbConfig.setProperty(YassonConfig.FAIL_ON_UNKNOWN_PROPERTIES,Boolean.TRUE);
 
+    log.info("Loading quality profile '{}'", filename);
     try (var jsonb = JsonbBuilder.create(jsonbConfig)) {
 
       var configFileContent = Files.readString(filename);
-      return jsonb.fromJson(configFileContent, QualityProfile.class);
+      var qualityProfile = jsonb.fromJson(configFileContent, QualityProfile.class);
+      log.info("Loading quality profile done.");
+      return qualityProfile;
     } catch (Exception e) {
-      log.error("Cannot read quality profile definition",e);
-      return null;
+      throw new ParameterException("Cannot load quality profile",e);
     }
   }
 }

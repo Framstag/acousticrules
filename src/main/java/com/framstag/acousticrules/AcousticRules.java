@@ -16,7 +16,6 @@
  */
 package com.framstag.acousticrules;
 
-import com.framstag.acousticrules.exceptions.ParameterException;
 import com.framstag.acousticrules.filter.Filter;
 import com.framstag.acousticrules.markdowndoc.MarkdownDocGenerator;
 import com.framstag.acousticrules.processing.ProcessingGroup;
@@ -27,6 +26,7 @@ import com.framstag.acousticrules.qualityprofile.QualityProfileGenerator;
 import com.framstag.acousticrules.qualityprofile.QualityProfileLoader;
 import com.framstag.acousticrules.rules.Rule;
 import com.framstag.acousticrules.rules.RuleSetLoader;
+import com.framstag.acousticrules.selector.Selector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
@@ -86,18 +86,7 @@ public class AcousticRules implements Callable<Integer> {
   public Integer call() throws Exception {
     List<Rule> rules = new RuleSetLoader().loadRules(ruleFiles);
     List<ProcessingGroup> processingGroups = new ProcessingGroupLoader().loadProcessingGroups(processorSetFiles);
-
-    Map<String, Set<Rule>> rulesByGroup = new HashMap<>();
-    for (var group : processingGroups) {
-      log.info("Processing group '{}'...", group.getName());
-      Set<Rule> groupRuleSet = selectRules(rules, group);
-
-      // TODO: Rewrite API to be more functional
-      filterRules(group.getFilters(), groupRuleSet);
-      logRules(groupRuleSet);
-
-      rulesByGroup.put(group.getName(), groupRuleSet);
-    }
+    Map<String, Set<Rule>> rulesByGroup = processRulesToGroups(rules, processingGroups);
 
     int duplicateCount = dumpRulesInMultipleGroups(rules, rulesByGroup);
 
@@ -108,14 +97,14 @@ public class AcousticRules implements Callable<Integer> {
 
     Set<Rule> overallRules = rulesByGroup.values().stream().flatMap(Collection::stream).collect(Collectors.toSet());
 
-    log.info("Overall rules: {}", overallRules.size());
+    log.info("Overall selected rules: {}", overallRules.size());
 
     if (dumpUnusedRules) {
       dumpUnusedRules(rules, overallRules);
     }
 
     if (qualityProfileFile != null) {
-      var qualityProfile = loadQualityProfile();
+      var qualityProfile = new QualityProfileLoader().load(qualityProfileFile);
 
       filterRules(qualityProfile, rulesByGroup);
       modifyRules(qualityProfile, rulesByGroup);
@@ -130,63 +119,19 @@ public class AcousticRules implements Callable<Integer> {
     return 0;
   }
 
-  private static Set<Rule> selectRules(List<Rule> rules, ProcessingGroup group) {
-    Set<Rule> allSelectedRules = new HashSet<>();
-    if (group.getSelectors() != null) {
-      for (var selector : group.getSelectors()) {
-        Set<Rule> selectedRules = new HashSet<>();
-        log.info("Selector: {} {}",
-          selector.getDescription(),
-          selector.getReasonString("- "));
-        for (var rule : rules) {
-          boolean selected = selector.select(rule);
+  private static Map<String, Set<Rule>> processRulesToGroups(List<Rule> rules, List<ProcessingGroup> processingGroups) {
+    Map<String, Set<Rule>> rulesByGroup = new HashMap<>();
 
-          if (selected) {
-            selectedRules.add(rule);
-          }
-        }
+    for (var group : processingGroups) {
+      log.info("Processing group '{}'...", group.getName());
+      Set<Rule> groupRuleSet = selectRules(rules, group.getSelectors());
+      filterRules(groupRuleSet, group.getFilters());
+      logRules(groupRuleSet);
 
-        allSelectedRules.addAll(selectedRules);
-        log.info("{} rules selected => {} rules over all", selectedRules.size(), allSelectedRules.size());
-      }
+      rulesByGroup.put(group.getName(), groupRuleSet);
     }
 
-    return allSelectedRules;
-  }
-
-  private static void filterRules(List<Filter> filters, Set<Rule> groupRuleSet) {
-    if (filters != null) {
-      for (var filter : filters) {
-        List<Rule> filteredRules = new LinkedList<>();
-        log.info("Filter: {} {}",
-          filter.getDescription(),
-          filter.getReasonString("- "));
-        for (var rule : new ArrayList<>(groupRuleSet)) {
-          boolean filtered = filter.filter(rule);
-
-          if (filtered) {
-            filteredRules.add(rule);
-          }
-        }
-
-        filteredRules.forEach(groupRuleSet::remove);
-
-        log.info("{} filtered => {} rules over all",
-          filteredRules.size(),
-          groupRuleSet.size());
-      }
-    }
-  }
-
-  private static void logRules(Set<Rule> groupRuleSet) {
-    for (var rule : groupRuleSet) {
-      log.info(" * {} {} {} {} ({})",
-        rule.getKey(),
-        rule.getSeverity(),
-        rule.getType(),
-        rule.getName(),
-        String.join(", ", rule.getSysTags()));
-    }
+    return rulesByGroup;
   }
 
   private static int dumpRulesInMultipleGroups(List<Rule> rules, Map<String, Set<Rule>> rulesByGroup) {
@@ -239,15 +184,6 @@ public class AcousticRules implements Callable<Integer> {
     log.info("Dump rules not selected in any group...done");
   }
 
-  private QualityProfile loadQualityProfile() {
-    log.info("Loading quality profile '{}'", qualityProfileFile);
-    var qualityProfileLoader = new QualityProfileLoader();
-
-    var qualityProfile = qualityProfileLoader.load(qualityProfileFile);
-    log.info("Loading quality profile done.");
-    return qualityProfile;
-  }
-
   private static void filterRules(QualityProfile qualityProfile, Map<String, Set<Rule>> rulesByGroup) {
     log.info("Filtering rules...");
     for (var group : qualityProfile.getGroups()) {
@@ -257,7 +193,7 @@ public class AcousticRules implements Callable<Integer> {
         break;
       }
 
-      filterRules(group.getFilters(), rulesByGroup.get(group.getName()));
+      filterRules(rulesByGroup.get(group.getName()),group.getFilters());
     }
     log.info("Filtering rules done.");
   }
@@ -287,6 +223,65 @@ public class AcousticRules implements Callable<Integer> {
 
     docGenerator.writeMarkdown(qualityProfile, qualityProfile.getDocumentationFilename(), rulesByGroup);
     log.info("Writing quality profile documentation done.");
+  }
+
+  private static Set<Rule> selectRules(List<Rule> rules, List<Selector> selectors) {
+    Set<Rule> allSelectedRules = new HashSet<>();
+    if (selectors != null) {
+      for (var selector : selectors) {
+        Set<Rule> selectedRules = new HashSet<>();
+        log.info("Selector: {} {}",
+          selector.getDescription(),
+          selector.getReasonString("- "));
+        for (var rule : rules) {
+          boolean selected = selector.select(rule);
+
+          if (selected) {
+            selectedRules.add(rule);
+          }
+        }
+
+        allSelectedRules.addAll(selectedRules);
+        log.info("{} rules selected => {} rules over all", selectedRules.size(), allSelectedRules.size());
+      }
+    }
+
+    return allSelectedRules;
+  }
+
+  private static void filterRules(Set<Rule> groupRuleSet, List<Filter> filters) {
+    if (filters != null) {
+      for (var filter : filters) {
+        List<Rule> filteredRules = new LinkedList<>();
+        log.info("Filter: {} {}",
+          filter.getDescription(),
+          filter.getReasonString("- "));
+        for (var rule : new ArrayList<>(groupRuleSet)) {
+          boolean filtered = filter.filter(rule);
+
+          if (filtered) {
+            filteredRules.add(rule);
+          }
+        }
+
+        filteredRules.forEach(groupRuleSet::remove);
+
+        log.info("{} filtered => {} rules over all",
+          filteredRules.size(),
+          groupRuleSet.size());
+      }
+    }
+  }
+
+  private static void logRules(Set<Rule> groupRuleSet) {
+    for (var rule : groupRuleSet) {
+      log.info(" * {} {} {} {} ({})",
+        rule.getKey(),
+        rule.getSeverity(),
+        rule.getType(),
+        rule.getName(),
+        String.join(", ", rule.getSysTags()));
+    }
   }
 
   private static void modifyRules(Collection<QualityGroup> groups, Map<String, Set<Rule>> groupRulesetMap) {
