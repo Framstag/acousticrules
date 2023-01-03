@@ -28,3 +28,17 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Build with maven
         run:  mvn --batch-mode --update-snapshots verify
+      - name: Release
+        uses: ncipollo/release-action@v1
+        if: ${{ github.ref == 'refs/heads/main' }}
+        with:
+          allowUpdates: true
+          body: "Release of the latest code in main"
+          draft: false
+          prerelease: true
+          generateReleaseNotes: false
+          name: latest
+          removeArtifacts: true
+          replacesArtifacts: true
+          tag: latest
+          artifacts: "target/acousticrules-jar-with-dependencies.jar"
