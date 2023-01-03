@@ -16,6 +16,7 @@
  */
 package com.framstag.acousticrules.processing;
 
+import com.framstag.acousticrules.exceptions.ParameterException;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
 import org.eclipse.yasson.YassonConfig;
@@ -24,21 +25,35 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ProcessingGroupLoader {
   private static final Logger log = LoggerFactory.getLogger(ProcessingGroupLoader.class);
 
-  public ProcessingGroup load(Path filename) {
+  public List<ProcessingGroup> loadProcessingGroups(Iterable<Path> processorSetFiles) throws ParameterException {
+    List<ProcessingGroup> processingGroups = new LinkedList<>();
+
+    for (var filename : processorSetFiles) {
+      processingGroups.add(load(filename));
+    }
+
+    return processingGroups;
+  }
+
+  public ProcessingGroup load(Path filename) throws ParameterException {
+    log.info("Loading processing group '{}'", filename);
     var jsonbConfig = new JsonbConfig();
     jsonbConfig.setProperty(YassonConfig.FAIL_ON_UNKNOWN_PROPERTIES, Boolean.TRUE);
 
     try (var jsonb = JsonbBuilder.create(jsonbConfig)) {
-
       var configFileContent = Files.readString(filename);
-      return jsonb.fromJson(configFileContent, ProcessingGroup.class);
+      var processingGroup = jsonb.fromJson(configFileContent, ProcessingGroup.class);
+      log.info("Processing group loaded.");
+      return processingGroup;
     } catch (Exception e) {
-      log.error("Cannot read processing instructions", e);
-      return null;
+      throw new ParameterException("Cannot load processing group", e);
     }
   }
+
 }

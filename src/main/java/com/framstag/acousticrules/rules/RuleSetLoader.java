@@ -16,6 +16,7 @@
  */
 package com.framstag.acousticrules.rules;
 
+import com.framstag.acousticrules.exceptions.ParameterException;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
 import org.slf4j.Logger;
@@ -23,20 +24,40 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.LinkedList;
+import java.util.List;
 
 public class RuleSetLoader {
   private static final Logger log = LoggerFactory.getLogger(RuleSetLoader.class);
 
-  public RuleSet load(Path filename) {
+  public List<Rule> loadRules(Iterable<Path> arguments) throws ParameterException {
+    var ruleSetLoader = new RuleSetLoader();
+    List<Rule> rules = new LinkedList<>();
+
+    for (var ruleSetFilename : arguments) {
+      var ruleSet = ruleSetLoader.load(ruleSetFilename);
+
+      if (ruleSet.hasRules()) {
+        rules.addAll(ruleSet.getRules());
+      }
+    }
+
+    log.info("{} rules over all files loaded.", rules.size());
+
+    return rules;
+  }
+
+  public RuleSet load(Path filename) throws ParameterException {
     var jsonbConfig = new JsonbConfig();
 
+    log.info("Loading rule set '{}'", filename);
     try (var jsonb = JsonbBuilder.create(jsonbConfig)) {
-
       var configFileContent = Files.readString(filename);
-      return jsonb.fromJson(configFileContent, RuleSet.class);
+      var ruleSet = jsonb.fromJson(configFileContent, RuleSet.class);
+      log.info("Rule set with {} rules loaded.", ruleSet.getRuleCount());
+      return ruleSet;
     } catch (Exception e) {
-      log.error("Cannot read rules",e);
-      return null;
+      throw new ParameterException("Cannot load rules", e);
     }
   }
 }

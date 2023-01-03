@@ -34,7 +34,7 @@ AcousticRules also generates markdown files for documentation
 while at it, so you do ot only have a QualityProfile but a documentation
 why the severity of a rule is the way it is.
 
-## Why else?
+## Other reasons
 
 AcousticRules is also a test application for me in my search to 
 generate simple DSLs for simple data modifications and
@@ -43,6 +43,11 @@ Parser generator tool.
 
 It teaches me how in this case to build JSON based DSLs
 (with their advantages and disandvantages).
+
+## About the name
+
+I try to avoid product names in the name of my projects but try to find
+a useful association....and in the end, a name is just a unique id.
 
 ## License
 
@@ -57,20 +62,23 @@ curl.
 See the following example for the Sonarcloud instance:
 
 ```bash
-curl -v -u <user_token>: https://sonarcloud.io/api/rules/search\?organization\=<organisation>\&languages\=<language>\&ps\=500\&p\=<page> >rules1.json
+curl -v -u <user_token>: -o rules1.json "https://sonarcloud.io/api/rules/search?organization=<organisation>&languages=<language>&ps=500&p=<page>"
 ```
 
 where:
 
-|Placeholder| Meaning                                                        |
-|-----------|----------------------------------------------------------------|
-|user_token | Sonar user token for authentification                          |
-|organisation| Name of the organisation the user belongs to (e.g. `framstag`) |
- |language| name of the language, see below                                |
-|page| Number of page                                                 |
+| Placeholder  | Meaning                                                        |
+|--------------|----------------------------------------------------------------|
+| user_token   | Sonar user token for authentification                          |
+| organisation | Name of the organisation the user belongs to (e.g. `framstag`) |
+ | language     | name of the language, see below                                |
+| page         | Number of page                                                 |
 
 Note that Sonar uses paging, so ou will not get all rules in one go but must 
 traverse pages by maximum 500 rules.
+
+Depending on your installation, filtering by organization is not supported or
+at least not required.
 
 Names for languages:
 

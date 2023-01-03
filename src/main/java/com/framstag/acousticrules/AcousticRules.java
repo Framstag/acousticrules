@@ -16,6 +16,7 @@
  */
 package com.framstag.acousticrules;
 
+import com.framstag.acousticrules.exceptions.ParameterException;
 import com.framstag.acousticrules.filter.Filter;
 import com.framstag.acousticrules.markdowndoc.MarkdownDocGenerator;
 import com.framstag.acousticrules.processing.ProcessingGroup;
@@ -56,7 +57,7 @@ public class AcousticRules implements Callable<Integer> {
     names = {"-p", "--processor"},
     paramLabel = "filename",
     description = "File containing a processor group definition")
-  private List<String> processorSetFiles;
+  private List<Path> processorSetFiles;
   @CommandLine.Option(
     names = {"-q", "--quality_profile"},
     paramLabel = "filename",
@@ -74,7 +75,7 @@ public class AcousticRules implements Callable<Integer> {
   @CommandLine.Parameters(
     description = "Rule files"
   )
-  private List<String> ruleFiles;
+  private List<Path> ruleFiles;
 
   public static void main(String[] args) {
     int exitCode = new CommandLine(new AcousticRules()).execute(args);
@@ -83,21 +84,8 @@ public class AcousticRules implements Callable<Integer> {
 
   @Override
   public Integer call() throws Exception {
-    List<ProcessingGroup> processingGroups = new LinkedList<>();
-
-    for (var filename : processorSetFiles) {
-      var processingGroup = loadProcessingGroup(filename);
-      if (processingGroup == null) {
-        return 1;
-      }
-
-      processingGroups.add(processingGroup);
-    }
-
-    List<Rule> rules = loadRules(ruleFiles);
-    if (rules == null) {
-      return 1;
-    }
+    List<Rule> rules = new RuleSetLoader().loadRules(ruleFiles);
+    List<ProcessingGroup> processingGroups = new ProcessingGroupLoader().loadProcessingGroups(processorSetFiles);
 
     Map<String, Set<Rule>> rulesByGroup = new HashMap<>();
     for (var group : processingGroups) {
@@ -140,47 +128,6 @@ public class AcousticRules implements Callable<Integer> {
     }
 
     return 0;
-  }
-
-  private static ProcessingGroup loadProcessingGroup(String processorSetFile) {
-    var processingGroupLoader = new ProcessingGroupLoader();
-
-    log.info("Loading processing group '{}'", processorSetFile);
-
-    var processingGroup = processingGroupLoader.load(Path.of(processorSetFile));
-
-    if (processingGroup == null) {
-      log.error("Cannot load processor set");
-      return null;
-    }
-
-    log.info("Processing group loaded.");
-    return processingGroup;
-  }
-
-  private static List<Rule> loadRules(List<String> arguments) {
-    var ruleSetLoader = new RuleSetLoader();
-    List<Rule> rules = new LinkedList<>();
-
-    for (var ruleSetFilename : arguments) {
-      log.info("Loading rule set '{}'", ruleSetFilename);
-      var ruleSet = ruleSetLoader.load(Path.of(ruleSetFilename));
-
-      if (ruleSet == null) {
-        log.error("Cannot load rules");
-        return null;
-      }
-
-      log.info("Rule set with {} rules loaded.", ruleSet.getRuleCount());
-
-      if (ruleSet.hasRules()) {
-        rules.addAll(ruleSet.getRules());
-      }
-    }
-
-    log.info("{} rules over all files loaded.", rules.size());
-
-    return rules;
   }
 
   private static Set<Rule> selectRules(List<Rule> rules, ProcessingGroup group) {
