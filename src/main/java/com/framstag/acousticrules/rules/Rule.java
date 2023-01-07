@@ -62,10 +62,6 @@ public class Rule implements Comparable<Rule> {
     this.params = params.stream().collect(Collectors.toMap(Parameter::key, Function.identity()));
   }
 
-  public String getKey() {
-    return key;
-  }
-
   public String getName() {
     return name;
   }
@@ -105,12 +101,15 @@ public class Rule implements Comparable<Rule> {
   public void setParam(String key, String value) {
     var param = params.get(key);
 
-    // TODO: Errorhandling
     if (param == null) {
-      return;
+      throw new IllegalArgumentException("The param '"+key+"' is not a known parameter for the rule "+getKey());
     }
 
     params.put(key,param.setValue(value));
+  }
+
+  public String getKey() {
+    return key;
   }
 
   public boolean hasParams() {
