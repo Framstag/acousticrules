@@ -168,14 +168,14 @@ public class QualityProfileGenerator {
 
     writeIndent(writer, indent + INDENT);
     writer.writeStartElement("key");
-    writer.writeCharacters(parameter.getKey());
+    writer.writeCharacters(parameter.key());
     writer.writeEndElement();
     writeLn(writer);
 
-    if (parameter.getValue() != null) {
+    if (parameter.value() != null) {
       writeIndent(writer, indent + INDENT);
       writer.writeStartElement("value");
-      writer.writeCharacters(parameter.getValue());
+      writer.writeCharacters(parameter.value());
       writer.writeEndElement();
       writeLn(writer);
     } else {

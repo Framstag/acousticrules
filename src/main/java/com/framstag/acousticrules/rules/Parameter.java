@@ -16,34 +16,34 @@
  */
 package com.framstag.acousticrules.rules;
 
-public class Parameter {
-  private String key;
-  private String defaultValue;
+import jakarta.json.bind.annotation.JsonbCreator;
+import jakarta.json.bind.annotation.JsonbProperty;
 
-  private String value;
+import java.util.Objects;
 
-  public String getKey() {
-    return key;
-  }
-
-  public void setKey(String key) {
+/**
+ * Immutable class for rule parameter.
+ * equals() and hashCode() are implemented based on the key attribute.
+ */
+public record Parameter(String key, String defaultValue, String value) {
+  @JsonbCreator
+  public Parameter(
+    @JsonbProperty("key") String key,
+    @JsonbProperty("defaultValue") String defaultValue,
+    @JsonbProperty("value") String value) {
     this.key = key;
-  }
-
-  public String getDefaultValue() {
-    return defaultValue;
-  }
-
-  public void setDefaultValue(String defaultValue) {
     this.defaultValue = defaultValue;
-  }
-
-  public String getValue() {
-    return value;
-  }
-
-  public void setValue(String value) {
     this.value = value;
+  }
+
+  /**
+   * Creates a copy of the Parameter class with the new value assigned.
+   * The instance the method is called on stays unmodified.
+   * @param value new value
+   * @return copy of the instance
+   */
+  public Parameter setValue(String value) {
+    return new Parameter(key,defaultValue,value);
   }
 
   public boolean hasOverwrittenDefaultValue() {
@@ -51,10 +51,30 @@ public class Parameter {
       return false;
     }
 
+    // One value is null, one not
     if (defaultValue == null || value == null) {
       return true;
     }
 
     return !defaultValue.equals((value));
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    var parameter = (Parameter) o;
+    return key.equals(parameter.key);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(key);
   }
 }

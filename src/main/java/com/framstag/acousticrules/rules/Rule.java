@@ -19,9 +19,14 @@ package com.framstag.acousticrules.rules;
 import jakarta.json.bind.annotation.JsonbCreator;
 import jakarta.json.bind.annotation.JsonbProperty;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Rule implements Comparable<Rule> {
 
@@ -32,7 +37,7 @@ public class Rule implements Comparable<Rule> {
   private final String lang;
   private final String type;
   private final List<String> sysTags;
-  private final List<Parameter> params;
+  private final Map<String,Parameter> params;
   private Severity severity;
 
   @JsonbCreator
@@ -45,7 +50,7 @@ public class Rule implements Comparable<Rule> {
     @JsonbProperty("lang") String lang,
     @JsonbProperty("type") String type,
     @JsonbProperty("sysTags") List<String> sysTags,
-    @JsonbProperty("params") List<Parameter> params) {
+    @JsonbProperty("params") Set<Parameter> params) {
     this.key = key;
     this.name = name;
     this.repo = repo;
@@ -54,7 +59,7 @@ public class Rule implements Comparable<Rule> {
     this.lang = lang;
     this.type = type;
     this.sysTags = List.copyOf(sysTags);
-    this.params = List.copyOf(params);
+    this.params = params.stream().collect(Collectors.toMap(Parameter::key, Function.identity()));
   }
 
   public String getKey() {
@@ -93,27 +98,23 @@ public class Rule implements Comparable<Rule> {
     return Collections.unmodifiableList(sysTags);
   }
 
-  public List<Parameter> getParams() {
-    return Collections.unmodifiableList(params);
+  public Collection<Parameter> getParams() {
+    return params.values();
   }
 
   public void setParam(String key, String value) {
+    var param = params.get(key);
+
     // TODO: Errorhandling
-    if (!hasParams()) {
+    if (param == null) {
       return;
     }
 
-    for (Parameter param : params) {
-      if (param.getKey().equals(key)) {
-        param.setValue(value);
-
-        return;
-      }
-    }
+    params.put(key,param.setValue(value));
   }
 
   public boolean hasParams() {
-    return params != null && !params.isEmpty();
+    return !params.isEmpty();
   }
 
   @Override
