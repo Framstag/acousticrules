@@ -18,8 +18,14 @@ package com.framstag.acousticrules.filter;
 
 import com.framstag.acousticrules.rules.Rule;
 import com.framstag.acousticrules.rules.Status;
+import jakarta.json.bind.annotation.JsonbCreator;
 
 public class RemoveDeprecated extends AbstractFilter {
+  @JsonbCreator
+  public RemoveDeprecated() {
+    // To keep the code in line with the other Filter
+  }
+
   @Override
   public String getDescription() {
     return "Removing deprecated rules";

@@ -39,7 +39,7 @@ public class QualityProfileGenerator {
                     Map<String, Set<Rule>> rulesByGroup) throws FileNotFoundException, XMLStreamException {
     var outputFactory = XMLOutputFactory.newDefaultFactory();
 
-    var writer = outputFactory.createXMLStreamWriter(new FileOutputStream(qualityProfile.getOutputFilename().toFile()),
+    var writer = outputFactory.createXMLStreamWriter(new FileOutputStream(qualityProfile.outputFilename().toFile()),
       StandardCharsets.UTF_8.name());
 
     writer.writeStartDocument(StandardCharsets.UTF_8.name(), "1.0");
@@ -50,13 +50,13 @@ public class QualityProfileGenerator {
 
     writeIndent(writer, INDENT);
     writer.writeStartElement("name");
-    writer.writeCharacters(qualityProfile.getName());
+    writer.writeCharacters(qualityProfile.name());
     writer.writeEndElement();
     writeLn(writer);
 
     writeIndent(writer, INDENT);
     writer.writeStartElement("language");
-    writer.writeCharacters(qualityProfile.getLanguage());
+    writer.writeCharacters(qualityProfile.language());
     writer.writeEndElement();
     writeLn(writer);
     writeLn(writer);
@@ -65,20 +65,20 @@ public class QualityProfileGenerator {
     writer.writeStartElement("rules");
     writeLn(writer);
 
-    for (QualityGroup group : qualityProfile.getGroups()) {
-      if (!rulesByGroup.containsKey(group.getName())) {
-        log.error("Quality profile requests dump of group '{}', but this group does not exist", group.getName());
+    for (QualityGroup group : qualityProfile.groups()) {
+      if (!rulesByGroup.containsKey(group.name())) {
+        log.error("Quality profile requests dump of group '{}', but this group does not exist", group.name());
         break;
       }
 
-      log.info("Writing group '{}'...", group.getName());
+      log.info("Writing group '{}'...", group.name());
 
       writeIndent(writer, INDENT+INDENT);
-      writer.writeComment(" Group " + group.getName() + " ");
+      writer.writeComment(" Group " + group.name() + " ");
       writeLn(writer);
       writeLn(writer);
 
-      Set<Rule> groupRules = rulesByGroup.get(group.getName());
+      Set<Rule> groupRules = rulesByGroup.get(group.name());
 
       for (Rule rule : groupRules) {
         writeRule(writer, rule, INDENT+INDENT);

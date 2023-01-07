@@ -135,7 +135,6 @@ public class AcousticRules implements Callable<Integer> {
   }
 
   private static int dumpRulesInMultipleGroups(List<Rule> rules, Map<String, Set<Rule>> rulesByGroup) {
-    var duplicateCount = 0;
     Map<Rule, List<String>> ruleGroupMap = new HashMap<>();
 
     // Initialize map
@@ -152,6 +151,7 @@ public class AcousticRules implements Callable<Integer> {
 
     log.info("Checking for rules being in multiple groups...");
 
+    var duplicateCount = 0;
     for (var entry : ruleGroupMap.entrySet()) {
       if (entry.getValue().size() > 1) {
         duplicateCount++;
@@ -186,21 +186,21 @@ public class AcousticRules implements Callable<Integer> {
 
   private static void filterRules(QualityProfile qualityProfile, Map<String, Set<Rule>> rulesByGroup) {
     log.info("Filtering rules...");
-    for (var group : qualityProfile.getGroups()) {
-      if (!rulesByGroup.containsKey(group.getName())) {
+    for (var group : qualityProfile.groups()) {
+      if (!rulesByGroup.containsKey(group.name())) {
         log.error("Quality profile requests filtering of group '{}', but this group does not exist",
-          group.getName());
+          group.name());
         break;
       }
 
-      filterRules(rulesByGroup.get(group.getName()),group.getFilters());
+      filterRules(rulesByGroup.get(group.name()),group.filters());
     }
     log.info("Filtering rules done.");
   }
 
   private static void modifyRules(QualityProfile qualityProfile, Map<String, Set<Rule>> rulesByGroup) {
     log.info("Modifying rules...");
-    modifyRules(qualityProfile.getGroups(), rulesByGroup);
+    modifyRules(qualityProfile.groups(), rulesByGroup);
     log.info("Modifying rules done.");
   }
 
@@ -218,58 +218,55 @@ public class AcousticRules implements Callable<Integer> {
   private static void generateDocumentationFile(QualityProfile qualityProfile,
                                                 Map<String, Set<Rule>> rulesByGroup)
     throws IOException {
-    log.info("Writing quality profile documentation '{}'...", qualityProfile.getDocumentationFilename());
+    log.info("Writing quality profile documentation '{}'...", qualityProfile.documentationFilename());
     var docGenerator = new MarkdownDocGenerator();
 
-    docGenerator.writeMarkdown(qualityProfile, qualityProfile.getDocumentationFilename(), rulesByGroup);
+    docGenerator.writeMarkdown(qualityProfile, qualityProfile.documentationFilename(), rulesByGroup);
     log.info("Writing quality profile documentation done.");
   }
 
   private static Set<Rule> selectRules(List<Rule> rules, List<Selector> selectors) {
     Set<Rule> allSelectedRules = new HashSet<>();
-    if (selectors != null) {
-      for (var selector : selectors) {
-        Set<Rule> selectedRules = new HashSet<>();
-        log.info("Selector: {} {}",
-          selector.getDescription(),
-          selector.getReasonString("- "));
-        for (var rule : rules) {
-          boolean selected = selector.select(rule);
 
-          if (selected) {
-            selectedRules.add(rule);
-          }
+    for (var selector : selectors) {
+      Set<Rule> selectedRules = new HashSet<>();
+      log.info("Selector: {} {}",
+        selector.getDescription(),
+        selector.getReasonString("- "));
+      for (var rule : rules) {
+        boolean selected = selector.select(rule);
+
+        if (selected) {
+          selectedRules.add(rule);
         }
-
-        allSelectedRules.addAll(selectedRules);
-        log.info("{} rules selected => {} rules over all", selectedRules.size(), allSelectedRules.size());
       }
+
+      allSelectedRules.addAll(selectedRules);
+      log.info("{} rules selected => {} rules over all", selectedRules.size(), allSelectedRules.size());
     }
 
     return allSelectedRules;
   }
 
   private static void filterRules(Set<Rule> groupRuleSet, List<Filter> filters) {
-    if (filters != null) {
-      for (var filter : filters) {
-        List<Rule> filteredRules = new LinkedList<>();
-        log.info("Filter: {} {}",
-          filter.getDescription(),
-          filter.getReasonString("- "));
-        for (var rule : new ArrayList<>(groupRuleSet)) {
-          boolean filtered = filter.filter(rule);
+    for (var filter : filters) {
+      List<Rule> filteredRules = new LinkedList<>();
+      log.info("Filter: {} {}",
+        filter.getDescription(),
+        filter.getReasonString("- "));
+      for (var rule : new ArrayList<>(groupRuleSet)) {
+        boolean filtered = filter.filter(rule);
 
-          if (filtered) {
-            filteredRules.add(rule);
-          }
+        if (filtered) {
+          filteredRules.add(rule);
         }
-
-        filteredRules.forEach(groupRuleSet::remove);
-
-        log.info("{} filtered => {} rules over all",
-          filteredRules.size(),
-          groupRuleSet.size());
       }
+
+      filteredRules.forEach(groupRuleSet::remove);
+
+      log.info("{} filtered => {} rules over all",
+        filteredRules.size(),
+        groupRuleSet.size());
     }
   }
 
@@ -286,33 +283,31 @@ public class AcousticRules implements Callable<Integer> {
 
   private static void modifyRules(Collection<QualityGroup> groups, Map<String, Set<Rule>> groupRulesetMap) {
     for (var group : groups) {
-      if (!groupRulesetMap.containsKey(group.getName())) {
+      if (!groupRulesetMap.containsKey(group.name())) {
         log.error("Quality profile requests modification group '{}', but this group does not exist",
-          group.getName());
+          group.name());
         break;
       }
 
-      Set<Rule> rules = groupRulesetMap.get(group.getName());
+      Set<Rule> rules = groupRulesetMap.get(group.name());
 
-      if (group.getModifier() != null) {
-        log.info("Modifying group '{}'...", group.getName());
-        for (var modifier : group.getModifier()) {
-          var modifiedCount = 0;
+      log.info("Modifying group '{}'...", group.name());
+      for (var modifier : group.modifier()) {
+        var modifiedCount = 0;
 
-          log.info("Modifier: {} {}",
-            modifier.getDescription(),
-            modifier.getReasonString("- "));
-          for (var rule : rules) {
-            if (modifier.modify(rule)) {
-              modifiedCount++;
-            }
+        log.info("Modifier: {} {}",
+          modifier.getDescription(),
+          modifier.getReasonString("- "));
+        for (var rule : rules) {
+          if (modifier.modify(rule)) {
+            modifiedCount++;
           }
-
-          log.info("{} of {} rules modified",
-            modifiedCount,
-            rules.size());
-
         }
+
+        log.info("{} of {} rules modified",
+          modifiedCount,
+          rules.size());
+
       }
     }
   }

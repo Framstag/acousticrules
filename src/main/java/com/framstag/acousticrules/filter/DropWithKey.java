@@ -17,14 +17,17 @@
 package com.framstag.acousticrules.filter;
 
 import com.framstag.acousticrules.rules.Rule;
+import jakarta.json.bind.annotation.JsonbCreator;
+import jakarta.json.bind.annotation.JsonbProperty;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class DropWithKey extends AbstractFilter {
-  private Set<String> keys;
+  private final Set<String> keys;
 
-  public void setKeys(Set<String> keys) {
+  @JsonbCreator
+  public DropWithKey(@JsonbProperty("keys") Set<String> keys) {
     this.keys = Set.copyOf(keys);
   }
 
@@ -36,10 +39,6 @@ public class DropWithKey extends AbstractFilter {
 
   @Override
   public boolean filter(Rule rule) {
-    if (keys.contains(rule.getKey())) {
-      return true;
-    }
-
-    return false;
+    return keys.contains(rule.getKey());
   }
 }

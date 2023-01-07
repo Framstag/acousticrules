@@ -19,39 +19,56 @@ package com.framstag.acousticrules.processing;
 import com.framstag.acousticrules.filter.Filter;
 import com.framstag.acousticrules.modifier.Modifier;
 import com.framstag.acousticrules.selector.Selector;
+import jakarta.json.bind.annotation.JsonbCreator;
+import jakarta.json.bind.annotation.JsonbProperty;
 
 import java.util.Collections;
 import java.util.List;
 
 public class ProcessingGroup {
-  private String name;
-  private List<Selector> selectors;
-  private List<Filter> filters;
+  private final String name;
+  private final List<Selector> selectors;
+  private final List<Filter> filters;
 
   private List<Modifier> modifier;
 
-  public String getName() {
-    return name;
+  @JsonbCreator
+  public ProcessingGroup(
+    @JsonbProperty("name") String name,
+    @JsonbProperty("selectors") List<Selector> selectors,
+    @JsonbProperty("filters") List<Filter> filters,
+    @JsonbProperty("modifier") List<Modifier> modifier) {
+    this.name = name;
+
+    if (selectors != null) {
+      this.selectors = List.copyOf(selectors);
+    } else {
+      this.selectors = Collections.emptyList();
+    }
+
+    if (filters != null) {
+      this.filters = List.copyOf(filters);
+    } else {
+      this.filters = Collections.emptyList();
+    }
+
+    if (modifier != null) {
+      this.modifier = List.copyOf(modifier);
+    } else {
+      this.modifier = Collections.emptyList();
+    }
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public String getName() {
+    return name;
   }
 
   public List<Selector> getSelectors() {
     return Collections.unmodifiableList(selectors);
   }
 
-  public void setSelectors(List<Selector> selectors) {
-    this.selectors = List.copyOf(selectors);
-  }
-
   public List<Filter> getFilters() {
     return Collections.unmodifiableList(filters);
-  }
-
-  public void setFilters(List<Filter> filters) {
-    this.filters = List.copyOf(filters);
   }
 
   public List<Modifier> getModifier() {

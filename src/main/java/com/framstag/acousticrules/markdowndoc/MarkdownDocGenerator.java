@@ -43,19 +43,19 @@ public class MarkdownDocGenerator {
       writer.write(System.lineSeparator());
       writer.write(System.lineSeparator());
 
-      List<QualityGroup> qualityGroupList = qualityProfile.getGroups().stream()
-        .sorted(Comparator.comparing(QualityGroup::getName)).toList();
+      List<QualityGroup> qualityGroupList = qualityProfile.groups().stream()
+        .sorted(Comparator.comparing(QualityGroup::name)).toList();
 
       for (QualityGroup group : qualityGroupList) {
-        if (!rulesByGroup.containsKey(group.getName())) {
-          log.error("Quality profile requests dump of group '{}', but this group does not exist", group.getName());
+        if (!rulesByGroup.containsKey(group.name())) {
+          log.error("Quality profile requests dump of group '{}', but this group does not exist", group.name());
           break;
         }
 
-        log.info("Writing group '{}'...", group.getName());
+        log.info("Writing group '{}'...", group.name());
 
         writer.write("## ");
-        writer.write(group.getName());
+        writer.write(group.name());
         writer.write(System.lineSeparator());
         writer.write(System.lineSeparator());
 
@@ -64,7 +64,7 @@ public class MarkdownDocGenerator {
         writer.write("|----|-----------|--------|");
         writer.write(System.lineSeparator());
 
-        Set<Rule> rules = rulesByGroup.get(group.getName());
+        Set<Rule> rules = rulesByGroup.get(group.name());
 
         List<Rule> rulesList = rules.stream().sorted(Comparator.comparing(Rule::getKey)).toList();
 

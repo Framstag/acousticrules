@@ -19,16 +19,15 @@ package com.framstag.acousticrules.rules;
 import java.util.Collections;
 import java.util.List;
 
-public class RuleSet {
+public record RuleSet(List<Rule> rules) {
 
-  private List<Rule> rules;
-
-  public List<Rule> getRules() {
-    return Collections.unmodifiableList(rules);
+  public RuleSet(List<Rule> rules) {
+    this.rules = List.copyOf(rules);
   }
 
-  public void setRules(List<Rule> rules) {
-    this.rules = List.copyOf(rules);
+  @Override
+  public List<Rule> rules() {
+    return Collections.unmodifiableList(rules);
   }
 
   public boolean hasRules() {

@@ -38,7 +38,7 @@ public class RuleSetLoader {
       var ruleSet = ruleSetLoader.load(ruleSetFilename);
 
       if (ruleSet.hasRules()) {
-        rules.addAll(ruleSet.getRules());
+        rules.addAll(ruleSet.rules());
       }
     }
 

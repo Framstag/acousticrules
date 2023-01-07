@@ -17,23 +17,22 @@
 package com.framstag.acousticrules.modifier;
 
 import com.framstag.acousticrules.rules.Rule;
+import jakarta.json.bind.annotation.JsonbCreator;
+import jakarta.json.bind.annotation.JsonbProperty;
 
 public class SetParamForKey extends AbstractModifier {
-  private String key;
+  private final String key;
 
-  private String param;
+  private final String param;
 
-  private String value;
+  private final String value;
 
-  public void setKey(String key) {
+  @JsonbCreator
+  public SetParamForKey(@JsonbProperty("key") String key,
+                        @JsonbProperty("param") String param,
+                        @JsonbProperty("value") String value) {
     this.key = key;
-  }
-
-  public void setParam(String param) {
     this.param = param;
-  }
-
-  public void setValue(String value) {
     this.value = value;
   }
 

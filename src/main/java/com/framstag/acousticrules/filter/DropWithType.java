@@ -17,14 +17,17 @@
 package com.framstag.acousticrules.filter;
 
 import com.framstag.acousticrules.rules.Rule;
+import jakarta.json.bind.annotation.JsonbCreator;
+import jakarta.json.bind.annotation.JsonbProperty;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class DropWithType extends AbstractFilter {
-  private Set<String> types;
+  private final Set<String> types;
 
-  public void setTypes(Set<String> types) {
+  @JsonbCreator
+  public DropWithType(@JsonbProperty("types") Set<String> types) {
     this.types = Set.copyOf(types);
   }
 

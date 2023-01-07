@@ -18,20 +18,20 @@ package com.framstag.acousticrules.modifier;
 
 import com.framstag.acousticrules.rules.Rule;
 import com.framstag.acousticrules.rules.Severity;
+import jakarta.json.bind.annotation.JsonbCreator;
+import jakarta.json.bind.annotation.JsonbProperty;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SetSeverity extends AbstractModifier {
-  private Set<String> keys;
-  private Severity to;
+  private final Set<String> keys;
+  private final Severity to;
 
-  public void setKeys(Set<String> keys) {
+  @JsonbCreator
+  public SetSeverity(@JsonbProperty("keys") Set<String> keys,
+                     @JsonbProperty("to") Severity to) {
     this.keys = Set.copyOf(keys);
-  }
-
-  public void setTo(Severity to) {
     this.to = to;
   }
 

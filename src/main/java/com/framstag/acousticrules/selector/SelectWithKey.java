@@ -17,14 +17,17 @@
 package com.framstag.acousticrules.selector;
 
 import com.framstag.acousticrules.rules.Rule;
+import jakarta.json.bind.annotation.JsonbCreator;
+import jakarta.json.bind.annotation.JsonbProperty;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SelectWithKey extends AbstractSelector {
-  private Set<String> keys;
+  private final Set<String> keys;
 
-  public void setKeys(Set<String> keys) {
+  @JsonbCreator
+  public SelectWithKey(@JsonbProperty("keys") Set<String> keys) {
     this.keys = Set.copyOf(keys);
   }
 

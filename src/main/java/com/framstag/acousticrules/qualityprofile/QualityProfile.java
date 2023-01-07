@@ -16,64 +16,37 @@
  */
 package com.framstag.acousticrules.qualityprofile;
 
+import jakarta.json.bind.annotation.JsonbCreator;
 import jakarta.json.bind.annotation.JsonbProperty;
 
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 
-public class QualityProfile {
-  private String language;
-
-  private String name;
-  @JsonbProperty("output_filename")
-  private Path outputFilename;
-
-  @JsonbProperty("documentation_filename")
-  private Path documentationFilename;
-  private List<QualityGroup> groups;
-
-  public String getLanguage() {
-    return language;
-  }
-
-  public void setLanguage(String language) {
+public record QualityProfile(String language,
+                             String name,
+                             Path outputFilename,
+                             Path documentationFilename,
+                             List<QualityGroup> groups) {
+  @JsonbCreator
+  public QualityProfile(@JsonbProperty("language") String language,
+                        @JsonbProperty("name") String name,
+                        @JsonbProperty("output_filename") Path outputFilename,
+                        @JsonbProperty("documentation_filename") Path documentationFilename,
+                        @JsonbProperty("groups") List<QualityGroup> groups) {
     this.language = language;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
     this.name = name;
-  }
-
-  public Path getDocumentationFilename() {
-    return documentationFilename;
-  }
-
-  public void setDocumentationFilename(Path documentationFilename) {
+    this.outputFilename = outputFilename;
     this.documentationFilename = documentationFilename;
+    this.groups = List.copyOf(groups);
   }
 
   public boolean hasDocumentationFilename() {
     return documentationFilename != null;
   }
 
-  public Path getOutputFilename() {
-    return outputFilename;
-  }
-
-  public void setOutputFilename(Path outputFilename) {
-    this.outputFilename = outputFilename;
-  }
-
-  public List<QualityGroup> getGroups() {
+  @Override
+  public List<QualityGroup> groups() {
     return Collections.unmodifiableList(groups);
-  }
-
-  public void setGroups(List<QualityGroup> groups) {
-    this.groups = List.copyOf(groups);
   }
 }

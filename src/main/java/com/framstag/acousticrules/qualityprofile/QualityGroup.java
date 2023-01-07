@@ -18,39 +18,41 @@ package com.framstag.acousticrules.qualityprofile;
 
 import com.framstag.acousticrules.filter.Filter;
 import com.framstag.acousticrules.modifier.Modifier;
+import jakarta.json.bind.annotation.JsonbCreator;
+import jakarta.json.bind.annotation.JsonbProperty;
 
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
-public class QualityGroup {
-  private String name;
-
-  private List<Filter> filters = new LinkedList<>();
-
-  private List<Modifier> modifier = new LinkedList<>();
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
+public record QualityGroup(String name,
+                           List<Filter> filters,
+                           List<Modifier> modifier) {
+  @JsonbCreator
+  public QualityGroup(@JsonbProperty("name") String name,
+                      @JsonbProperty("filters") List<Filter> filters,
+                      @JsonbProperty("modifier") List<Modifier> modifier) {
     this.name = name;
+
+    if (filters != null) {
+      this.filters = List.copyOf(filters);
+    } else {
+      this.filters = Collections.emptyList();
+    }
+
+    if (modifier != null) {
+      this.modifier = List.copyOf(modifier);
+    } else {
+      this.modifier = Collections.emptyList();
+    }
   }
 
-  public List<Filter> getFilters() {
+  @Override
+  public List<Filter> filters() {
     return Collections.unmodifiableList(filters);
   }
 
-  public void setFilters(List<Filter> filters) {
-    this.filters = List.copyOf(filters);
-  }
-
-  public List<Modifier> getModifier() {
+  @Override
+  public List<Modifier> modifier() {
     return Collections.unmodifiableList(modifier);
-  }
-
-  public void setModifier(List<Modifier> modifier) {
-    this.modifier = List.copyOf(modifier);
   }
 }

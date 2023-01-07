@@ -18,16 +18,17 @@ package com.framstag.acousticrules.modifier;
 
 import com.framstag.acousticrules.rules.Rule;
 import com.framstag.acousticrules.rules.Severity;
+import jakarta.json.bind.annotation.JsonbCreator;
+import jakarta.json.bind.annotation.JsonbProperty;
 
 public class ChangeSeverity extends AbstractModifier {
-  private Severity from;
-  private Severity to;
+  private final Severity from;
+  private final Severity to;
 
-  public void setFrom(Severity from) {
+  @JsonbCreator
+  public ChangeSeverity(@JsonbProperty("from") Severity from,
+                        @JsonbProperty("to") Severity to) {
     this.from = from;
-  }
-
-  public void setTo(Severity to) {
     this.to = to;
   }
 

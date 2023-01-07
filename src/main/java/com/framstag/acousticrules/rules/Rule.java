@@ -16,46 +16,57 @@
  */
 package com.framstag.acousticrules.rules;
 
+import jakarta.json.bind.annotation.JsonbCreator;
+import jakarta.json.bind.annotation.JsonbProperty;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 public class Rule implements Comparable<Rule> {
 
-  private String key;
-  private String name;
-  private String repo;
+  private final String key;
+  private final String name;
+  private final String repo;
+  private final Status status;
+  private final String lang;
+  private final String type;
+  private final List<String> sysTags;
+  private final List<Parameter> params;
   private Severity severity;
-  private Status status;
-  private String lang;
-  private String type;
 
-  private List<String> sysTags;
-
-  private List<Parameter> params;
+  @JsonbCreator
+  public Rule(
+    @JsonbProperty("key") String key,
+    @JsonbProperty("name") String name,
+    @JsonbProperty("repo") String repo,
+    @JsonbProperty("severity") Severity severity,
+    @JsonbProperty("status") Status status,
+    @JsonbProperty("lang") String lang,
+    @JsonbProperty("type") String type,
+    @JsonbProperty("sysTags") List<String> sysTags,
+    @JsonbProperty("params") List<Parameter> params) {
+    this.key = key;
+    this.name = name;
+    this.repo = repo;
+    this.severity = severity;
+    this.status = status;
+    this.lang = lang;
+    this.type = type;
+    this.sysTags = List.copyOf(sysTags);
+    this.params = List.copyOf(params);
+  }
 
   public String getKey() {
     return key;
-  }
-
-  public void setKey(String key) {
-    this.key = key;
   }
 
   public String getName() {
     return name;
   }
 
-  public void setName(String name) {
-    this.name = name;
-  }
-
   public String getRepo() {
     return repo;
-  }
-
-  public void setRepo(String repo) {
-    this.repo = repo;
   }
 
   public Severity getSeverity() {
@@ -70,40 +81,20 @@ public class Rule implements Comparable<Rule> {
     return status;
   }
 
-  public void setStatus(Status status) {
-    this.status = status;
-  }
-
   public String getLang() {
     return lang;
-  }
-
-  public void setLang(String lang) {
-    this.lang = lang;
   }
 
   public String getType() {
     return type;
   }
 
-  public void setType(String type) {
-    this.type = type;
-  }
-
   public List<String> getSysTags() {
     return Collections.unmodifiableList(sysTags);
   }
 
-  public void setSysTags(List<String> sysTags) {
-    this.sysTags = List.copyOf(sysTags);
-  }
-
   public List<Parameter> getParams() {
     return Collections.unmodifiableList(params);
-  }
-
-  public void setParams(List<Parameter> params) {
-    this.params = List.copyOf(params);
   }
 
   public void setParam(String key, String value) {
