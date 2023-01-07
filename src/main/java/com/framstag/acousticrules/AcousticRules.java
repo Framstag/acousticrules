@@ -155,7 +155,7 @@ public class AcousticRules implements Callable<Integer> {
     for (var entry : ruleGroupMap.entrySet()) {
       if (entry.getValue().size() > 1) {
         duplicateCount++;
-        log.warn("* Rule {} '{}' is in multiple groups: {}",
+        log.atWarn().log("* Rule {} '{}' is in multiple groups: {}",
           entry.getKey().getKey(),
           entry.getKey().getName(),
           String.join(",", entry.getValue()));
@@ -172,7 +172,7 @@ public class AcousticRules implements Callable<Integer> {
 
     for (var rule : rules) {
       if (!overallRules.contains(rule)) {
-        log.info(" * {} {} {} {} {} ({})",
+        log.atInfo().log(" * {} {} {} {} {} ({})",
           rule.getKey(),
           rule.getSeverity(),
           rule.getType(),
@@ -188,8 +188,8 @@ public class AcousticRules implements Callable<Integer> {
     log.info("Filtering rules...");
     for (var group : qualityProfile.groups()) {
       if (!rulesByGroup.containsKey(group.name())) {
-        log.error("Quality profile requests filtering of group '{}', but this group does not exist",
-          group.name());
+        log.atError().log("Quality profile requests filtering of group '{}', but this group does not exist",
+            group.name());
         break;
       }
 
@@ -272,7 +272,7 @@ public class AcousticRules implements Callable<Integer> {
 
   private static void logRules(Set<Rule> groupRuleSet) {
     for (var rule : groupRuleSet) {
-      log.info(" * {} {} {} {} ({})",
+      log.atInfo().log(" * {} {} {} {} ({})",
         rule.getKey(),
         rule.getSeverity(),
         rule.getType(),
@@ -284,14 +284,14 @@ public class AcousticRules implements Callable<Integer> {
   private static void modifyRules(Collection<QualityGroup> groups, Map<String, Set<Rule>> groupRulesetMap) {
     for (var group : groups) {
       if (!groupRulesetMap.containsKey(group.name())) {
-        log.error("Quality profile requests modification group '{}', but this group does not exist",
-          group.name());
+        log.atError().log("Quality profile requests modification group '{}', but this group does not exist",
+            group.name());
         break;
       }
 
       Set<Rule> rules = groupRulesetMap.get(group.name());
 
-      log.info("Modifying group '{}'...", group.name());
+      log.atInfo().log("Modifying group '{}'...", group.name());
       for (var modifier : group.modifier()) {
         var modifiedCount = 0;
 

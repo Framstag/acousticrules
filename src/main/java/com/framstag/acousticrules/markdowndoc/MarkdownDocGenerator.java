@@ -48,11 +48,11 @@ public class MarkdownDocGenerator {
 
       for (QualityGroup group : qualityGroupList) {
         if (!rulesByGroup.containsKey(group.name())) {
-          log.error("Quality profile requests dump of group '{}', but this group does not exist", group.name());
+          log.atError().log("Quality profile requests dump of group '{}', but this group does not exist", group.name());
           break;
         }
 
-        log.info("Writing group '{}'...", group.name());
+        log.atInfo().log("Writing group '{}'...", group.name());
 
         writer.write("## ");
         writer.write(group.name());
