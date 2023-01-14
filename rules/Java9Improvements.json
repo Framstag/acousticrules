@@ -31,12 +31,5 @@
     {
       "@processor": "RemoveDeprecated"
     }
-  ],
-  "modifier": [
-    {
-      "@processor": "ChangeSeverity",
-      "from": "MINOR",
-      "to": "MAJOR"
-    }
   ]
 }

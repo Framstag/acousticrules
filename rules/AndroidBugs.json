@@ -18,12 +18,5 @@
     {
       "@processor": "RemoveDeprecated"
     }
-  ],
-  "modifier": [
-    {
-      "@processor": "ChangeSeverity",
-      "from": "MAJOR",
-      "to": "BLOCKER"
-    }
   ]
 }

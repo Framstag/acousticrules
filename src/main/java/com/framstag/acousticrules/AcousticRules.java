@@ -314,7 +314,7 @@ public class AcousticRules implements Callable<Integer> {
       log.info("Modifier: {} {}",
         modifier.getDescription(),
         modifier.getReasonString("- "));
-      for (var rule : modifiedRules) {
+      for (var rule : rules) {
         if (modifier.modify(rule)) {
           modifiedCount++;
         }

@@ -30,8 +30,6 @@ public class ProcessingGroup {
   private final List<Selector> selectors;
   private final List<Filter> filters;
 
-  private List<Modifier> modifier;
-
   @JsonbCreator
   public ProcessingGroup(
     @JsonbProperty("name") String name,
@@ -51,12 +49,6 @@ public class ProcessingGroup {
     } else {
       this.filters = Collections.emptyList();
     }
-
-    if (modifier != null) {
-      this.modifier = List.copyOf(modifier);
-    } else {
-      this.modifier = Collections.emptyList();
-    }
   }
 
   public String getName() {
@@ -69,13 +61,5 @@ public class ProcessingGroup {
 
   public List<Filter> getFilters() {
     return Collections.unmodifiableList(filters);
-  }
-
-  public List<Modifier> getModifier() {
-    return Collections.unmodifiableList(modifier);
-  }
-
-  public void setModifier(List<Modifier> modifier) {
-    this.modifier = List.copyOf(modifier);
   }
 }
