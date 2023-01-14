@@ -18,6 +18,7 @@ package com.framstag.acousticrules;
 
 import com.framstag.acousticrules.filter.Filter;
 import com.framstag.acousticrules.markdowndoc.MarkdownDocGenerator;
+import com.framstag.acousticrules.modifier.Modifier;
 import com.framstag.acousticrules.processing.ProcessingGroup;
 import com.framstag.acousticrules.processing.ProcessingGroupLoader;
 import com.framstag.acousticrules.qualityprofile.QualityGroup;
@@ -289,26 +290,42 @@ public class AcousticRules implements Callable<Integer> {
         break;
       }
 
-      Set<Rule> rules = groupRulesetMap.get(group.name());
-
       log.atInfo().log("Modifying group '{}'...", group.name());
-      for (var modifier : group.modifier()) {
-        var modifiedCount = 0;
 
-        log.info("Modifier: {} {}",
-          modifier.getDescription(),
-          modifier.getReasonString("- "));
-        for (var rule : rules) {
-          if (modifier.modify(rule)) {
-            modifiedCount++;
-          }
-        }
-
-        log.info("{} of {} rules modified",
-          modifiedCount,
-          rules.size());
-
-      }
+      groupRulesetMap.put(group.name(),
+        modifyRules(groupRulesetMap.get(group.name()),
+          group.modifier()));
     }
+  }
+
+  /**
+   * Calls the modifier over the given Collection of rules and return a new collection with the new,
+   * modified rules.
+   * @param rules Set of rules
+   * @param modifiers collection of modifiers to be applied
+   * @return A new set of modified rules.
+   */
+  private static Set<Rule> modifyRules(Set<Rule> rules, Collection<Modifier> modifiers) {
+    Set<Rule> modifiedRules = new HashSet<>(rules);
+
+    for (var modifier : modifiers) {
+      var modifiedCount = 0;
+
+      log.info("Modifier: {} {}",
+        modifier.getDescription(),
+        modifier.getReasonString("- "));
+      for (var rule : modifiedRules) {
+        if (modifier.modify(rule)) {
+          modifiedCount++;
+        }
+        modifiedRules.add(rule);
+      }
+
+      log.info("{} of {} rules modified",
+        modifiedCount,
+        rules.size());
+    }
+
+    return modifiedRules;
   }
 }
