@@ -51,6 +51,11 @@ public final class RuleInstance implements Ruleable,Comparable<RuleInstance> {
     return definition.getName();
   }
 
+  public Map<String, String> getParameter() {
+    // Make sure the Map we hand out is immutable and our map cannot be changes via a side effect
+    return Map.copyOf(parameter);
+  }
+
   public RuleInstance setParameter(String key, String value) {
     if (!definition.hasParam(key)) {
       throw new IllegalArgumentException("The param '"+key+"' is not a known parameter for the rule "+getKey());

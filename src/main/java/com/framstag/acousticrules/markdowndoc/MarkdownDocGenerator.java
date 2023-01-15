@@ -110,9 +110,9 @@ public class MarkdownDocGenerator {
     writer.write(System.lineSeparator());
     writer.write(System.lineSeparator());
 
-    writer.write("|Rule|Description|Severity|");
+    writer.write("|Rule|Description|Severity|Parameter|");
     writer.write(System.lineSeparator());
-    writer.write("|----|-----------|--------|");
+    writer.write("|----|-----------|--------|---------|");
     writer.write(System.lineSeparator());
 
 
@@ -125,13 +125,12 @@ public class MarkdownDocGenerator {
       var ruleInstance = ruleGroup.getRuleInstance(ruleDefinition.getKey());
       var ruleDeleted = ruleInstance == null;
       var severityChanged = !ruleDeleted && ruleInstance.getSeverity()!=ruleDefinition.getSeverity();
+      var hasParameter = !ruleDeleted && !ruleInstance.getParameter().isEmpty();
 
       writeSeparator(writer);
 
       if (ruleDeleted) {
-        writer.write("~~~");
-        writer.write(ruleDefinition.getKey());
-        writer.write("~~~");
+        writer.write(strikedThrough(ruleDefinition.getKey()));
       } else {
         writer.write(ruleDefinition.getKey());
       }
@@ -143,17 +142,24 @@ public class MarkdownDocGenerator {
       writeSeparator(writer);
 
       if (ruleDeleted) {
-        writer.write("~~~");
-        writer.write(ruleDefinition.getSeverity().name());
-        writer.write("~~~");
+        writer.write(strikedThrough(ruleDefinition.getSeverity().name()));
       } else if (severityChanged) {
-        writer.write("~~~");
-        writer.write(ruleDefinition.getSeverity().name());
-        writer.write("~~~");
+        writer.write(strikedThrough(ruleDefinition.getSeverity().name()));
         writer.write(" -> ");
         writer.write(ruleInstance.getSeverity().name());
       } else {
         writer.write(ruleInstance.getSeverity().name());
+      }
+
+      writeSeparator(writer);
+
+      if (hasParameter) {
+        for (var entry : ruleInstance.getParameter().entrySet()) {
+          writer.write(entry.getKey());
+          writer.write("=");
+          writer.write(entry.getValue());
+          writer.write("<br />");
+        }
       }
 
       writeSeparator(writer);
@@ -166,5 +172,9 @@ public class MarkdownDocGenerator {
 
   private static void writeSeparator(Writer writer) throws IOException {
     writer.write("|");
+  }
+
+  private static String strikedThrough(String text) {
+    return "~~~" + text + "~~~";
   }
 }
