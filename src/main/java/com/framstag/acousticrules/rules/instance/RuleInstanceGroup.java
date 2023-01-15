@@ -20,35 +20,36 @@ package com.framstag.acousticrules.rules.instance;
 import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public final class RuleInstanceGroup {
   private final RuleDefinitionGroup definitionGroup;
-  private final Set<RuleInstance> ruleInstances;
+  private final Map<String,RuleInstance> ruleInstances;
 
-  private RuleInstanceGroup(RuleDefinitionGroup definitionGroup, Set<RuleInstance> ruleInstances) {
+  private RuleInstanceGroup(RuleDefinitionGroup definitionGroup, Map<String,RuleInstance> ruleInstances) {
     this.definitionGroup = definitionGroup;
-    this.ruleInstances = Set.copyOf(ruleInstances);
+    this.ruleInstances = Map.copyOf(ruleInstances);
   }
 
   public static RuleInstanceGroup fromDefinitionGroup(RuleDefinitionGroup definitionGroup) {
-    Set<RuleInstance> ruleInstances = definitionGroup
+    Map<String,RuleInstance> ruleInstances = definitionGroup
       .getRules()
       .stream()
       .map(RuleInstance::fromDefinition)
-      .collect(Collectors.toUnmodifiableSet());
+      .collect(Collectors.toUnmodifiableMap(RuleInstance::getKey,Function.identity()));
 
     return new RuleInstanceGroup(definitionGroup, ruleInstances);
   }
 
-  public RuleDefinitionGroup getDefinitionGroup() {
+  public RuleDefinitionGroup getRuleDefinitionGroup() {
     return definitionGroup;
   }
 
-  public Set<RuleInstance> getRuleInstances() {
-    return ruleInstances;
+  public Collection<RuleInstance> getRuleInstances() {
+    return ruleInstances.values();
   }
 
   public int size() {
@@ -56,9 +57,9 @@ public final class RuleInstanceGroup {
   }
 
   public RuleInstanceGroup filter(Iterable<RuleInstance> filteredInstances) {
-    Set<RuleInstance> newInstances = new HashSet<>(ruleInstances);
+    var newInstances = new HashMap<String,RuleInstance>(ruleInstances);
 
-    filteredInstances.forEach(newInstances::remove);
+    filteredInstances.forEach(rule -> newInstances.remove(rule.getKey()));
 
     return new RuleInstanceGroup(definitionGroup,newInstances);
   }
@@ -68,13 +69,22 @@ public final class RuleInstanceGroup {
    * @param instances instances to update
    * @return a new RuleInstance instance.
    */
-  public RuleInstanceGroup update(Collection<RuleInstance> instances) {
-    Set<RuleInstance> newInstances = new HashSet<>(ruleInstances);
+  public RuleInstanceGroup update(Iterable<RuleInstance> instances) {
+    HashMap<String,RuleInstance> newInstances = new HashMap<>(ruleInstances);
 
-    newInstances.removeAll(instances);
-    newInstances.addAll(instances);
+    instances.forEach(rule ->
+      newInstances.put(rule.getKey(),rule)
+    );
 
     return new RuleInstanceGroup(definitionGroup,newInstances);
   }
 
+  /**
+   * Return the RuleInstance with the given key or null
+   * @param key key of the rule
+   * @return instance or null
+   */
+  public RuleInstance getRuleInstance(String key) {
+    return ruleInstances.get(key);
+  }
 }

@@ -20,7 +20,6 @@ import com.framstag.acousticrules.qualityprofile.QualityGroup;
 import com.framstag.acousticrules.qualityprofile.QualityProfile;
 import com.framstag.acousticrules.rules.definition.RuleDefinition;
 import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
-import com.framstag.acousticrules.rules.instance.RuleInstance;
 import com.framstag.acousticrules.rules.instance.RuleInstanceGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -117,19 +116,48 @@ public class MarkdownDocGenerator {
     writer.write(System.lineSeparator());
 
 
-    List<RuleInstance> rulesList = ruleGroup
-      .getRuleInstances()
+    List<RuleDefinition> rulesList = ruleGroup
+      .getRuleDefinitionGroup().getRules()
       .stream()
-      .sorted(Comparator.comparing(RuleInstance::getKey)).toList();
+      .sorted(Comparator.comparing(RuleDefinition::getKey)).toList();
 
-    for (RuleInstance rule : rulesList) {
+    for (RuleDefinition ruleDefinition : rulesList) {
+      var ruleInstance = ruleGroup.getRuleInstance(ruleDefinition.getKey());
+      var ruleDeleted = ruleInstance == null;
+      var severityChanged = !ruleDeleted && ruleInstance.getSeverity()!=ruleDefinition.getSeverity();
+
       writeSeparator(writer);
-      writer.write(rule.getKey());
+
+      if (ruleDeleted) {
+        writer.write("~~~");
+        writer.write(ruleDefinition.getKey());
+        writer.write("~~~");
+      } else {
+        writer.write(ruleDefinition.getKey());
+      }
+
       writeSeparator(writer);
-      writer.write(rule.getName());
+
+      writer.write(ruleDefinition.getName());
+
       writeSeparator(writer);
-      writer.write(rule.getSeverity().name());
+
+      if (ruleDeleted) {
+        writer.write("~~~");
+        writer.write(ruleDefinition.getSeverity().name());
+        writer.write("~~~");
+      } else if (severityChanged) {
+        writer.write("~~~");
+        writer.write(ruleDefinition.getSeverity().name());
+        writer.write("~~~");
+        writer.write(" -> ");
+        writer.write(ruleInstance.getSeverity().name());
+      } else {
+        writer.write(ruleInstance.getSeverity().name());
+      }
+
       writeSeparator(writer);
+
       writer.write(System.lineSeparator());
     }
 
