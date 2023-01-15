@@ -67,7 +67,13 @@ public class MarkdownDocGenerator {
         break;
       }
 
-      writeGroup(writer, rulesByGroup.get(groupName), groupName);
+      log.atInfo().log("Writing group '{}'...", groupName);
+
+      var ruleInstanceGroup = rulesByGroup.get(groupName);
+
+      writeGroupHeader(writer, groupName);
+
+      writeGroupTable(writer, ruleInstanceGroup);
     }
   }
 
@@ -75,9 +81,9 @@ public class MarkdownDocGenerator {
                                        RuleDefinitionGroup ruleGroup) throws IOException {
     log.atInfo().log("Writing unused rules...");
 
-    writer.write("|Rule|Description|Severity|");
+    writer.write("|Rule|Type|Description|Severity|Status|Tags|");
     writer.write(System.lineSeparator());
-    writer.write("|----|-----------|--------|");
+    writer.write("|----|----|-----------|--------|------|----|");
     writer.write(System.lineSeparator());
 
 
@@ -90,9 +96,15 @@ public class MarkdownDocGenerator {
       writeSeparator(writer);
       writer.write(rule.getKey());
       writeSeparator(writer);
+      writer.write(rule.getType());
+      writeSeparator(writer);
       writer.write(rule.getName());
       writeSeparator(writer);
       writer.write(rule.getSeverity().name());
+      writeSeparator(writer);
+      writer.write(rule.getStatus().name());
+      writeSeparator(writer);
+      writer.write(String.join(",", rule.getSysTags()));
       writeSeparator(writer);
       writer.write(System.lineSeparator());
     }
@@ -100,16 +112,16 @@ public class MarkdownDocGenerator {
     writer.write(System.lineSeparator());
   }
 
-  private static void writeGroup(FileWriter writer,
-                                 RuleInstanceGroup ruleGroup,
-                                 String groupName) throws IOException {
-    log.atInfo().log("Writing group '{}'...", groupName);
-
+  private static void writeGroupHeader(FileWriter writer,
+                                        String groupName) throws IOException {
     writer.write("### ");
     writer.write(groupName);
     writer.write(System.lineSeparator());
     writer.write(System.lineSeparator());
+  }
 
+  private static void writeGroupTable(FileWriter writer,
+                                      RuleInstanceGroup ruleGroup) throws IOException {
     writer.write("|Rule|Description|Severity|Parameter|");
     writer.write(System.lineSeparator());
     writer.write("|----|-----------|--------|---------|");
