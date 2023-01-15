@@ -20,6 +20,8 @@ import com.framstag.acousticrules.qualityprofile.QualityGroup;
 import com.framstag.acousticrules.qualityprofile.QualityProfile;
 import com.framstag.acousticrules.rules.definition.RuleDefinition;
 import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
+import com.framstag.acousticrules.rules.instance.RuleInstance;
+import com.framstag.acousticrules.rules.instance.RuleInstanceGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +39,7 @@ public class MarkdownDocGenerator {
 
   public void writeMarkdown(QualityProfile qualityProfile,
                             Path filename,
-                            Map<String, RuleDefinitionGroup> rulesByGroup,
+                            Map<String, RuleInstanceGroup> rulesByGroup,
                             RuleDefinitionGroup unusedRules) throws IOException {
     try (var writer = new FileWriter(filename.toString(), StandardCharsets.UTF_8)) {
       writer.write("# Documentation");
@@ -57,7 +59,7 @@ public class MarkdownDocGenerator {
   }
 
   private static void writeGroups(FileWriter writer,
-                                  Map<String, RuleDefinitionGroup> rulesByGroup,
+                                  Map<String, RuleInstanceGroup> rulesByGroup,
                                   List<String> groupNames) throws IOException {
     for (var groupName : groupNames) {
       if (!rulesByGroup.containsKey(groupName)) {
@@ -99,7 +101,7 @@ public class MarkdownDocGenerator {
   }
 
   private static void writeGroup(FileWriter writer,
-                                 RuleDefinitionGroup ruleGroup,
+                                 RuleInstanceGroup ruleGroup,
                                  String groupName) throws IOException {
     log.atInfo().log("Writing group '{}'...", groupName);
 
@@ -114,12 +116,12 @@ public class MarkdownDocGenerator {
     writer.write(System.lineSeparator());
 
 
-    List<RuleDefinition> rulesList = ruleGroup
-      .getRules()
+    List<RuleInstance> rulesList = ruleGroup
+      .getRuleInstances()
       .stream()
-      .sorted(Comparator.comparing(RuleDefinition::getKey)).toList();
+      .sorted(Comparator.comparing(RuleInstance::getKey)).toList();
 
-    for (RuleDefinition rule : rulesList) {
+    for (RuleInstance rule : rulesList) {
       writer.write("|");
       writer.write(rule.getKey());
       writer.write("|");

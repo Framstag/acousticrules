@@ -15,23 +15,7 @@
  * limitations under the License.
  */
 
-package com.framstag.acousticrules.selector;
-
-import com.framstag.acousticrules.rules.Ruleable;
-import jakarta.json.bind.annotation.JsonbSubtype;
-import jakarta.json.bind.annotation.JsonbTypeInfo;
-
-@JsonbTypeInfo(key = "@processor", value = {
-  @JsonbSubtype(alias = "SelectWithKey", type = SelectWithKey.class),
-  @JsonbSubtype(alias = "SelectWithTag", type = SelectWithTag.class),
-  @JsonbSubtype(alias = "SelectWithType", type = SelectWithType.class)
-})
-public interface Selector {
-  String getReason();
-
-  String getReasonString(String prefix);
-
-  String getDescription();
-
-  boolean select(Ruleable rule);
-}
+/**
+ * All classes surrounding the RuleInstance class.
+ */
+package com.framstag.acousticrules.rules.instance;

@@ -17,7 +17,7 @@
 
 package com.framstag.acousticrules.filter;
 
-import com.framstag.acousticrules.rules.definition.RuleDefinition;
+import com.framstag.acousticrules.rules.Ruleable;
 import jakarta.json.bind.annotation.JsonbSubtype;
 import jakarta.json.bind.annotation.JsonbTypeInfo;
 
@@ -35,5 +35,5 @@ public interface Filter {
 
   String getDescription();
 
-  boolean filter(RuleDefinition rule);
+  boolean filter(Ruleable rule);
 }

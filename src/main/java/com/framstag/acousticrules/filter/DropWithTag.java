@@ -16,7 +16,7 @@
  */
 package com.framstag.acousticrules.filter;
 
-import com.framstag.acousticrules.rules.definition.RuleDefinition;
+import com.framstag.acousticrules.rules.Ruleable;
 import jakarta.json.bind.annotation.JsonbCreator;
 import jakarta.json.bind.annotation.JsonbProperty;
 
@@ -37,7 +37,7 @@ public class DropWithTag extends AbstractFilter {
   }
 
   @Override
-  public boolean filter(RuleDefinition rule) {
+  public boolean filter(Ruleable rule) {
     for (String tag : rule.getSysTags()) {
       if (tags.contains(tag)) {
         return true;

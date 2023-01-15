@@ -16,8 +16,8 @@
  */
 package com.framstag.acousticrules.modifier;
 
-import com.framstag.acousticrules.rules.definition.RuleDefinition;
 import com.framstag.acousticrules.rules.Severity;
+import com.framstag.acousticrules.rules.instance.RuleInstance;
 import jakarta.json.bind.annotation.JsonbCreator;
 import jakarta.json.bind.annotation.JsonbProperty;
 
@@ -38,7 +38,7 @@ public class ChangeSeverity extends AbstractModifier {
   }
 
   @Override
-  public boolean modify(RuleDefinition rule) {
+  public boolean modify(RuleInstance rule) {
     if (rule.getSeverity()==from) {
       rule.setSeverity(to);
       return true;

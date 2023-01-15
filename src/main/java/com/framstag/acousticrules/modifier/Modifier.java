@@ -17,7 +17,7 @@
 
 package com.framstag.acousticrules.modifier;
 
-import com.framstag.acousticrules.rules.definition.RuleDefinition;
+import com.framstag.acousticrules.rules.instance.RuleInstance;
 import jakarta.json.bind.annotation.JsonbSubtype;
 import jakarta.json.bind.annotation.JsonbTypeInfo;
 
@@ -33,5 +33,5 @@ public interface Modifier {
 
   String getDescription();
 
-  boolean modify(RuleDefinition rule);
+  boolean modify(RuleInstance rule);
 }

@@ -17,6 +17,7 @@
 package com.framstag.acousticrules.rules.definition;
 
 import com.framstag.acousticrules.rules.Parameter;
+import com.framstag.acousticrules.rules.Ruleable;
 import com.framstag.acousticrules.rules.Severity;
 import com.framstag.acousticrules.rules.Status;
 import jakarta.json.bind.annotation.JsonbCreator;
@@ -37,7 +38,7 @@ import java.util.stream.Collectors;
  * Sonar JSON file containing rule definitions.
  *
  */
-public class RuleDefinition implements Comparable<RuleDefinition> {
+public class RuleDefinition implements Ruleable, Comparable<RuleDefinition> {
 
   private final String key;
   private final String name;
@@ -47,7 +48,7 @@ public class RuleDefinition implements Comparable<RuleDefinition> {
   private final String type;
   private final List<String> sysTags;
   private final Map<String, Parameter> params;
-  private Severity severity;
+  private final Severity severity;
 
   @JsonbCreator
   public RuleDefinition(
@@ -79,50 +80,40 @@ public class RuleDefinition implements Comparable<RuleDefinition> {
     return repo;
   }
 
-  public Severity getSeverity() {
-    return severity;
-  }
-
-  public void setSeverity(Severity severity) {
-    this.severity = severity;
-  }
-
-  public Status getStatus() {
-    return status;
-  }
-
   public String getLang() {
     return lang;
-  }
-
-  public String getType() {
-    return type;
-  }
-
-  public List<String> getSysTags() {
-    return Collections.unmodifiableList(sysTags);
   }
 
   public Collection<Parameter> getParams() {
     return params.values();
   }
 
-  public void setParam(String key, String value) {
-    var param = params.get(key);
-
-    if (param == null) {
-      throw new IllegalArgumentException("The param '"+key+"' is not a known parameter for the rule "+getKey());
-    }
-
-    params.put(key,param.setValue(value));
-  }
-
   public String getKey() {
     return key;
   }
 
+  public String getType() {
+    return type;
+  }
+
+  public Severity getSeverity() {
+    return severity;
+  }
+
+  public Status getStatus() {
+    return status;
+  }
+
+  public List<String> getSysTags() {
+    return Collections.unmodifiableList(sysTags);
+  }
+
   public boolean hasParams() {
     return !params.isEmpty();
+  }
+
+  public boolean hasParam(String key) {
+    return params != null && params.containsKey(key);
   }
 
   @Override
