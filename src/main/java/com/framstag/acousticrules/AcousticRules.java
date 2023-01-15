@@ -20,13 +20,14 @@ import com.framstag.acousticrules.filter.Filter;
 import com.framstag.acousticrules.markdowndoc.MarkdownDocGenerator;
 import com.framstag.acousticrules.modifier.Modifier;
 import com.framstag.acousticrules.processing.ProcessingGroup;
-import com.framstag.acousticrules.processing.ProcessingGroupLoader;
+import com.framstag.acousticrules.processing.ProcessingGroupRepository;
 import com.framstag.acousticrules.qualityprofile.QualityGroup;
 import com.framstag.acousticrules.qualityprofile.QualityProfile;
 import com.framstag.acousticrules.qualityprofile.QualityProfileGenerator;
-import com.framstag.acousticrules.qualityprofile.QualityProfileLoader;
-import com.framstag.acousticrules.rules.Rule;
-import com.framstag.acousticrules.rules.RuleSetLoader;
+import com.framstag.acousticrules.qualityprofile.QualityProfileRepository;
+import com.framstag.acousticrules.rules.definition.RuleDefinition;
+import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
+import com.framstag.acousticrules.rules.definition.RulesRepository;
 import com.framstag.acousticrules.selector.Selector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +37,6 @@ import javax.xml.stream.XMLStreamException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -45,7 +45,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
-import java.util.stream.Collectors;
 
 @CommandLine.Command(name = "AcousticRules",
   mixinStandardHelpOptions = true,
@@ -66,10 +65,6 @@ public class AcousticRules implements Callable<Integer> {
     description = "File containing a quality profile definition")
   private Path qualityProfileFile;
   @CommandLine.Option(
-    names = {"-u", "--dumpUnused"},
-    description = "Dump the rules not used in any group")
-  private boolean dumpUnusedRules;
-  @CommandLine.Option(
     names = {"--stopOnDuplicates"},
     description = "Do not generate a quality profile if the same rule is matched by multiple groups")
   private boolean stopOnDuplicates;
@@ -85,27 +80,25 @@ public class AcousticRules implements Callable<Integer> {
 
   @Override
   public Integer call() throws Exception {
-    List<Rule> rules = new RuleSetLoader().loadRules(ruleFiles);
-    List<ProcessingGroup> processingGroups = new ProcessingGroupLoader().loadProcessingGroups(processorSetFiles);
-    Map<String, Set<Rule>> rulesByGroup = processRulesToGroups(rules, processingGroups);
+    var allRulesList = new RulesRepository().loadRulesFromRulesDownloadFiles(ruleFiles);
+    var allRules = RuleDefinitionGroup.fromRuleDefinitionList(allRulesList);
+    List<ProcessingGroup> processingGroups = new ProcessingGroupRepository().loadProcessingGroups(processorSetFiles);
+    Map<String, RuleDefinitionGroup> rulesByGroup = processRulesToGroups(allRules, processingGroups);
 
-    int duplicateCount = dumpRulesInMultipleGroups(rules, rulesByGroup);
+    int duplicateCount = dumpRulesInMultipleGroups(allRules, rulesByGroup);
 
     if (stopOnDuplicates && duplicateCount > 0) {
       log.error("There are {} rule(s) in multiple groups, aborting!", duplicateCount);
       return 1;
     }
 
-    Set<Rule> overallRules = rulesByGroup.values().stream().flatMap(Collection::stream).collect(Collectors.toSet());
+    var usedRules = RuleDefinitionGroup.fromRuleDefinitionGroups(rulesByGroup.values());
+    var unusedRules = allRules.filter(usedRules.getRules());
 
-    log.info("Overall selected rules: {}", overallRules.size());
-
-    if (dumpUnusedRules) {
-      dumpUnusedRules(rules, overallRules);
-    }
+    log.info("Overall selected rules: {}", usedRules.size());
 
     if (qualityProfileFile != null) {
-      var qualityProfile = new QualityProfileLoader().load(qualityProfileFile);
+      var qualityProfile = new QualityProfileRepository().load(qualityProfileFile);
 
       filterRules(qualityProfile, rulesByGroup);
       modifyRules(qualityProfile, rulesByGroup);
@@ -113,39 +106,40 @@ public class AcousticRules implements Callable<Integer> {
       writeSonarQualityProfile(qualityProfile, rulesByGroup);
 
       if (qualityProfile.hasDocumentationFilename()) {
-        generateDocumentationFile(qualityProfile, rulesByGroup);
+        generateDocumentationFile(qualityProfile, rulesByGroup,unusedRules);
       }
     }
 
     return 0;
   }
 
-  private static Map<String, Set<Rule>> processRulesToGroups(List<Rule> rules, List<ProcessingGroup> processingGroups) {
-    Map<String, Set<Rule>> rulesByGroup = new HashMap<>();
+  private static Map<String, RuleDefinitionGroup> processRulesToGroups(RuleDefinitionGroup allRules,
+                                                                       List<ProcessingGroup> processingGroups) {
+    Map<String, RuleDefinitionGroup> rulesByGroup = new HashMap<>();
 
     for (var group : processingGroups) {
       log.info("Processing group '{}'...", group.getName());
-      Set<Rule> groupRuleSet = selectRules(rules, group.getSelectors());
-      filterRules(groupRuleSet, group.getFilters());
-      logRules(groupRuleSet);
+      var ruleDefinitionGroup = filterRules(selectRules(allRules, group.getSelectors()), group.getFilters());
+      logRules(ruleDefinitionGroup);
 
-      rulesByGroup.put(group.getName(), groupRuleSet);
+      rulesByGroup.put(group.getName(), ruleDefinitionGroup);
     }
 
     return rulesByGroup;
   }
 
-  private static int dumpRulesInMultipleGroups(List<Rule> rules, Map<String, Set<Rule>> rulesByGroup) {
-    Map<Rule, List<String>> ruleGroupMap = new HashMap<>();
+  private static int dumpRulesInMultipleGroups(RuleDefinitionGroup allRules, Map<String,
+    RuleDefinitionGroup> rulesByGroup) {
+    Map<RuleDefinition, List<String>> ruleGroupMap = new HashMap<>();
 
     // Initialize map
-    for (var rule : rules) {
+    for (var rule : allRules.getRules()) {
       ruleGroupMap.put(rule, new LinkedList<>());
     }
 
     // Fill the list of groups for each rule
     for (var entry : rulesByGroup.entrySet()) {
-      for (var rule : entry.getValue()) {
+      for (var rule : entry.getValue().getRules()) {
         ruleGroupMap.get(rule).add(entry.getKey());
       }
     }
@@ -168,24 +162,7 @@ public class AcousticRules implements Callable<Integer> {
     return duplicateCount;
   }
 
-  private static void dumpUnusedRules(List<Rule> rules, Set<Rule> overallRules) {
-    log.info("Dump rules not selected in any group...");
-
-    for (var rule : rules) {
-      if (!overallRules.contains(rule)) {
-        log.atInfo().log(" * {} {} {} {} {} ({})",
-          rule.getKey(),
-          rule.getSeverity(),
-          rule.getType(),
-          rule.getStatus(),
-          rule.getName(),
-          String.join(", ", rule.getSysTags()));
-      }
-    }
-    log.info("Dump rules not selected in any group...done");
-  }
-
-  private static void filterRules(QualityProfile qualityProfile, Map<String, Set<Rule>> rulesByGroup) {
+  private static void filterRules(QualityProfile qualityProfile, Map<String, RuleDefinitionGroup> rulesByGroup) {
     log.info("Filtering rules...");
     for (var group : qualityProfile.groups()) {
       if (!rulesByGroup.containsKey(group.name())) {
@@ -194,19 +171,21 @@ public class AcousticRules implements Callable<Integer> {
         break;
       }
 
-      filterRules(rulesByGroup.get(group.name()),group.filters());
+      rulesByGroup.put(group.name(),
+        filterRules(rulesByGroup.get(group.name()),
+          group.filters()));
     }
     log.info("Filtering rules done.");
   }
 
-  private static void modifyRules(QualityProfile qualityProfile, Map<String, Set<Rule>> rulesByGroup) {
+  private static void modifyRules(QualityProfile qualityProfile, Map<String, RuleDefinitionGroup> rulesByGroup) {
     log.info("Modifying rules...");
     modifyRules(qualityProfile.groups(), rulesByGroup);
     log.info("Modifying rules done.");
   }
 
   private static void writeSonarQualityProfile(QualityProfile qualityProfile,
-                                               Map<String, Set<Rule>> rulesByGroup)
+                                               Map<String, RuleDefinitionGroup> rulesByGroup)
     throws FileNotFoundException, XMLStreamException {
     log.info("Writing quality profile...");
 
@@ -217,24 +196,54 @@ public class AcousticRules implements Callable<Integer> {
   }
 
   private static void generateDocumentationFile(QualityProfile qualityProfile,
-                                                Map<String, Set<Rule>> rulesByGroup)
+                                                Map<String, RuleDefinitionGroup> rulesByGroup,
+                                                RuleDefinitionGroup unusedRules)
     throws IOException {
     log.info("Writing quality profile documentation '{}'...", qualityProfile.documentationFilename());
     var docGenerator = new MarkdownDocGenerator();
 
-    docGenerator.writeMarkdown(qualityProfile, qualityProfile.documentationFilename(), rulesByGroup);
+    docGenerator.writeMarkdown(qualityProfile,
+      qualityProfile.documentationFilename(),
+      rulesByGroup,
+      unusedRules);
     log.info("Writing quality profile documentation done.");
   }
 
-  private static Set<Rule> selectRules(List<Rule> rules, List<Selector> selectors) {
-    Set<Rule> allSelectedRules = new HashSet<>();
+  private static RuleDefinitionGroup filterRules(RuleDefinitionGroup groupRuleSet, List<Filter> filters) {
+    var modifiedRulesGroup = groupRuleSet;
+
+    for (var filter : filters) {
+      List<RuleDefinition> filteredRules = new LinkedList<>();
+
+      log.info("Filter: {} {}",
+        filter.getDescription(),
+        filter.getReasonString("- "));
+      for (var rule : groupRuleSet.getRules()) {
+        boolean filtered = filter.filter(rule);
+        if (filtered) {
+          filteredRules.add(rule);
+        }
+      }
+
+      modifiedRulesGroup = modifiedRulesGroup.filter(filteredRules);
+
+      log.info("{} filtered => {} rules over all",
+        filteredRules.size(),
+        modifiedRulesGroup.size());
+    }
+
+    return modifiedRulesGroup;
+  }
+
+  private static RuleDefinitionGroup selectRules(RuleDefinitionGroup rules, List<Selector> selectors) {
+    Set<RuleDefinition> allSelectedRules = new HashSet<>();
 
     for (var selector : selectors) {
-      Set<Rule> selectedRules = new HashSet<>();
+      Set<RuleDefinition> selectedRules = new HashSet<>();
       log.info("Selector: {} {}",
         selector.getDescription(),
         selector.getReasonString("- "));
-      for (var rule : rules) {
+      for (var rule : rules.getRules()) {
         boolean selected = selector.select(rule);
 
         if (selected) {
@@ -246,33 +255,11 @@ public class AcousticRules implements Callable<Integer> {
       log.info("{} rules selected => {} rules over all", selectedRules.size(), allSelectedRules.size());
     }
 
-    return allSelectedRules;
+    return RuleDefinitionGroup.fromRuleDefinitionSet(allSelectedRules);
   }
 
-  private static void filterRules(Set<Rule> groupRuleSet, List<Filter> filters) {
-    for (var filter : filters) {
-      List<Rule> filteredRules = new LinkedList<>();
-      log.info("Filter: {} {}",
-        filter.getDescription(),
-        filter.getReasonString("- "));
-      for (var rule : new ArrayList<>(groupRuleSet)) {
-        boolean filtered = filter.filter(rule);
-
-        if (filtered) {
-          filteredRules.add(rule);
-        }
-      }
-
-      filteredRules.forEach(groupRuleSet::remove);
-
-      log.info("{} filtered => {} rules over all",
-        filteredRules.size(),
-        groupRuleSet.size());
-    }
-  }
-
-  private static void logRules(Set<Rule> groupRuleSet) {
-    for (var rule : groupRuleSet) {
+  private static void logRules(RuleDefinitionGroup ruleDefinitionGroup) {
+    for (var rule : ruleDefinitionGroup.getRules()) {
       log.atInfo().log(" * {} {} {} {} ({})",
         rule.getKey(),
         rule.getSeverity(),
@@ -282,7 +269,7 @@ public class AcousticRules implements Callable<Integer> {
     }
   }
 
-  private static void modifyRules(Collection<QualityGroup> groups, Map<String, Set<Rule>> groupRulesetMap) {
+  private static void modifyRules(Collection<QualityGroup> groups, Map<String, RuleDefinitionGroup> groupRulesetMap) {
     for (var group : groups) {
       if (!groupRulesetMap.containsKey(group.name())) {
         log.atError().log("Quality profile requests modification group '{}', but this group does not exist",
@@ -305,25 +292,25 @@ public class AcousticRules implements Callable<Integer> {
    * @param modifiers collection of modifiers to be applied
    * @return A new set of modified rules.
    */
-  private static Set<Rule> modifyRules(Set<Rule> rules, Collection<Modifier> modifiers) {
-    Set<Rule> modifiedRules = new HashSet<>(rules);
+  private static RuleDefinitionGroup modifyRules(RuleDefinitionGroup rules, Collection<Modifier> modifiers) {
+    RuleDefinitionGroup modifiedRules = rules;
 
     for (var modifier : modifiers) {
-      var modifiedCount = 0;
-
+      Set<RuleDefinition> updatedDefinitions = new HashSet<>();
       log.info("Modifier: {} {}",
         modifier.getDescription(),
         modifier.getReasonString("- "));
-      for (var rule : rules) {
+      for (var rule : rules.getRules()) {
         if (modifier.modify(rule)) {
-          modifiedCount++;
+          updatedDefinitions.add(rule);
         }
-        modifiedRules.add(rule);
       }
 
       log.info("{} of {} rules modified",
-        modifiedCount,
+        updatedDefinitions.size(),
         rules.size());
+
+      modifiedRules = modifiedRules.update(updatedDefinitions);
     }
 
     return modifiedRules;

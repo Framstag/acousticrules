@@ -16,7 +16,7 @@
  */
 package com.framstag.acousticrules.selector;
 
-import com.framstag.acousticrules.rules.Rule;
+import com.framstag.acousticrules.rules.definition.RuleDefinition;
 import jakarta.json.bind.annotation.JsonbCreator;
 import jakarta.json.bind.annotation.JsonbProperty;
 
@@ -38,7 +38,7 @@ public class SelectWithType extends AbstractSelector {
   }
 
   @Override
-  public boolean select(Rule rule) {
+  public boolean select(RuleDefinition rule) {
     return types.contains(rule.getType());
   }
 

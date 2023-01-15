@@ -14,31 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.framstag.acousticrules.rules;
 
-import java.util.Collections;
-import java.util.List;
-
-public record RuleSet(List<Rule> rules) {
-
-  public RuleSet(List<Rule> rules) {
-    this.rules = List.copyOf(rules);
-  }
-
-  @Override
-  public List<Rule> rules() {
-    return Collections.unmodifiableList(rules);
-  }
-
-  public boolean hasRules() {
-    return rules != null && !rules.isEmpty();
-  }
-
-  public int getRuleCount() {
-    if (rules == null) {
-      return 0;
-    }
-
-    return rules.size();
-  }
-}
+/**
+ * Classes belonging to the RuleDefinition class.
+ */
+package com.framstag.acousticrules.rules.definition;

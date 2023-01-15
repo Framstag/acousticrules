@@ -14,11 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.framstag.acousticrules.rules;
+package com.framstag.acousticrules.processing;
 
 import com.framstag.acousticrules.exceptions.ParameterException;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
+import org.eclipse.yasson.YassonConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,37 +28,30 @@ import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 
-public class RuleSetLoader {
-  private static final Logger log = LoggerFactory.getLogger(RuleSetLoader.class);
+public class ProcessingGroupRepository {
+  private static final Logger log = LoggerFactory.getLogger(ProcessingGroupRepository.class);
 
-  public List<Rule> loadRules(Iterable<Path> arguments) throws ParameterException {
-    var ruleSetLoader = new RuleSetLoader();
-    List<Rule> rules = new LinkedList<>();
+  public List<ProcessingGroup> loadProcessingGroups(Iterable<Path> processorSetFiles) throws ParameterException {
+    List<ProcessingGroup> processingGroups = new LinkedList<>();
 
-    for (var ruleSetFilename : arguments) {
-      var ruleSet = ruleSetLoader.load(ruleSetFilename);
-
-      if (ruleSet.hasRules()) {
-        rules.addAll(ruleSet.rules());
-      }
+    for (var filename : processorSetFiles) {
+      processingGroups.add(load(filename));
     }
 
-    log.info("{} rules over all files loaded.", rules.size());
-
-    return rules;
+    return processingGroups;
   }
 
-  public RuleSet load(Path filename) throws ParameterException {
+  public ProcessingGroup load(Path filename) throws ParameterException {
+    log.info("Loading processing group '{}'", filename);
     var jsonbConfig = new JsonbConfig();
+    jsonbConfig.setProperty(YassonConfig.FAIL_ON_UNKNOWN_PROPERTIES, Boolean.TRUE);
 
-    log.info("Loading rule set '{}'", filename);
     try (var jsonb = JsonbBuilder.create(jsonbConfig)) {
       var configFileContent = Files.readString(filename);
-      var ruleSet = jsonb.fromJson(configFileContent, RuleSet.class);
-      log.info("Rule set with {} rules loaded.", ruleSet.getRuleCount());
-      return ruleSet;
+      return jsonb.fromJson(configFileContent, ProcessingGroup.class);
     } catch (Exception e) {
-      throw new ParameterException("Cannot load rules", e);
+      throw new ParameterException("Cannot load processing group", e);
     }
   }
+
 }

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.framstag.acousticrules.processing;
+package com.framstag.acousticrules.qualityprofile;
 
 import com.framstag.acousticrules.exceptions.ParameterException;
 import jakarta.json.bind.JsonbBuilder;
@@ -25,35 +25,23 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.LinkedList;
-import java.util.List;
 
-public class ProcessingGroupLoader {
-  private static final Logger log = LoggerFactory.getLogger(ProcessingGroupLoader.class);
+public class QualityProfileRepository {
+  private static final Logger log = LoggerFactory.getLogger(QualityProfileRepository.class);
 
-  public List<ProcessingGroup> loadProcessingGroups(Iterable<Path> processorSetFiles) throws ParameterException {
-    List<ProcessingGroup> processingGroups = new LinkedList<>();
-
-    for (var filename : processorSetFiles) {
-      processingGroups.add(load(filename));
-    }
-
-    return processingGroups;
-  }
-
-  public ProcessingGroup load(Path filename) throws ParameterException {
-    log.info("Loading processing group '{}'", filename);
+  public QualityProfile load(Path filename) {
     var jsonbConfig = new JsonbConfig();
-    jsonbConfig.setProperty(YassonConfig.FAIL_ON_UNKNOWN_PROPERTIES, Boolean.TRUE);
+    jsonbConfig.setProperty(YassonConfig.FAIL_ON_UNKNOWN_PROPERTIES,Boolean.TRUE);
 
+    log.info("Loading quality profile '{}'", filename);
     try (var jsonb = JsonbBuilder.create(jsonbConfig)) {
+
       var configFileContent = Files.readString(filename);
-      var processingGroup = jsonb.fromJson(configFileContent, ProcessingGroup.class);
-      log.info("Processing group loaded.");
-      return processingGroup;
+      var qualityProfile = jsonb.fromJson(configFileContent, QualityProfile.class);
+      log.info("Loading quality profile done.");
+      return qualityProfile;
     } catch (Exception e) {
-      throw new ParameterException("Cannot load processing group", e);
+      throw new ParameterException("Cannot load quality profile",e);
     }
   }
-
 }

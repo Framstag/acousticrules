@@ -17,7 +17,7 @@
 
 package com.framstag.acousticrules.selector;
 
-import com.framstag.acousticrules.rules.Rule;
+import com.framstag.acousticrules.rules.definition.RuleDefinition;
 import jakarta.json.bind.annotation.JsonbSubtype;
 import jakarta.json.bind.annotation.JsonbTypeInfo;
 
@@ -33,5 +33,5 @@ public interface Selector {
 
   String getDescription();
 
-  boolean select(Rule rule);
+  boolean select(RuleDefinition rule);
 }

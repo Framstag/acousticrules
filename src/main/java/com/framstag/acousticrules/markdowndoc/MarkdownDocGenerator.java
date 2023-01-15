@@ -18,7 +18,8 @@ package com.framstag.acousticrules.markdowndoc;
 
 import com.framstag.acousticrules.qualityprofile.QualityGroup;
 import com.framstag.acousticrules.qualityprofile.QualityProfile;
-import com.framstag.acousticrules.rules.Rule;
+import com.framstag.acousticrules.rules.definition.RuleDefinition;
+import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +30,6 @@ import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class MarkdownDocGenerator {
 
@@ -37,50 +37,99 @@ public class MarkdownDocGenerator {
 
   public void writeMarkdown(QualityProfile qualityProfile,
                             Path filename,
-                            Map<String, Set<Rule>> rulesByGroup) throws IOException {
+                            Map<String, RuleDefinitionGroup> rulesByGroup,
+                            RuleDefinitionGroup unusedRules) throws IOException {
     try (var writer = new FileWriter(filename.toString(), StandardCharsets.UTF_8)) {
       writer.write("# Documentation");
       writer.write(System.lineSeparator());
       writer.write(System.lineSeparator());
 
-      List<QualityGroup> qualityGroupList = qualityProfile.groups().stream()
-        .sorted(Comparator.comparing(QualityGroup::name)).toList();
+      writer.write("## Used Rules by Group");
+      writer.write(System.lineSeparator());
+      writer.write(System.lineSeparator());
+      writeGroups(writer, rulesByGroup, qualityProfile.groups().stream().map(QualityGroup::name).toList());
 
-      for (QualityGroup group : qualityGroupList) {
-        if (!rulesByGroup.containsKey(group.name())) {
-          log.atError().log("Quality profile requests dump of group '{}', but this group does not exist", group.name());
-          break;
-        }
-
-        log.atInfo().log("Writing group '{}'...", group.name());
-
-        writer.write("## ");
-        writer.write(group.name());
-        writer.write(System.lineSeparator());
-        writer.write(System.lineSeparator());
-
-        writer.write("|Rule|Description|Severity|");
-        writer.write(System.lineSeparator());
-        writer.write("|----|-----------|--------|");
-        writer.write(System.lineSeparator());
-
-        Set<Rule> rules = rulesByGroup.get(group.name());
-
-        List<Rule> rulesList = rules.stream().sorted(Comparator.comparing(Rule::getKey)).toList();
-
-        for (Rule rule : rulesList) {
-          writer.write("|");
-          writer.write(rule.getKey());
-          writer.write("|");
-          writer.write(rule.getName());
-          writer.write("|");
-          writer.write(rule.getSeverity().name());
-          writer.write("|");
-          writer.write(System.lineSeparator());
-        }
-
-        writer.write(System.lineSeparator());
-      }
+      writer.write("## Unused Rules");
+      writer.write(System.lineSeparator());
+      writer.write(System.lineSeparator());
+      writeUnusedRules(writer, unusedRules);
     }
+  }
+
+  private static void writeGroups(FileWriter writer,
+                                  Map<String, RuleDefinitionGroup> rulesByGroup,
+                                  List<String> groupNames) throws IOException {
+    for (var groupName : groupNames) {
+      if (!rulesByGroup.containsKey(groupName)) {
+        log.atError().log("Quality profile requests dump of group '{}', but this group does not exist", groupName);
+        break;
+      }
+
+      writeGroup(writer, rulesByGroup.get(groupName), groupName);
+    }
+  }
+
+  private static void writeUnusedRules(FileWriter writer,
+                                       RuleDefinitionGroup ruleGroup) throws IOException {
+    log.atInfo().log("Writing unused rules...");
+
+    writer.write("|Rule|Description|Severity|");
+    writer.write(System.lineSeparator());
+    writer.write("|----|-----------|--------|");
+    writer.write(System.lineSeparator());
+
+
+    List<RuleDefinition> rulesList = ruleGroup
+      .getRules()
+      .stream()
+      .sorted(Comparator.comparing(RuleDefinition::getKey)).toList();
+
+    for (RuleDefinition rule : rulesList) {
+      writer.write("|");
+      writer.write(rule.getKey());
+      writer.write("|");
+      writer.write(rule.getName());
+      writer.write("|");
+      writer.write(rule.getSeverity().name());
+      writer.write("|");
+      writer.write(System.lineSeparator());
+    }
+
+    writer.write(System.lineSeparator());
+  }
+
+  private static void writeGroup(FileWriter writer,
+                                 RuleDefinitionGroup ruleGroup,
+                                 String groupName) throws IOException {
+    log.atInfo().log("Writing group '{}'...", groupName);
+
+    writer.write("### ");
+    writer.write(groupName);
+    writer.write(System.lineSeparator());
+    writer.write(System.lineSeparator());
+
+    writer.write("|Rule|Description|Severity|");
+    writer.write(System.lineSeparator());
+    writer.write("|----|-----------|--------|");
+    writer.write(System.lineSeparator());
+
+
+    List<RuleDefinition> rulesList = ruleGroup
+      .getRules()
+      .stream()
+      .sorted(Comparator.comparing(RuleDefinition::getKey)).toList();
+
+    for (RuleDefinition rule : rulesList) {
+      writer.write("|");
+      writer.write(rule.getKey());
+      writer.write("|");
+      writer.write(rule.getName());
+      writer.write("|");
+      writer.write(rule.getSeverity().name());
+      writer.write("|");
+      writer.write(System.lineSeparator());
+    }
+
+    writer.write(System.lineSeparator());
   }
 }

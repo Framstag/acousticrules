@@ -17,7 +17,8 @@
 package com.framstag.acousticrules.qualityprofile;
 
 import com.framstag.acousticrules.rules.Parameter;
-import com.framstag.acousticrules.rules.Rule;
+import com.framstag.acousticrules.rules.definition.RuleDefinition;
+import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +29,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.Set;
 
 public class QualityProfileGenerator {
 
@@ -36,7 +36,7 @@ public class QualityProfileGenerator {
   private static final int INDENT = 2;
 
   public void write(QualityProfile qualityProfile,
-                    Map<String, Set<Rule>> rulesByGroup) throws FileNotFoundException, XMLStreamException {
+                    Map<String, RuleDefinitionGroup> rulesByGroup) throws FileNotFoundException, XMLStreamException {
     var outputFactory = XMLOutputFactory.newDefaultFactory();
 
     var writer = outputFactory.createXMLStreamWriter(new FileOutputStream(qualityProfile.outputFilename().toFile()),
@@ -78,9 +78,9 @@ public class QualityProfileGenerator {
       writeLn(writer);
       writeLn(writer);
 
-      Set<Rule> groupRules = rulesByGroup.get(group.name());
+      RuleDefinitionGroup groupRules = rulesByGroup.get(group.name());
 
-      for (Rule rule : groupRules) {
+      for (RuleDefinition rule : groupRules.getRules()) {
         writeRule(writer, rule, INDENT+INDENT);
         // TODO: Not on the last rule
         writeLn(writer);
@@ -104,7 +104,7 @@ public class QualityProfileGenerator {
     }
   }
 
-  private static void writeRule(XMLStreamWriter writer, Rule rule, int indent) throws XMLStreamException {
+  private static void writeRule(XMLStreamWriter writer, RuleDefinition rule, int indent) throws XMLStreamException {
     writeIndent(writer, indent);
     writer.writeStartElement("rule");
     writeLn(writer);
@@ -135,7 +135,9 @@ public class QualityProfileGenerator {
     writeLn(writer);
   }
 
-  private static void writeParameterList(XMLStreamWriter writer, Rule rule, int indent) throws XMLStreamException {
+  private static void writeParameterList(XMLStreamWriter writer,
+                                         RuleDefinition rule,
+                                         int indent) throws XMLStreamException {
     writeIndent(writer, indent);
 
     if (rule.hasParams()) {

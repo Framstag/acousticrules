@@ -16,7 +16,7 @@
  */
 package com.framstag.acousticrules.filter;
 
-import com.framstag.acousticrules.rules.Rule;
+import com.framstag.acousticrules.rules.definition.RuleDefinition;
 import com.framstag.acousticrules.rules.Status;
 import jakarta.json.bind.annotation.JsonbCreator;
 
@@ -32,7 +32,7 @@ public class RemoveDeprecated extends AbstractFilter {
   }
 
   @Override
-  public boolean filter(Rule rule) {
+  public boolean filter(RuleDefinition rule) {
     return rule.getStatus() == Status.DEPRECATED;
   }
 }

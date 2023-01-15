@@ -89,13 +89,13 @@ Names for languages:
 
 ## Commandline options
 
-Commandline options are still quickly changing so I suggest to simply
+Commandline options are still quickly changing, so I suggest to simply
 call AcousticRules --help.
 
 The current command lines for generating a C++ quality profile are:
 
 ```bash
--u --stopOnDuplicates @rules_import.options -q CPP_QualityProfile.json cpp_rules1.json cpp_rules2.json
+--stopOnDuplicates @rules_import.options -q CPP_QualityProfile.json cpp_rules1.json cpp_rules2.json
 ```
 
 where `cpp_rules1.json` and `cpp_rules2.json` are the C++ rules downloaded

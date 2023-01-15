@@ -14,8 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.framstag.acousticrules.rules;
+package com.framstag.acousticrules.rules.definition;
 
+import com.framstag.acousticrules.rules.Parameter;
+import com.framstag.acousticrules.rules.Severity;
+import com.framstag.acousticrules.rules.Status;
 import jakarta.json.bind.annotation.JsonbCreator;
 import jakarta.json.bind.annotation.JsonbProperty;
 
@@ -28,7 +31,13 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class Rule implements Comparable<Rule> {
+/**
+ * A rule definition as defined by the Sonar server.
+ * The identity attribute is the rule definition key. The class is deserializable from a corresponding
+ * Sonar JSON file containing rule definitions.
+ *
+ */
+public class RuleDefinition implements Comparable<RuleDefinition> {
 
   private final String key;
   private final String name;
@@ -37,11 +46,11 @@ public class Rule implements Comparable<Rule> {
   private final String lang;
   private final String type;
   private final List<String> sysTags;
-  private final Map<String,Parameter> params;
+  private final Map<String, Parameter> params;
   private Severity severity;
 
   @JsonbCreator
-  public Rule(
+  public RuleDefinition(
     @JsonbProperty("key") String key,
     @JsonbProperty("name") String name,
     @JsonbProperty("repo") String repo,
@@ -117,7 +126,7 @@ public class Rule implements Comparable<Rule> {
   }
 
   @Override
-  public int compareTo(Rule other) {
+  public int compareTo(RuleDefinition other) {
     return key.compareTo(other.key);
   }
 
@@ -136,7 +145,7 @@ public class Rule implements Comparable<Rule> {
       return false;
     }
 
-    var rule = (Rule) o;
+    var rule = (RuleDefinition) o;
     return key.equals(rule.key);
   }
 }

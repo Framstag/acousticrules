@@ -16,7 +16,7 @@
  */
 package com.framstag.acousticrules.filter;
 
-import com.framstag.acousticrules.rules.Rule;
+import com.framstag.acousticrules.rules.definition.RuleDefinition;
 import jakarta.json.bind.annotation.JsonbCreator;
 import jakarta.json.bind.annotation.JsonbProperty;
 
@@ -38,7 +38,7 @@ public class DropNotWithType extends AbstractFilter {
   }
 
   @Override
-  public boolean filter(Rule rule) {
+  public boolean filter(RuleDefinition rule) {
     return !types.contains(rule.getType());
   }
 }
