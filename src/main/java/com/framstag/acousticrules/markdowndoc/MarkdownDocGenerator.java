@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Comparator;
@@ -87,13 +88,13 @@ public class MarkdownDocGenerator {
       .sorted(Comparator.comparing(RuleDefinition::getKey)).toList();
 
     for (RuleDefinition rule : rulesList) {
-      writer.write("|");
+      writeSeparator(writer);
       writer.write(rule.getKey());
-      writer.write("|");
+      writeSeparator(writer);
       writer.write(rule.getName());
-      writer.write("|");
+      writeSeparator(writer);
       writer.write(rule.getSeverity().name());
-      writer.write("|");
+      writeSeparator(writer);
       writer.write(System.lineSeparator());
     }
 
@@ -122,16 +123,20 @@ public class MarkdownDocGenerator {
       .sorted(Comparator.comparing(RuleInstance::getKey)).toList();
 
     for (RuleInstance rule : rulesList) {
-      writer.write("|");
+      writeSeparator(writer);
       writer.write(rule.getKey());
-      writer.write("|");
+      writeSeparator(writer);
       writer.write(rule.getName());
-      writer.write("|");
+      writeSeparator(writer);
       writer.write(rule.getSeverity().name());
-      writer.write("|");
+      writeSeparator(writer);
       writer.write(System.lineSeparator());
     }
 
     writer.write(System.lineSeparator());
+  }
+
+  private static void writeSeparator(Writer writer) throws IOException {
+    writer.write("|");
   }
 }

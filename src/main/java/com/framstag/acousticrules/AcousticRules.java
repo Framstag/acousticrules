@@ -39,7 +39,13 @@ import javax.xml.stream.XMLStreamException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "AcousticRules",
@@ -160,7 +166,7 @@ public class AcousticRules implements Callable<Integer> {
     return duplicateCount;
   }
 
-  private Map<String,RuleInstanceGroup> createInstanceGroups(QualityProfile qualityProfile,
+  private static Map<String,RuleInstanceGroup> createInstanceGroups(QualityProfile qualityProfile,
                                                              Map<String, RuleDefinitionGroup> ruleDefinitionsByGroup) {
     Map<String, RuleInstanceGroup> ruleInstanceGroupMap = new HashMap<>();
     for (var group : qualityProfile.groups()) {
@@ -329,19 +335,20 @@ public class AcousticRules implements Callable<Integer> {
     RuleInstanceGroup modifiedRules = rules;
 
     for (var modifier : modifiers) {
-      Set<RuleInstance> updatedDefinitions = new HashSet<>();
+      List<RuleInstance> updatedDefinitions = new LinkedList<>();
       log.info("Modifier: {} {}",
         modifier.getDescription(),
         modifier.getReasonString("- "));
-      for (var rule : rules.getRuleInstances()) {
-        if (modifier.modify(rule)) {
-          updatedDefinitions.add(rule);
+      for (var rule : modifiedRules.getRuleInstances()) {
+        var instance = modifier.modify(rule);
+        if (instance != null) {
+          updatedDefinitions.add(instance);
         }
       }
 
       log.info("{} of {} rules modified",
         updatedDefinitions.size(),
-        rules.size());
+        modifiedRules.size());
 
       modifiedRules = modifiedRules.update(updatedDefinitions);
     }

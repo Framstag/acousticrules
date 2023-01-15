@@ -17,7 +17,6 @@
 
 package com.framstag.acousticrules.rules.instance;
 
-import com.framstag.acousticrules.rules.definition.RuleDefinition;
 import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
 
 import java.util.Collection;
@@ -31,7 +30,7 @@ public final class RuleInstanceGroup {
 
   private RuleInstanceGroup(RuleDefinitionGroup definitionGroup, Set<RuleInstance> ruleInstances) {
     this.definitionGroup = definitionGroup;
-    this.ruleInstances = ruleInstances;
+    this.ruleInstances = Set.copyOf(ruleInstances);
   }
 
   public static RuleInstanceGroup fromDefinitionGroup(RuleDefinitionGroup definitionGroup) {
@@ -52,10 +51,6 @@ public final class RuleInstanceGroup {
     return ruleInstances;
   }
 
-  public Collection<RuleDefinition> getRuleDefinitions() {
-    return definitionGroup.getRules();
-  }
-
   public int size() {
     return ruleInstances.size();
   }
@@ -73,10 +68,11 @@ public final class RuleInstanceGroup {
    * @param instances instances to update
    * @return a new RuleInstance instance.
    */
-  public RuleInstanceGroup update(Iterable<RuleInstance> instances) {
+  public RuleInstanceGroup update(Collection<RuleInstance> instances) {
     Set<RuleInstance> newInstances = new HashSet<>(ruleInstances);
 
-    instances.forEach(newInstances::add);
+    newInstances.removeAll(instances);
+    newInstances.addAll(instances);
 
     return new RuleInstanceGroup(definitionGroup,newInstances);
   }

@@ -22,31 +22,44 @@ import com.framstag.acousticrules.rules.Severity;
 import com.framstag.acousticrules.rules.Status;
 import com.framstag.acousticrules.rules.definition.RuleDefinition;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
-public final class RuleInstance implements Ruleable {
+/**
+ * Immutable class for holding information of the instantiation of a RuleDefinition. The instantiation
+ * process allows to overwrite some of the information in the RuleDefinition.
+ */
+public final class RuleInstance implements Ruleable,Comparable<RuleInstance> {
   private final RuleDefinition definition;
   private final Map<String, String> parameter;
-  private Severity severity;
+  private final Severity severity;
 
-  private RuleInstance(RuleDefinition definition) {
+  private RuleInstance(RuleDefinition definition, Severity severity, Map<String,String> parameter) {
     this.definition = definition;
-    this.severity = definition.getSeverity();
-    this.parameter = new HashMap<>();
+    this.severity = severity;
+    this.parameter = Map.copyOf(parameter);
   }
 
   public static RuleInstance fromDefinition(RuleDefinition definition) {
-    return new RuleInstance(definition);
+    return new RuleInstance(definition, definition.getSeverity(), Collections.emptyMap());
   }
 
-  public void setParam(String key, String value) {
+  public String getName() {
+    return definition.getName();
+  }
+
+  public RuleInstance setParameter(String key, String value) {
     if (!definition.hasParam(key)) {
       throw new IllegalArgumentException("The param '"+key+"' is not a known parameter for the rule "+getKey());
     }
 
-    parameter.put(key,value);
+    Map<String,String> newParameter = new HashMap<>(parameter);
+    newParameter.put(key,value);
+
+    return new RuleInstance(definition,severity,newParameter);
   }
 
   public String getKey() {
@@ -72,11 +85,30 @@ public final class RuleInstance implements Ruleable {
     return definition.getSysTags();
   }
 
-  public void setSeverity(Severity severity) {
-    this.severity = severity;
+  public RuleInstance setSeverity(Severity severity) {
+    return new RuleInstance(definition,severity,parameter);
   }
 
-  public String getName() {
-    return definition.getName();
+  @Override
+  public int compareTo(RuleInstance other) {
+    return getKey().compareTo(other.getKey());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getKey());
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    var rule = (RuleInstance) o;
+    return getKey().equals(rule.getKey());
   }
 }

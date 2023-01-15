@@ -33,5 +33,10 @@ public interface Modifier {
 
   String getDescription();
 
-  boolean modify(RuleInstance rule);
+  /**
+   * Returns a new RuleInstance if the instance was modified, else null
+   * @param rule The RuleInstance to modify
+   * @return a new instance or null
+   */
+  RuleInstance modify(RuleInstance rule);
 }

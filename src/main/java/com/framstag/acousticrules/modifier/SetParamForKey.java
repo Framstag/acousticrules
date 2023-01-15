@@ -42,12 +42,11 @@ public class SetParamForKey extends AbstractModifier {
   }
 
   @Override
-  public boolean modify(RuleInstance rule) {
+  public RuleInstance modify(RuleInstance rule) {
     if (key.equals(rule.getKey())) {
-      rule.setParam(param,value);
-      return true;
+      return rule.setParameter(param,value);
     }
 
-    return false;
+    return null;
   }
 }

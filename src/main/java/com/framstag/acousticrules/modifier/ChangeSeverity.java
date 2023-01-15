@@ -38,12 +38,11 @@ public class ChangeSeverity extends AbstractModifier {
   }
 
   @Override
-  public boolean modify(RuleInstance rule) {
+  public RuleInstance modify(RuleInstance rule) {
     if (rule.getSeverity()==from) {
-      rule.setSeverity(to);
-      return true;
+      return rule.setSeverity(to);
     }
 
-    return false;
+    return null;
   }
 }
