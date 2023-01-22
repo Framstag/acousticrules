@@ -33,7 +33,15 @@ public class SelectWithKey extends AbstractSelector {
 
   @Override
   public String getDescription() {
-    return "Select rules with keys(s) " +
+    String header;
+
+    if (keys.size() == 1) {
+      header = "Selecting rules with key ";
+    } else {
+      header = "Selecting rules with keys ";
+    }
+
+    return header +
       keys.stream().map(key -> "'"+key+"'").collect(Collectors.joining(", "));
   }
 

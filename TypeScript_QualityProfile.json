@@ -1,0 +1,99 @@
+{
+  "language": "ts",
+  "name": "Framstag",
+  "output_filename": "TypeScript_QualityProfile.xml",
+  "documentation_filename": "TypeScript_QualityProfile.md",
+  "groups": [
+    {
+      "name": "Test Improvements",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "reason": "Test improvements are important",
+          "from": "INFO",
+          "to": "MINOR"
+        }
+      ]
+    },
+    {
+      "name": "Test Bugs",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "reason": "Test bugs are important",
+          "from": "MINOR",
+          "to": "MAJOR"
+        }
+      ]
+    },
+    {
+      "name": "Performance",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "reason": "We do not want performance relevant problems in our code",
+          "from": "MINOR",
+          "to": "MAJOR"
+        }
+      ]
+    },
+    {
+      "name": "Good Code",
+      "filters": [
+      ],
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "reason": "We rank this lower than bugs, performance and security, if it is not CRITICAL or BLOCKER",
+          "from": "MAJOR",
+          "to": "MINOR"
+        }
+      ]
+    },
+    {
+      "name": "Obsoletes",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "reason": "Our code must be maintainable",
+          "from": "MINOR",
+          "to": "MAJOR"
+        }
+      ]
+    },
+    {
+      "name": "Bugs",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "reason": "Our code must be bug free",
+          "from": "MINOR",
+          "to": "BLOCKER"
+        },
+        {
+          "@processor": "ChangeSeverity",
+          "reason": "Our code must be bug free",
+          "from": "MAJOR",
+          "to": "BLOCKER"
+        },
+        {
+          "@processor": "ChangeSeverity",
+          "reason": "Our code must be bug free",
+          "from": "CRITICAL",
+          "to": "BLOCKER"
+        }
+      ]
+    },
+    {
+      "name": "Security",
+      "modifier": [
+        {
+          "@processor": "ChangeSeverity",
+          "reason": "Our code must be free of security issues",
+          "from": "MINOR",
+          "to": "MAJOR"
+        }
+      ]
+    }
+  ]
+}

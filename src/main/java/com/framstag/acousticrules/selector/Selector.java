@@ -27,6 +27,7 @@ import jakarta.json.bind.annotation.JsonbTypeInfo;
   @JsonbSubtype(alias = "SelectWithType", type = SelectWithType.class)
 })
 public interface Selector {
+  boolean hasReason();
   String getReason();
 
   String getReasonString(String prefix);

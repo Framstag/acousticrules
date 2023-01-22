@@ -29,6 +29,7 @@ import jakarta.json.bind.annotation.JsonbTypeInfo;
   @JsonbSubtype(alias = "RemoveDeprecated", type = RemoveDeprecated.class)
 })
 public interface Filter {
+  boolean hasReason();
   String getReason();
 
   String getReasonString(String prefix);

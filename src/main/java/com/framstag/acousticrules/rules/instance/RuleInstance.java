@@ -36,15 +36,31 @@ public final class RuleInstance implements Ruleable,Comparable<RuleInstance> {
   private final RuleDefinition definition;
   private final Map<String, String> parameter;
   private final Severity severity;
+  private final String severityReason;
 
-  private RuleInstance(RuleDefinition definition, Severity severity, Map<String,String> parameter) {
+  private RuleInstance(RuleDefinition definition,
+                       Severity severity,
+                       String severityReason,
+                       Map<String,String> parameter) {
     this.definition = definition;
     this.severity = severity;
+    this.severityReason = severityReason;
     this.parameter = Map.copyOf(parameter);
   }
 
   public static RuleInstance fromDefinition(RuleDefinition definition) {
-    return new RuleInstance(definition, definition.getSeverity(), Collections.emptyMap());
+    return new RuleInstance(definition,
+      definition.getSeverity(),
+      null,
+      Collections.emptyMap());
+  }
+
+  public boolean hasSeverityReason() {
+    return severityReason != null && !severityReason.isBlank();
+  }
+
+  public String getSeverityReason() {
+    return severityReason;
   }
 
   public String getName() {
@@ -64,7 +80,10 @@ public final class RuleInstance implements Ruleable,Comparable<RuleInstance> {
     Map<String,String> newParameter = new HashMap<>(parameter);
     newParameter.put(key,value);
 
-    return new RuleInstance(definition,severity,newParameter);
+    return new RuleInstance(definition,
+      severity,
+      severityReason,
+      newParameter);
   }
 
   public String getKey() {
@@ -90,8 +109,11 @@ public final class RuleInstance implements Ruleable,Comparable<RuleInstance> {
     return definition.getSysTags();
   }
 
-  public RuleInstance setSeverity(Severity severity) {
-    return new RuleInstance(definition,severity,parameter);
+  public RuleInstance setSeverity(Severity severity, String reason) {
+    return new RuleInstance(definition,
+      severity,
+      reason,
+      parameter);
   }
 
   @Override

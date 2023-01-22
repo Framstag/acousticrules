@@ -49,7 +49,13 @@ public class MarkdownDocGenerator {
       writer.write("## Used Rules by Group");
       writer.write(System.lineSeparator());
       writer.write(System.lineSeparator());
-      writeGroups(writer, rulesByGroup, qualityProfile.groups().stream().map(QualityGroup::name).toList());
+      writeGroups(writer,
+        rulesByGroup,
+        qualityProfile
+          .groups()
+          .stream()
+          .map(QualityGroup::name)
+          .toList());
 
       writer.write("## Unused Rules");
       writer.write(System.lineSeparator());
@@ -72,7 +78,7 @@ public class MarkdownDocGenerator {
       var ruleInstanceGroup = rulesByGroup.get(groupName);
 
       writeGroupHeader(writer, groupName);
-
+      writeProcessing(writer, ruleInstanceGroup);
       writeGroupTable(writer, ruleInstanceGroup);
     }
   }
@@ -98,7 +104,7 @@ public class MarkdownDocGenerator {
       writeSeparator(writer);
       writer.write(rule.getType());
       writeSeparator(writer);
-      writer.write(rule.getName());
+      writer.write(escaped(rule.getName()));
       writeSeparator(writer);
       writer.write(rule.getSeverity().name());
       writeSeparator(writer);
@@ -120,11 +126,65 @@ public class MarkdownDocGenerator {
     writer.write(System.lineSeparator());
   }
 
+  private static void writeProcessing(FileWriter writer,
+                                      RuleInstanceGroup ruleGroup) throws IOException {
+    var definitionGroup = ruleGroup.getRuleDefinitionGroup();
+    var processingGroup = definitionGroup.getProcessingGroup();
+
+    writer.write("#### Rule Selectors");
+    writer.write(System.lineSeparator());
+    writer.write(System.lineSeparator());
+
+    writer.write("|Selection|Reason|");
+    writer.write(System.lineSeparator());
+    writer.write("|---------|------|");
+    writer.write(System.lineSeparator());
+
+    for (var selector : processingGroup.getSelectors()) {
+      writer.write("|");
+      writer.write(selector.getDescription());
+      writer.write("|");
+      if (selector.hasReason()) {
+        writer.write(selector.getReason());
+      }
+      writer.write("|");
+      writer.write(System.lineSeparator());
+    }
+
+    writer.write(System.lineSeparator());
+
+    writer.write("#### Rule Filters");
+    writer.write(System.lineSeparator());
+    writer.write(System.lineSeparator());
+
+    writer.write("|Filter|Reason|");
+    writer.write(System.lineSeparator());
+    writer.write("|---------|------|");
+    writer.write(System.lineSeparator());
+
+    for (var filter : processingGroup.getFilters()) {
+      writer.write("|");
+      writer.write(filter.getDescription());
+      writer.write("|");
+      if (filter.hasReason()) {
+        writer.write(filter.getReason());
+      }
+      writer.write("|");
+      writer.write(System.lineSeparator());
+    }
+
+    writer.write(System.lineSeparator());
+  }
+
   private static void writeGroupTable(FileWriter writer,
                                       RuleInstanceGroup ruleGroup) throws IOException {
-    writer.write("|Rule|Description|Severity|Parameter|");
+    writer.write("#### Resulting Rules");
     writer.write(System.lineSeparator());
-    writer.write("|----|-----------|--------|---------|");
+    writer.write(System.lineSeparator());
+
+    writer.write("|Rule|Description|Severity|Reason|Parameter|");
+    writer.write(System.lineSeparator());
+    writer.write("|----|-----------|--------|------|---------|");
     writer.write(System.lineSeparator());
 
 
@@ -141,6 +201,8 @@ public class MarkdownDocGenerator {
 
       writeSeparator(writer);
 
+      // Rule
+
       if (ruleDeleted) {
         writer.write(strikedThrough(ruleDefinition.getKey()));
       } else {
@@ -149,9 +211,13 @@ public class MarkdownDocGenerator {
 
       writeSeparator(writer);
 
-      writer.write(ruleDefinition.getName());
+      // Description
+
+      writer.write(escaped(ruleDefinition.getName()));
 
       writeSeparator(writer);
+
+      // Severity
 
       if (ruleDeleted) {
         writer.write(strikedThrough(ruleDefinition.getSeverity().name()));
@@ -161,6 +227,14 @@ public class MarkdownDocGenerator {
         writer.write(ruleInstance.getSeverity().name());
       } else {
         writer.write(ruleInstance.getSeverity().name());
+      }
+
+      writeSeparator(writer);
+
+      // Severity Reason
+
+      if (!ruleDeleted && ruleInstance.hasSeverityReason()) {
+        writer.write(ruleInstance.getSeverityReason());
       }
 
       writeSeparator(writer);
@@ -184,6 +258,12 @@ public class MarkdownDocGenerator {
 
   private static void writeSeparator(Writer writer) throws IOException {
     writer.write("|");
+  }
+
+  private static String escaped(String text) {
+    return text
+      .replace("<","&lt;")
+      .replace(">","&gt;");
   }
 
   private static String strikedThrough(String text) {

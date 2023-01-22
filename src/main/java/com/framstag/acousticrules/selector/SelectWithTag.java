@@ -33,7 +33,15 @@ public class SelectWithTag extends AbstractSelector {
 
   @Override
   public String getDescription() {
-    return "Selecting rules with tag(s) " +
+    String header;
+
+    if (tags.size() == 1) {
+      header = "Selecting rules with tag ";
+    } else {
+      header = "Selecting rules with tags ";
+    }
+
+    return header +
       tags.stream().map(tag -> "'"+tag+"'").collect(Collectors.joining(", "));
   }
 

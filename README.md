@@ -82,10 +82,13 @@ at least not required.
 
 Names for languages:
 
-| Language | Name |
-|----------|------|
-| Java     | java |
-| C++      | cpp  |
+| Language   | Name |
+|------------|------|
+| Java       | java |
+| C++        | cpp  |
+| TypeScript | ts   |
+| HTML       | web  | 
+| CSS        | css  |
 
 ## Commandline options
 

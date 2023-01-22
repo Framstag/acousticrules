@@ -3,7 +3,7 @@
   "selectors": [
     {
       "@processor": "SelectWithTag",
-      "reason": "A rules selected as performance relevant",
+      "reason": "All rules makred as performance relevant",
       "tags": [
         "performance"
       ]
@@ -42,7 +42,7 @@
     },
     {
       "@processor": "DropWithTag",
-      "reason": "Ignore rules of specific guide lines",
+      "reason": "Ignore rules of specific guidelines",
       "tags": [
         "cppcoreguidelines"
       ]

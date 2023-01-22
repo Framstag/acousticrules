@@ -8,6 +8,12 @@
       ]
     },
     {
+      "@processor": "SelectWithType",
+      "types": [
+        "VULNERABILITY"
+      ]
+    },
+    {
       "@processor": "SelectWithTag",
       "tags": [
         "cert",
@@ -48,9 +54,10 @@
     },
     {
       "@processor": "DropWithKey",
-      "reason": "This is not an security issue",
+      "reason": "These are not security issues or have their own group",
       "keys": [
-        "cpp:S1917"
+        "cpp:S1917",
+        "typescript:S1874"
       ]
     },
     {

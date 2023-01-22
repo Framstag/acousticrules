@@ -33,7 +33,15 @@ public class DropWithTag extends AbstractFilter {
 
   @Override
   public String getDescription() {
-    return "Removing rules with tag(s) "+tags.stream().map(tag -> "'"+tag+"'").collect(Collectors.joining(", "));
+    String header;
+
+    if (tags.size() == 1) {
+      header = "Dropping rules with tag ";
+    } else {
+      header = "Dropping rules with tags ";
+    }
+
+    return header + tags.stream().map(tag -> "'" + tag + "'").collect(Collectors.joining(", "));
   }
 
   @Override

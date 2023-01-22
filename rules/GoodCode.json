@@ -3,14 +3,14 @@
   "selectors": [
     {
       "@processor": "SelectWithType",
-      "reason": "We are interested in code smells",
+      "reason": "We are interested in code smells to avoid to make our code better",
       "types": [
         "CODE_SMELL"
       ]
     },
     {
       "@processor": "SelectWithTag",
-      "reason": "Also categories that are not bugs but should improve code",
+      "reason": "Also categories that are not bugs but should improve code, too",
       "tags": [
         "unused",
         "brain-overload",
@@ -28,7 +28,7 @@
   "filters": [
     {
       "@processor": "DropWithTag",
-      "reason": "Specific frameworks ahve their own group",
+      "reason": "Specific frameworks have their own group",
       "tags": [
         "struts",
         "spring"
@@ -36,7 +36,7 @@
     },
     {
       "@processor": "DropWithTag",
-      "reason": "These are categories that signal bugs, too",
+      "reason": "These are categories that signal bugs, too, so drop them",
       "tags": [
         "error-handling",
         "overflow",
@@ -70,7 +70,8 @@
       "reason": "Security has its own group",
       "tags": [
         "cert",
-        "cwe"
+        "cwe",
+        "owasp-a3"
       ]
     },
     {
@@ -83,7 +84,9 @@
         "java11",
         "java12",
         "java14",
-        "java15"
+        "java15",
+        "java16",
+        "java17"
       ]
     },
     {
@@ -98,7 +101,7 @@
     },
     {
       "@processor": "DropWithTag",
-      "reason": "Drop rules from specific guide lines",
+      "reason": "Drop rules from specific guidelines",
       "tags": [
         "cppcoreguidelines",
         "based-on-misra",

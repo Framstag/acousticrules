@@ -33,8 +33,15 @@ public class DropWithType extends AbstractFilter {
 
   @Override
   public String getDescription() {
-    return "Removing rules with types(s) "+
-      types.stream().map(type -> "'"+type+"'").collect(Collectors.joining(", "));
+    String header;
+
+    if (types.size() == 1) {
+      header = "Dropping rules with type ";
+    } else {
+      header = "Dropping rules with types ";
+    }
+
+    return header + types.stream().map(type -> "'" + type + "'").collect(Collectors.joining(", "));
   }
 
   @Override

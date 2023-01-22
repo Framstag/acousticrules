@@ -31,7 +31,7 @@
       "modifier": [
         {
           "@processor": "ChangeSeverity",
-          "reason": "We do not want performance relevant problems",
+          "reason": "We do not want performance relevant problems in our code",
           "from": "MINOR",
           "to": "MAJOR"
         }
@@ -59,7 +59,7 @@
       "modifier": [
         {
           "@processor": "ChangeSeverity",
-          "reason": "If it is not too important and is not in another group..",
+          "reason": "We rank this lower than bugs, performance and security, if it is not CRITICAL or BLOCKER",
           "from": "MAJOR",
           "to": "MINOR"
         },
@@ -77,6 +77,7 @@
       "modifier": [
         {
           "@processor": "ChangeSeverity",
+          "reason": "Our code must be maintainable",
           "from": "MINOR",
           "to": "MAJOR"
         }
@@ -87,6 +88,7 @@
       "modifier": [
         {
           "@processor": "ChangeSeverity",
+          "reason": "Our code should reflect good use of the JDK",
           "from": "MINOR",
           "to": "MAJOR"
         }
@@ -97,6 +99,7 @@
       "modifier": [
         {
           "@processor": "ChangeSeverity",
+          "reason": "Our code must be bug free",
           "from": "MAJOR",
           "to": "BLOCKER"
         }
@@ -107,6 +110,7 @@
       "modifier": [
         {
           "@processor": "ChangeSeverity",
+          "reason": "Our code should reflect good use of the JDK",
           "from": "MINOR",
           "to": "MAJOR"
         }
@@ -118,6 +122,7 @@
       "modifier": [
         {
           "@processor": "ChangeSeverity",
+          "reason": "Our code must be bug free",
           "from": "MAJOR",
           "to": "BLOCKER"
         }
@@ -128,6 +133,7 @@
       "modifier": [
         {
           "@processor": "ChangeSeverity",
+          "reason": "Our code should reflect good use of the JDK",
           "from": "MINOR",
           "to": "MAJOR"
         }
@@ -139,6 +145,7 @@
       "modifier": [
         {
           "@processor": "ChangeSeverity",
+          "reason": "Our code must be bug free",
           "from": "MAJOR",
           "to": "BLOCKER"
         }
@@ -149,6 +156,7 @@
       "modifier": [
         {
           "@processor": "ChangeSeverity",
+          "reason": "Our code should reflect good use of the JDK",
           "from": "MINOR",
           "to": "MAJOR"
         }
@@ -159,6 +167,7 @@
       "modifier": [
         {
           "@processor": "ChangeSeverity",
+          "reason": "Our code must be bug free",
           "from": "MAJOR",
           "to": "BLOCKER"
         }
@@ -169,8 +178,9 @@
       "modifier": [
         {
           "@processor": "ChangeSeverity",
-          "from": "MAJOR",
-          "to": "MINOR"
+          "reason": "Our code should reflect good use of Spring",
+          "from": "MINOR",
+          "to": "MAJOR"
         }
       ]
     },
@@ -179,6 +189,7 @@
       "modifier": [
         {
           "@processor": "ChangeSeverity",
+          "reason": "Our code must be bug free",
           "from": "MAJOR",
           "to": "BLOCKER"
         }
@@ -189,16 +200,19 @@
       "modifier": [
         {
           "@processor": "ChangeSeverity",
+          "reason": "Our code must be bug free",
           "from": "MINOR",
           "to": "BLOCKER"
         },
         {
           "@processor": "ChangeSeverity",
+          "reason": "Our code must be bug free",
           "from": "MAJOR",
           "to": "BLOCKER"
         },
         {
           "@processor": "ChangeSeverity",
+          "reason": "Our code must be bug free",
           "from": "CRITICAL",
           "to": "BLOCKER"
         }
@@ -209,6 +223,7 @@
       "modifier": [
         {
           "@processor": "ChangeSeverity",
+          "reason": "Our code must be free of security issues",
           "from": "MINOR",
           "to": "MAJOR"
         }

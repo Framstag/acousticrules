@@ -45,7 +45,7 @@ public class SetSeverity extends AbstractModifier {
   @Override
   public RuleInstance modify(RuleInstance rule) {
     if (keys.contains(rule.getKey())) {
-      return rule.setSeverity(to);
+      return rule.setSeverity(to,getReason());
     }
 
     return null;

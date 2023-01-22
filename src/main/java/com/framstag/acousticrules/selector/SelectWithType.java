@@ -33,7 +33,15 @@ public class SelectWithType extends AbstractSelector {
 
   @Override
   public String getDescription() {
-    return "Select rules with types(s) " +
+    String header;
+
+    if (types.size() == 1) {
+      header = "Selecting rules with type ";
+    } else {
+      header = "Selecting rules with types ";
+    }
+
+    return header +
       types.stream().map(tag -> "'"+tag+"'").collect(Collectors.joining(", "));
   }
 

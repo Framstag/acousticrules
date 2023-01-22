@@ -19,6 +19,16 @@ package com.framstag.acousticrules.filter;
 public abstract class AbstractFilter implements Filter {
   private String reason;
 
+  @Override
+  public boolean hasReason() {
+    return reason != null && !reason.isBlank();
+  }
+
+  @Override
+  public String getReason() {
+    return reason;
+  }
+
   public String getReasonString(String prefix) {
     String reasonValue = getReason();
     if (reasonValue == null) {
@@ -26,11 +36,6 @@ public abstract class AbstractFilter implements Filter {
     } else {
       return prefix + reasonValue;
     }
-  }
-
-  @Override
-  public String getReason() {
-    return reason;
   }
 
   public void setReason(String reason) {

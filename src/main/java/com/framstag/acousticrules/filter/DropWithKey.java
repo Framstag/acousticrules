@@ -33,8 +33,15 @@ public class DropWithKey extends AbstractFilter {
 
   @Override
   public String getDescription() {
-    return "Removing rules with keys(s) " +
-      keys.stream().map(tag -> "'"+tag+"'").collect(Collectors.joining(", "));
+    String header;
+
+    if (keys.size() == 1) {
+      header = "Dropping rules with key ";
+    } else {
+      header = "Dropping rules with keys ";
+    }
+
+    return header + keys.stream().map(key -> "'"+key+"'").collect(Collectors.joining(", "));
   }
 
   @Override

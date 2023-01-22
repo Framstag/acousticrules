@@ -1,11 +1,11 @@
 {
-  "name": "Java 10 Bugs",
+  "name": "Java 17 Bugs",
   "selectors": [
     {
       "@processor": "SelectWithTag",
       "reason": "Select JDK specific rules",
       "tags": [
-        "java10"
+        "java17"
       ]
     }
   ],

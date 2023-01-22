@@ -3,7 +3,7 @@
   "selectors": [
     {
       "@processor": "SelectWithTag",
-      "reason": "Rule regarding testing and rules regarding concrete test frameworks",
+      "reason": "Rules regarding testing and use of test frameworks",
       "tags": [
         "tests",
         "junit",
@@ -21,7 +21,7 @@
     },
     {
       "@processor": "DropWithType",
-      "reason": "Bugs are in another group",
+      "reason": "Bugs have their own group",
       "types": [
         "BUG"
       ]

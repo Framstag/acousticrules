@@ -20,6 +20,11 @@ public abstract class AbstractSelector implements Selector {
   private String reason;
 
   @Override
+  public boolean hasReason() {
+    return reason != null && !reason.isBlank();
+  }
+
+  @Override
   public String getReason() {
     return reason;
   }

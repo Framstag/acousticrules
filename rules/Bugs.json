@@ -60,6 +60,7 @@
     },
     {
       "@processor": "DropWithTag",
+      "reason": "Drop framework-specific bugs, they have their own group",
       "tags": [
         "spring",
         "hibernate"
@@ -67,12 +68,14 @@
     },
     {
       "@processor": "DropWithTag",
+      "reason": "Drop performance bugs, they have their own group",
       "tags": [
         "performance"
       ]
     },
     {
       "@processor": "DropWithTag",
+      "reason": "Drop language specific bugs",
       "tags": [
         "java8",
         "java9",
@@ -80,12 +83,9 @@
         "java11",
         "java12",
         "java14",
-        "java15"
-      ]
-    },
-    {
-      "@processor": "DropWithTag",
-      "tags": [
+        "java15",
+        "java16",
+        "java17",
         "since-c++11",
         "since-c++14",
         "since-c++17",
@@ -94,10 +94,18 @@
     },
     {
       "@processor": "DropWithTag",
+      "reason": "Drop style-guide specific bugs, they have their own group",
       "tags": [
         "cppcoreguidelines",
         "based-on-misra",
         "misra-c++2008"
+      ]
+    },
+    {
+      "@processor": "DropWithTag",
+      "reason": "Obsolete features have their own group",
+      "tags": [
+        "obsolete"
       ]
     },
     {

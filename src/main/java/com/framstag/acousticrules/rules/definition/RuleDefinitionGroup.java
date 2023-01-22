@@ -17,7 +17,10 @@
 
 package com.framstag.acousticrules.rules.definition;
 
+import com.framstag.acousticrules.processing.ProcessingGroup;
+
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -27,19 +30,22 @@ import java.util.stream.Collectors;
  * There a functions for doing simple set operations on the group.
  */
 public final class RuleDefinitionGroup {
+  private final ProcessingGroup processingGroup;
   private final Set<RuleDefinition> ruleDefinitions;
 
-  private RuleDefinitionGroup(Set<RuleDefinition> ruleDefinitions) {
+  private RuleDefinitionGroup(ProcessingGroup processingGroup,
+                              Set<RuleDefinition> ruleDefinitions) {
+    this.processingGroup = processingGroup;
     // make an immutable copy
     this.ruleDefinitions = Set.copyOf(ruleDefinitions);
   }
 
-  public static RuleDefinitionGroup fromRuleDefinitionSet(Set<RuleDefinition> definitions) {
-    return new RuleDefinitionGroup(definitions);
+  public static RuleDefinitionGroup fromProcessingGroup(ProcessingGroup processingGroup) {
+    return new RuleDefinitionGroup(processingGroup, Collections.emptySet());
   }
 
   public static RuleDefinitionGroup fromRuleDefinitionList(RuleDefinitionList definitions) {
-    return new RuleDefinitionGroup(new HashSet<>(definitions.getRules()));
+    return new RuleDefinitionGroup(null, new HashSet<>(definitions.getRules()));
   }
 
   public static RuleDefinitionGroup fromRuleDefinitionGroups(Collection<RuleDefinitionGroup> definitions) {
@@ -48,11 +54,15 @@ public final class RuleDefinitionGroup {
       .flatMap(group -> group.getRules().stream())
       .collect(Collectors.toSet());
 
-    return new RuleDefinitionGroup(overallRules);
+    return new RuleDefinitionGroup(null, overallRules);
   }
 
   public Collection<RuleDefinition> getRules() {
     return ruleDefinitions;
+  }
+
+  public ProcessingGroup getProcessingGroup() {
+    return processingGroup;
   }
 
   public int size() {
@@ -64,7 +74,7 @@ public final class RuleDefinitionGroup {
 
     filteredDefinitions.forEach(newDefinitions::remove);
 
-    return new RuleDefinitionGroup(newDefinitions);
+    return new RuleDefinitionGroup(processingGroup,newDefinitions);
   }
 
   /**
@@ -72,12 +82,12 @@ public final class RuleDefinitionGroup {
    * @param definitions definitions to update
    * @return a new RuleDefinition instance.
    */
-  public RuleDefinitionGroup update(Iterable<RuleDefinition> definitions) {
+  public RuleDefinitionGroup addOrUpdate(Iterable<RuleDefinition> definitions) {
     Set<RuleDefinition> newDefinitions = new HashSet<>(ruleDefinitions);
 
     definitions.forEach(newDefinitions::add);
 
-    return new RuleDefinitionGroup(newDefinitions);
+    return new RuleDefinitionGroup(processingGroup,newDefinitions);
   }
 
   public boolean contains(RuleDefinition ruleDefinition) {

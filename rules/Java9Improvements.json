@@ -3,6 +3,7 @@
   "selectors": [
     {
       "@processor": "SelectWithTag",
+      "reason": "Select JDK specific rules",
       "tags": [
         "java9"
       ]
@@ -11,6 +12,7 @@
   "filters": [
     {
       "@processor": "DropWithType",
+      "reason": "JDK-specific bugs have their own group",
       "types": [
         "BUG"
       ]

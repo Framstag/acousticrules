@@ -18,6 +18,10 @@
 -p rules/Java14Bugs.json
 -p rules/Java15Improvements.json
 -p rules/Java15Bugs.json
+-p rules/Java16Improvements.json
+-p rules/Java16Bugs.json
+-p rules/Java17Improvements.json
+-p rules/Java17Bugs.json
 
 -p rules/CPP11Improvements.json
 -p rules/CPP11Bugs.json

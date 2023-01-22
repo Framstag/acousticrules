@@ -3,7 +3,7 @@
   "selectors": [
     {
       "@processor": "SelectWithTag",
-      "reason": "Rule regarding testing and rules regarding concrete test frameworks",
+      "reason": "Rule regarding testing use of test frameworks",
       "tags": [
         "tests",
         "junit",

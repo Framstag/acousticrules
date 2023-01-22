@@ -3,6 +3,7 @@
   "selectors": [
     {
       "@processor": "SelectWithTag",
+      "reason": "Select all rules that are tags as 'uses obsolete features'",
       "tags": [
         "obsolete"
       ]
@@ -11,6 +12,7 @@
   "filters": [
     {
       "@processor": "DropWithTag",
+      "reason": "These are filtered by other groups",
       "tags": [
         "cert",
         "lock-in",
@@ -19,6 +21,7 @@
     },
     {
       "@processor": "DropWithTag",
+      "reason": "Ignore rules of specific guidelines",
       "tags": [
         "based-on-misra",
         "misra-c++2008"

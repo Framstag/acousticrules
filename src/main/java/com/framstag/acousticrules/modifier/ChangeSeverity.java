@@ -40,7 +40,7 @@ public class ChangeSeverity extends AbstractModifier {
   @Override
   public RuleInstance modify(RuleInstance rule) {
     if (rule.getSeverity()==from) {
-      return rule.setSeverity(to);
+      return rule.setSeverity(to,getReason());
     }
 
     return null;
