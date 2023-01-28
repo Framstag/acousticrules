@@ -58,8 +58,8 @@ public class MarkdownDocGenerator {
           .toList());
 
       writer.write("## Unused Rules");
-      writer.write(System.lineSeparator());
-      writer.write(System.lineSeparator());
+      writeLn(writer);
+      writeLn(writer);
       writeUnusedRules(writer, unusedRules);
     }
   }
@@ -83,14 +83,18 @@ public class MarkdownDocGenerator {
     }
   }
 
+  private static void writeLn(Writer writer) throws IOException {
+    writer.write(System.lineSeparator());
+  }
+
   private static void writeUnusedRules(FileWriter writer,
                                        RuleDefinitionGroup ruleGroup) throws IOException {
     log.atInfo().log("Writing unused rules...");
 
     writer.write("|Rule|Type|Description|Severity|Status|Tags|");
-    writer.write(System.lineSeparator());
+    writeLn(writer);
     writer.write("|----|----|-----------|--------|------|----|");
-    writer.write(System.lineSeparator());
+    writeLn(writer);
 
 
     List<RuleDefinition> rulesList = ruleGroup
@@ -112,18 +116,18 @@ public class MarkdownDocGenerator {
       writeSeparator(writer);
       writer.write(String.join(",", rule.getSysTags()));
       writeSeparator(writer);
-      writer.write(System.lineSeparator());
+      writeLn(writer);
     }
 
-    writer.write(System.lineSeparator());
+    writeLn(writer);
   }
 
   private static void writeGroupHeader(FileWriter writer,
                                         String groupName) throws IOException {
     writer.write("### ");
     writer.write(groupName);
-    writer.write(System.lineSeparator());
-    writer.write(System.lineSeparator());
+    writeLn(writer);
+    writeLn(writer);
   }
 
   private static void writeProcessing(FileWriter writer,
@@ -132,13 +136,13 @@ public class MarkdownDocGenerator {
     var processingGroup = definitionGroup.getProcessingGroup();
 
     writer.write("#### Rule Selectors");
-    writer.write(System.lineSeparator());
-    writer.write(System.lineSeparator());
+    writeLn(writer);
+    writeLn(writer);
 
     writer.write("|Selection|Reason|");
-    writer.write(System.lineSeparator());
+    writeLn(writer);
     writer.write("|---------|------|");
-    writer.write(System.lineSeparator());
+    writeLn(writer);
 
     for (var selector : processingGroup.getSelectors()) {
       writer.write("|");
@@ -148,19 +152,19 @@ public class MarkdownDocGenerator {
         writer.write(selector.getReason());
       }
       writer.write("|");
-      writer.write(System.lineSeparator());
+      writeLn(writer);
     }
 
-    writer.write(System.lineSeparator());
+    writeLn(writer);
 
     writer.write("#### Rule Filters");
-    writer.write(System.lineSeparator());
-    writer.write(System.lineSeparator());
+    writeLn(writer);
+    writeLn(writer);
 
     writer.write("|Filter|Reason|");
-    writer.write(System.lineSeparator());
+    writeLn(writer);
     writer.write("|---------|------|");
-    writer.write(System.lineSeparator());
+    writeLn(writer);
 
     for (var filter : processingGroup.getFilters()) {
       writer.write("|");
@@ -170,22 +174,22 @@ public class MarkdownDocGenerator {
         writer.write(filter.getReason());
       }
       writer.write("|");
-      writer.write(System.lineSeparator());
+      writeLn(writer);
     }
 
-    writer.write(System.lineSeparator());
+    writeLn(writer);
   }
 
   private static void writeGroupTable(FileWriter writer,
                                       RuleInstanceGroup ruleGroup) throws IOException {
     writer.write("#### Resulting Rules");
-    writer.write(System.lineSeparator());
-    writer.write(System.lineSeparator());
+    writeLn(writer);
+    writeLn(writer);
 
     writer.write("|Rule|Description|Severity|Reason|Parameter|");
-    writer.write(System.lineSeparator());
+    writeLn(writer);
     writer.write("|----|-----------|--------|------|---------|");
-    writer.write(System.lineSeparator());
+    writeLn(writer);
 
 
     List<RuleDefinition> rulesList = ruleGroup
@@ -194,66 +198,12 @@ public class MarkdownDocGenerator {
       .sorted(Comparator.comparing(RuleDefinition::getKey)).toList();
 
     for (RuleDefinition ruleDefinition : rulesList) {
-      var ruleInstance = ruleGroup.getRuleInstance(ruleDefinition.getKey());
-      var ruleDeleted = ruleInstance == null;
-      var severityChanged = !ruleDeleted && ruleInstance.getSeverity()!=ruleDefinition.getSeverity();
-      var hasParameter = !ruleDeleted && !ruleInstance.getParameter().isEmpty();
+      writeGroupTableEntry(writer, ruleGroup, ruleDefinition);
 
-      writeSeparator(writer);
-
-      // Rule
-
-      if (ruleDeleted) {
-        writer.write(strikedThrough(ruleDefinition.getKey()));
-      } else {
-        writer.write(ruleDefinition.getKey());
-      }
-
-      writeSeparator(writer);
-
-      // Description
-
-      writer.write(escaped(ruleDefinition.getName()));
-
-      writeSeparator(writer);
-
-      // Severity
-
-      if (ruleDeleted) {
-        writer.write(strikedThrough(ruleDefinition.getSeverity().name()));
-      } else if (severityChanged) {
-        writer.write(strikedThrough(ruleDefinition.getSeverity().name()));
-        writer.write(" -> ");
-        writer.write(ruleInstance.getSeverity().name());
-      } else {
-        writer.write(ruleInstance.getSeverity().name());
-      }
-
-      writeSeparator(writer);
-
-      // Severity Reason
-
-      if (!ruleDeleted && ruleInstance.hasSeverityReason()) {
-        writer.write(ruleInstance.getSeverityReason());
-      }
-
-      writeSeparator(writer);
-
-      if (hasParameter) {
-        for (var entry : ruleInstance.getParameter().entrySet()) {
-          writer.write(entry.getKey());
-          writer.write("=");
-          writer.write(entry.getValue());
-          writer.write("<br />");
-        }
-      }
-
-      writeSeparator(writer);
-
-      writer.write(System.lineSeparator());
+      writeLn(writer);
     }
 
-    writer.write(System.lineSeparator());
+    writeLn(writer);
   }
 
   private static void writeSeparator(Writer writer) throws IOException {
@@ -266,7 +216,79 @@ public class MarkdownDocGenerator {
       .replace(">","&gt;");
   }
 
+  private static void writeGroupTableEntry(FileWriter writer,
+                                           RuleInstanceGroup ruleGroup,
+                                           RuleDefinition ruleDefinition) throws IOException {
+    var ruleInstance = ruleGroup.getRuleInstance(ruleDefinition.getKey());
+    var ruleIsDeleted = ruleInstance == null;
+    var ruleIsDisabled = ruleInstance != null && ruleInstance.isDisabled();
+    var ruleIsUsed = !ruleIsDeleted && !ruleIsDisabled;
+    var severityHasChanged = ruleIsUsed &&
+      ruleInstance.getSeverity()!= ruleDefinition.getSeverity();
+    var hasParameter = ruleIsUsed && !ruleInstance.getParameter().isEmpty();
+
+    writeSeparator(writer);
+
+    // Rule
+
+    if (!ruleIsUsed) {
+      writer.write(strikedThrough(ruleDefinition.getKey()));
+    } else {
+      writer.write(ruleDefinition.getKey());
+    }
+
+    writeSeparator(writer);
+
+    // Description
+
+    writer.write(escaped(ruleDefinition.getName()));
+
+    writeSeparator(writer);
+
+    // Severity
+
+    if (!ruleIsUsed) {
+      writer.write(strikedThrough(ruleDefinition.getSeverity().name()));
+    } else if (severityHasChanged) {
+      writer.write(strikedThrough(ruleDefinition.getSeverity().name()));
+      writer.write(" -> ");
+      writer.write(ruleInstance.getSeverity().name());
+    } else {
+      writer.write(ruleInstance.getSeverity().name());
+    }
+
+    writeSeparator(writer);
+
+    // Severity Reason
+
+    if (severityHasChanged && ruleInstance.hasSeverityReason()) {
+      writer.write(ruleInstance.getSeverityReason());
+      writeLinebreak(writer);
+    }
+    if (ruleIsDisabled && ruleInstance.hasStatusReason()) {
+      writer.write(ruleInstance.getStatusReason());
+      writeLinebreak(writer);
+    }
+
+    writeSeparator(writer);
+
+    if (hasParameter) {
+      for (var entry : ruleInstance.getParameter().entrySet()) {
+        writer.write(entry.getKey());
+        writer.write("=");
+        writer.write(entry.getValue());
+        writeLinebreak(writer);
+      }
+    }
+
+    writeSeparator(writer);
+  }
+
   private static String strikedThrough(String text) {
     return "~~~" + text + "~~~";
+  }
+
+  private static void writeLinebreak(Writer writer) throws IOException {
+    writer.write("<br />");
   }
 }

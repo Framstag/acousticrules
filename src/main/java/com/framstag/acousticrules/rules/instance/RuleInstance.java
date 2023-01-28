@@ -34,15 +34,21 @@ import java.util.Objects;
  */
 public final class RuleInstance implements Ruleable,Comparable<RuleInstance> {
   private final RuleDefinition definition;
+  private final UseStatus status;
+  private final String statusReason;
   private final Map<String, String> parameter;
   private final Severity severity;
   private final String severityReason;
 
   private RuleInstance(RuleDefinition definition,
+                       UseStatus status,
+                       String statusReason,
                        Severity severity,
                        String severityReason,
                        Map<String,String> parameter) {
     this.definition = definition;
+    this.status = status;
+    this.statusReason = statusReason;
     this.severity = severity;
     this.severityReason = severityReason;
     this.parameter = Map.copyOf(parameter);
@@ -50,6 +56,8 @@ public final class RuleInstance implements Ruleable,Comparable<RuleInstance> {
 
   public static RuleInstance fromDefinition(RuleDefinition definition) {
     return new RuleInstance(definition,
+      UseStatus.ACTIVE,
+      null,
       definition.getSeverity(),
       null,
       Collections.emptyMap());
@@ -61,6 +69,18 @@ public final class RuleInstance implements Ruleable,Comparable<RuleInstance> {
 
   public String getSeverityReason() {
     return severityReason;
+  }
+
+  public boolean isDisabled() {
+    return status == UseStatus.DISABLED;
+  }
+
+  public boolean hasStatusReason() {
+    return statusReason != null && !statusReason.isBlank();
+  }
+
+  public String getStatusReason() {
+    return statusReason;
   }
 
   public String getName() {
@@ -80,6 +100,15 @@ public final class RuleInstance implements Ruleable,Comparable<RuleInstance> {
     return Map.copyOf(parameter);
   }
 
+  public RuleInstance disable(String reason) {
+    return new RuleInstance(definition,
+      UseStatus.DISABLED,
+      reason,
+      severity,
+      severityReason,
+      parameter);
+  }
+
   public RuleInstance setParameter(String key, String value) {
     if (!definition.hasParam(key)) {
       throw new IllegalArgumentException("The param '"+key+"' is not a known parameter for the rule "+getKey());
@@ -89,6 +118,8 @@ public final class RuleInstance implements Ruleable,Comparable<RuleInstance> {
     newParameter.put(key,value);
 
     return new RuleInstance(definition,
+      status,
+      statusReason,
       severity,
       severityReason,
       newParameter);
@@ -119,6 +150,8 @@ public final class RuleInstance implements Ruleable,Comparable<RuleInstance> {
 
   public RuleInstance setSeverity(Severity severity, String reason) {
     return new RuleInstance(definition,
+      status,
+      statusReason,
       severity,
       reason,
       parameter);

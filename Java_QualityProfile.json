@@ -39,23 +39,6 @@
     },
     {
       "name": "Good Code",
-      "filters": [
-        {
-          "@processor": "DropWithKey",
-          "reason": "This is not our formatting",
-          "keys": [
-            "java:S1106",
-            "java:S1108"
-          ]
-        },
-        {
-          "@processor": "DropWithKey",
-          "reason": "Done via IntelliJ",
-          "keys": [
-            "java:S1451"
-          ]
-        }
-      ],
       "modifier": [
         {
           "@processor": "ChangeSeverity",
@@ -69,6 +52,21 @@
           "key": "java:S1312",
           "param": "format",
           "value": "log"
+        },
+        {
+          "@processor": "DisableByKey",
+          "reason": "This is not our formatting",
+          "keys": [
+            "java:S1106",
+            "java:S1108"
+          ]
+        },
+        {
+          "@processor": "DisableByKey",
+          "reason": "Done via IntelliJ",
+          "keys": [
+            "java:S1451"
+          ]
         }
       ]
     },

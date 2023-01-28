@@ -80,9 +80,11 @@ public class QualityProfileGenerator {
       RuleInstanceGroup groupRules = rulesByGroup.get(group.name());
 
       for (RuleInstance rule : groupRules.getRuleInstances()) {
-        writeRule(writer, rule, INDENT+INDENT);
-        // TODO: Not on the last rule
-        writeLn(writer);
+        if (!rule.isDisabled()) {
+          writeRule(writer, rule, INDENT + INDENT);
+          // TODO: Not on the last rule
+          writeLn(writer);
+        }
       }
     }
 

@@ -24,7 +24,8 @@ import jakarta.json.bind.annotation.JsonbTypeInfo;
 @JsonbTypeInfo(key = "@processor", value = {
   @JsonbSubtype(alias = "ChangeSeverity", type = ChangeSeverity.class),
   @JsonbSubtype(alias = "SetSeverity", type = SetSeverity.class),
-  @JsonbSubtype(alias = "SetParamForKey", type = SetParamForKey.class)
+  @JsonbSubtype(alias = "SetParamForKey", type = SetParamForKey.class),
+  @JsonbSubtype(alias = "DisableByKey", type = DisableByKey.class)
 })
 public interface Modifier {
   String getReason();

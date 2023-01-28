@@ -39,30 +39,6 @@
     },
     {
       "name": "Good Code",
-      "filters": [
-        {
-          "@processor": "DropWithKey",
-          "reason": "We do not restrict the use of // or /* ... */ commands",
-          "keys": [
-            "cpp:S1708",
-            "cpp:S139"
-          ]
-        },
-        {
-          "@processor": "DropWithKey",
-          "reason": "We are in a library/framework context",
-          "keys": [
-            "cpp:S5536"
-          ]
-        },
-        {
-          "@processor": "DropWithKey",
-          "reason": "We do not see this as a real problem, dropping the rule",
-          "keys": [
-            "cpp:S1915"
-          ]
-        }
-      ],
       "modifier": [
         {
           "@processor": "ChangeSeverity",
@@ -98,6 +74,28 @@
           "key": "cpp:S2343",
           "param": "format",
           "value": "^[A-Z][a-zA-Z0-9]*$"
+        },
+        {
+          "@processor": "DisableByKey",
+          "reason": "We do not restrict the use of // or /* ... */ commands",
+          "keys": [
+            "cpp:S1708",
+            "cpp:S139"
+          ]
+        },
+        {
+          "@processor": "DisableByKey",
+          "reason": "We are in a library/framework context",
+          "keys": [
+            "cpp:S5536"
+          ]
+        },
+        {
+          "@processor": "DisableByKey",
+          "reason": "We do not see this as a real problem, dropping the rule",
+          "keys": [
+            "cpp:S1915"
+          ]
         }
       ]
     },
@@ -113,21 +111,19 @@
     },
     {
       "name": "C++11 Improvements",
-      "filters": [
-        {
-          "@processor": "DropWithKey",
-          "reason": "Avoiding lambdas is not a helpful warning in our code",
-          "keys": [
-            "cpp:S1750"
-          ]
-        }
-      ],
       "modifier": [
         {
           "@processor": "ChangeSeverity",
           "reason": "Language based improvements are important, raise severity",
           "from": "MINOR",
           "to": "MAJOR"
+        },
+        {
+          "@processor": "DisableByKey",
+          "reason": "Avoiding lambdas is not a helpful warning in our code",
+          "keys": [
+            "cpp:S1750"
+          ]
         }
       ]
     },
@@ -212,28 +208,26 @@
     },
     {
       "name": "Misra",
-      "filters": [
-        {
-          "@processor": "DropWithKey",
-          "reason": "We do not restrict the use of // or /* ... */ commands",
-          "keys": [
-            "cpp:S787"
-          ]
-        },
-        {
-          "@processor": "DropWithKey",
-          "reason": "While a long term goal, this is currently not target  in general",
-          "keys": [
-            "cpp:S813"
-          ]
-        }
-      ],
       "modifier": [
         {
           "@processor": "ChangeSeverity",
           "reason": "It is about good practices not bugs, so reduce severity for MAJOR",
           "from": "MAJOR",
           "to": "MINOR"
+        },
+        {
+          "@processor": "DisableByKey",
+          "reason": "We do not restrict the use of // or /* ... */ commands",
+          "keys": [
+            "cpp:S787"
+          ]
+        },
+        {
+          "@processor": "DisableByKey",
+          "reason": "While a long term goal, this is currently not target  in general",
+          "keys": [
+            "cpp:S813"
+          ]
         }
       ]
     },
