@@ -37,31 +37,18 @@ public class MarkdownDocGenerator {
 
   private static final Logger log = LoggerFactory.getLogger(MarkdownDocGenerator.class);
 
-  public void writeMarkdown(QualityProfile qualityProfile,
-                            Path filename,
-                            Map<String, RuleInstanceGroup> rulesByGroup,
-                            RuleDefinitionGroup unusedRules) throws IOException {
-    try (var writer = new FileWriter(filename.toString(), StandardCharsets.UTF_8)) {
-      writer.write("# Documentation");
-      writer.write(System.lineSeparator());
-      writer.write(System.lineSeparator());
+  private static void writeH1(Writer writer, String title) throws IOException {
+    writer.write("# ");
+    writer.write(title);
+    writeLn(writer);
+    writeLn(writer);
+  }
 
-      writer.write("## Used Rules by Group");
-      writer.write(System.lineSeparator());
-      writer.write(System.lineSeparator());
-      writeGroups(writer,
-        rulesByGroup,
-        qualityProfile
-          .groups()
-          .stream()
-          .map(QualityGroup::name)
-          .toList());
-
-      writer.write("## Unused Rules");
-      writeLn(writer);
-      writeLn(writer);
-      writeUnusedRules(writer, unusedRules);
-    }
+  private static void writeH2(Writer writer, String title) throws IOException {
+    writer.write("## ");
+    writer.write(title);
+    writeLn(writer);
+    writeLn(writer);
   }
 
   private static void writeGroups(FileWriter writer,
@@ -79,12 +66,11 @@ public class MarkdownDocGenerator {
 
       writeGroupHeader(writer, groupName);
       writeProcessing(writer, ruleInstanceGroup);
-      writeGroupTable(writer, ruleInstanceGroup);
-    }
-  }
 
-  private static void writeLn(Writer writer) throws IOException {
-    writer.write(System.lineSeparator());
+      if (!ruleInstanceGroup.getRuleInstances().isEmpty()) {
+        writeGroupTable(writer, ruleInstanceGroup);
+      }
+    }
   }
 
   private static void writeUnusedRules(FileWriter writer,
@@ -123,11 +109,8 @@ public class MarkdownDocGenerator {
   }
 
   private static void writeGroupHeader(FileWriter writer,
-                                        String groupName) throws IOException {
-    writer.write("### ");
-    writer.write(groupName);
-    writeLn(writer);
-    writeLn(writer);
+                                       String groupName) throws IOException {
+    writeH3(writer, groupName);
   }
 
   private static void writeProcessing(FileWriter writer,
@@ -135,9 +118,7 @@ public class MarkdownDocGenerator {
     var definitionGroup = ruleGroup.getRuleDefinitionGroup();
     var processingGroup = definitionGroup.getProcessingGroup();
 
-    writer.write("#### Rule Selectors");
-    writeLn(writer);
-    writeLn(writer);
+    writeH4(writer, "Rule Selectors");
 
     writer.write("|Selection|Reason|");
     writeLn(writer);
@@ -157,9 +138,7 @@ public class MarkdownDocGenerator {
 
     writeLn(writer);
 
-    writer.write("#### Rule Filters");
-    writeLn(writer);
-    writeLn(writer);
+    writeH4(writer, "Rule Filters");
 
     writer.write("|Filter|Reason|");
     writeLn(writer);
@@ -180,11 +159,20 @@ public class MarkdownDocGenerator {
     writeLn(writer);
   }
 
+  private static void writeH4(Writer writer, String title) throws IOException {
+    writer.write("#### ");
+    writer.write(title);
+    writeLn(writer);
+    writeLn(writer);
+  }
+
+  private static void writeLn(Writer writer) throws IOException {
+    writer.write(System.lineSeparator());
+  }
+
   private static void writeGroupTable(FileWriter writer,
                                       RuleInstanceGroup ruleGroup) throws IOException {
-    writer.write("#### Resulting Rules");
-    writeLn(writer);
-    writeLn(writer);
+    writeH4(writer, "Resulting Rules");
 
     writer.write("|Rule|Description|Severity|Reason|Parameter|");
     writeLn(writer);
@@ -212,8 +200,15 @@ public class MarkdownDocGenerator {
 
   private static String escaped(String text) {
     return text
-      .replace("<","&lt;")
-      .replace(">","&gt;");
+      .replace("<", "&lt;")
+      .replace(">", "&gt;");
+  }
+
+  private static void writeH3(Writer writer, String title) throws IOException {
+    writer.write("### ");
+    writer.write(title);
+    writeLn(writer);
+    writeLn(writer);
   }
 
   private static void writeGroupTableEntry(FileWriter writer,
@@ -224,7 +219,7 @@ public class MarkdownDocGenerator {
     var ruleIsDisabled = ruleInstance != null && ruleInstance.isDisabled();
     var ruleIsUsed = !ruleIsDeleted && !ruleIsDisabled;
     var severityHasChanged = ruleIsUsed &&
-      ruleInstance.getSeverity()!= ruleDefinition.getSeverity();
+      ruleInstance.getSeverity() != ruleDefinition.getSeverity();
     var hasParameter = ruleIsUsed && !ruleInstance.getParameter().isEmpty();
 
     writeSeparator(writer);
@@ -290,5 +285,26 @@ public class MarkdownDocGenerator {
 
   private static void writeLinebreak(Writer writer) throws IOException {
     writer.write("<br />");
+  }
+
+  public void writeMarkdown(QualityProfile qualityProfile,
+                            Path filename,
+                            Map<String, RuleInstanceGroup> rulesByGroup,
+                            RuleDefinitionGroup unusedRules) throws IOException {
+    try (var writer = new FileWriter(filename.toString(), StandardCharsets.UTF_8)) {
+      writeH1(writer, "Documentation");
+      writeH2(writer, "Used Rules by Group");
+
+      writeGroups(writer,
+        rulesByGroup,
+        qualityProfile
+          .groups()
+          .stream()
+          .map(QualityGroup::name)
+          .toList());
+
+      writeH2(writer, "Unused Rules");
+      writeUnusedRules(writer, unusedRules);
+    }
   }
 }
