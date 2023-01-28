@@ -107,7 +107,7 @@ public class AcousticRules implements Callable<Integer> {
       ruleInstanceGroupMap = filterRules(qualityProfile, ruleInstanceGroupMap);
       modifyRules(qualityProfile, ruleInstanceGroupMap);
 
-      writeSonarQualityProfile(qualityProfile, ruleDefinitionsByGroup);
+      writeSonarQualityProfile(qualityProfile, ruleInstanceGroupMap);
 
       if (qualityProfile.hasDocumentationFilename()) {
         generateDocumentationFile(qualityProfile, ruleInstanceGroupMap,unusedRuleDefinitions);
@@ -208,7 +208,7 @@ public class AcousticRules implements Callable<Integer> {
   }
 
   private static void writeSonarQualityProfile(QualityProfile qualityProfile,
-                                               Map<String, RuleDefinitionGroup> rulesByGroup)
+                                               Map<String, RuleInstanceGroup> rulesByGroup)
     throws FileNotFoundException, XMLStreamException {
     log.info("Writing quality profile...");
 

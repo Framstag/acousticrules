@@ -67,6 +67,14 @@ public final class RuleInstance implements Ruleable,Comparable<RuleInstance> {
     return definition.getName();
   }
 
+  public String getRepo() {
+    return definition.getRepo();
+  }
+
+  public boolean hasParameter() {
+    return !parameter.isEmpty();
+  }
+
   public Map<String, String> getParameter() {
     // Make sure the Map we hand out is immutable and our map cannot be changes via a side effect
     return Map.copyOf(parameter);

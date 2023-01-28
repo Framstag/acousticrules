@@ -16,9 +16,8 @@
  */
 package com.framstag.acousticrules.qualityprofile;
 
-import com.framstag.acousticrules.rules.Parameter;
-import com.framstag.acousticrules.rules.definition.RuleDefinition;
-import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
+import com.framstag.acousticrules.rules.instance.RuleInstance;
+import com.framstag.acousticrules.rules.instance.RuleInstanceGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +35,7 @@ public class QualityProfileGenerator {
   private static final int INDENT = 2;
 
   public void write(QualityProfile qualityProfile,
-                    Map<String, RuleDefinitionGroup> rulesByGroup) throws FileNotFoundException, XMLStreamException {
+                    Map<String, RuleInstanceGroup> rulesByGroup) throws FileNotFoundException, XMLStreamException {
     var outputFactory = XMLOutputFactory.newDefaultFactory();
 
     var writer = outputFactory.createXMLStreamWriter(new FileOutputStream(qualityProfile.outputFilename().toFile()),
@@ -78,9 +77,9 @@ public class QualityProfileGenerator {
       writeLn(writer);
       writeLn(writer);
 
-      RuleDefinitionGroup groupRules = rulesByGroup.get(group.name());
+      RuleInstanceGroup groupRules = rulesByGroup.get(group.name());
 
-      for (RuleDefinition rule : groupRules.getRules()) {
+      for (RuleInstance rule : groupRules.getRuleInstances()) {
         writeRule(writer, rule, INDENT+INDENT);
         // TODO: Not on the last rule
         writeLn(writer);
@@ -104,7 +103,7 @@ public class QualityProfileGenerator {
     }
   }
 
-  private static void writeRule(XMLStreamWriter writer, RuleDefinition rule, int indent) throws XMLStreamException {
+  private static void writeRule(XMLStreamWriter writer, RuleInstance rule, int indent) throws XMLStreamException {
     writeIndent(writer, indent);
     writer.writeStartElement("rule");
     writeLn(writer);
@@ -136,16 +135,16 @@ public class QualityProfileGenerator {
   }
 
   private static void writeParameterList(XMLStreamWriter writer,
-                                         RuleDefinition rule,
+                                         RuleInstance rule,
                                          int indent) throws XMLStreamException {
     writeIndent(writer, indent);
 
-    if (rule.hasParams()) {
+    if (rule.hasParameter()) {
       writer.writeStartElement("parameters");
       writeLn(writer);
 
-      for (Parameter parameter : rule.getParams()) {
-        writeParameter(writer, indent + INDENT, parameter);
+      for (var parameter : rule.getParameter().entrySet()) {
+        writeParameter(writer, indent + INDENT, parameter.getKey(), parameter.getValue());
       }
 
       writeIndent(writer, indent);
@@ -159,25 +158,22 @@ public class QualityProfileGenerator {
 
   private static void writeParameter(XMLStreamWriter writer,
                                      int indent,
-                                     Parameter parameter) throws XMLStreamException {
-    if (!parameter.hasOverwrittenDefaultValue()) {
-      return;
-    }
-
+                                     String key,
+                                     String value) throws XMLStreamException {
     writeIndent(writer, indent);
     writer.writeStartElement("parameter");
     writeLn(writer);
 
     writeIndent(writer, indent + INDENT);
     writer.writeStartElement("key");
-    writer.writeCharacters(parameter.key());
+    writer.writeCharacters(key);
     writer.writeEndElement();
     writeLn(writer);
 
-    if (parameter.value() != null) {
+    if (value != null) {
       writeIndent(writer, indent + INDENT);
       writer.writeStartElement("value");
-      writer.writeCharacters(parameter.value());
+      writer.writeCharacters(value);
       writer.writeEndElement();
       writeLn(writer);
     } else {
