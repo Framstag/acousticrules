@@ -1,6 +1,6 @@
 /*
  * AcousticRuler
- * Copyright 2022 Tim Teulings
+ * Copyright 2023 Tim Teulings
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,20 @@
  */
 package com.framstag.acousticrules;
 
+import com.framstag.acousticrules.exceptions.ParameterException;
 import com.framstag.acousticrules.filter.Filter;
 import com.framstag.acousticrules.markdowndoc.MarkdownDocGenerator;
 import com.framstag.acousticrules.modifier.Modifier;
 import com.framstag.acousticrules.processing.ProcessingGroup;
 import com.framstag.acousticrules.processing.ProcessingGroupRepository;
+import com.framstag.acousticrules.properties.Propertizer;
 import com.framstag.acousticrules.qualityprofile.QualityGroup;
 import com.framstag.acousticrules.qualityprofile.QualityProfile;
 import com.framstag.acousticrules.qualityprofile.QualityProfileGenerator;
 import com.framstag.acousticrules.qualityprofile.QualityProfileRepository;
 import com.framstag.acousticrules.rules.definition.RuleDefinition;
 import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
+import com.framstag.acousticrules.rules.definition.RuleDefinitionList;
 import com.framstag.acousticrules.rules.definition.RulesRepository;
 import com.framstag.acousticrules.rules.instance.RuleInstance;
 import com.framstag.acousticrules.rules.instance.RuleInstanceGroup;
@@ -56,20 +59,29 @@ public class AcousticRules implements Callable<Integer> {
 
   private static final Logger log = LoggerFactory.getLogger(AcousticRules.class);
   @CommandLine.Option(
-    names = {"-p", "--processor"},
+    names = {"-r", "--rule"},
     paramLabel = "filename",
     description = "File containing a processor group definition")
   private List<Path> processorSetFiles;
+
   @CommandLine.Option(
     names = {"-q", "--quality_profile"},
     paramLabel = "filename",
     required = true,
     description = "File containing a quality profile definition")
   private Path qualityProfileFile;
+
   @CommandLine.Option(
     names = {"--stopOnDuplicates"},
     description = "Do not generate a quality profile if the same rule is matched by multiple groups")
   private boolean stopOnDuplicates;
+
+  @CommandLine.Option(
+    names = {"-p", "--property"},
+    paramLabel = "value",
+    description = "Definition of a property")
+  private Map<String,String> propertyMap;
+
   @CommandLine.Parameters(
     description = "Rule files"
   )
@@ -82,8 +94,18 @@ public class AcousticRules implements Callable<Integer> {
 
   @Override
   public Integer call() throws Exception {
+    dumpProperties(propertyMap);
+
+    var propertizer = new Propertizer(propertyMap);
+
     var allRuleDefinitionsList = new RulesRepository().loadRulesFromRulesDownloadFiles(ruleFiles);
+
+    var language = verifyAndReturnLanguage(allRuleDefinitionsList);
+
+    log.info("Detected language: `{}`", language);
+
     var allRuleDefinitions = RuleDefinitionGroup.fromRuleDefinitionList(allRuleDefinitionsList);
+
     List<ProcessingGroup> processingGroups = new ProcessingGroupRepository().loadProcessingGroups(processorSetFiles);
     Map<String,RuleDefinitionGroup> ruleDefinitionsByGroup = processRulesToGroups(allRuleDefinitions,
       processingGroups);
@@ -103,11 +125,13 @@ public class AcousticRules implements Callable<Integer> {
     if (qualityProfileFile != null) {
       var qualityProfile = new QualityProfileRepository().load(qualityProfileFile);
 
+      qualityProfile = propertizeQualityProfile(qualityProfile,propertizer);
+
       Map<String,RuleInstanceGroup> ruleInstanceGroupMap = createInstanceGroups(qualityProfile, ruleDefinitionsByGroup);
       ruleInstanceGroupMap = filterRules(qualityProfile, ruleInstanceGroupMap);
       modifyRules(qualityProfile, ruleInstanceGroupMap);
 
-      writeSonarQualityProfile(qualityProfile, ruleInstanceGroupMap);
+      writeSonarQualityProfile(qualityProfile, language, ruleInstanceGroupMap);
 
       if (qualityProfile.hasDocumentationFilename()) {
         generateDocumentationFile(qualityProfile, ruleInstanceGroupMap,unusedRuleDefinitions);
@@ -115,6 +139,33 @@ public class AcousticRules implements Callable<Integer> {
     }
 
     return 0;
+  }
+
+  private static void dumpProperties(Map<String, String> propertyMap) {
+    if (propertyMap == null) {
+      return;
+    }
+
+    for (var entry : propertyMap.entrySet()) {
+      log.info("Property '{}'='{}'",entry.getKey(),entry.getValue());
+    }
+  }
+
+  private static String verifyAndReturnLanguage(RuleDefinitionList allRuleDefinitionsList) {
+    var language="";
+
+    for (var rule : allRuleDefinitionsList.getRules()) {
+      if (language.isEmpty()) {
+        language = rule.getLang();
+      } else {
+        if (!rule.getLang().equals(language)) {
+          throw new ParameterException(String.format("Not all rules have the same language: '%s' vs. '%s'",
+            language,rule.getLang()));
+        }
+      }
+    }
+
+    return language;
   }
 
   private static Map<String, RuleDefinitionGroup> processRulesToGroups(RuleDefinitionGroup allRules,
@@ -168,6 +219,23 @@ public class AcousticRules implements Callable<Integer> {
     return duplicateCount;
   }
 
+  private static QualityProfile propertizeQualityProfile(QualityProfile qualityProfile, Propertizer propertizer) {
+    if (!propertizer.validate(qualityProfile.outputFilename().toString())) {
+      throw new ParameterException("Attribute 'outputFilename' of QualityProfile contains unknown Property");
+    }
+
+    if (!propertizer.validate(qualityProfile.documentationFilename().toString())) {
+      throw new ParameterException("Attribute 'documentationFilename' of QualityProfile contains unknown Property");
+    }
+
+    qualityProfile = qualityProfile.withDocumentationFilename(
+      Path.of(propertizer.resolve(qualityProfile.documentationFilename().toString())));
+    qualityProfile = qualityProfile.withOutputFilename(
+      Path.of(propertizer.resolve(qualityProfile.outputFilename().toString())));
+
+    return qualityProfile;
+  }
+
   private static Map<String,RuleInstanceGroup> createInstanceGroups(QualityProfile qualityProfile,
                                                              Map<String, RuleDefinitionGroup> ruleDefinitionsByGroup) {
     Map<String, RuleInstanceGroup> ruleInstanceGroupMap = new HashMap<>();
@@ -208,13 +276,14 @@ public class AcousticRules implements Callable<Integer> {
   }
 
   private static void writeSonarQualityProfile(QualityProfile qualityProfile,
+                                               String language,
                                                Map<String, RuleInstanceGroup> rulesByGroup)
     throws FileNotFoundException, XMLStreamException {
-    log.info("Writing quality profile...");
+    log.info("Writing quality profile '{}'...",qualityProfile.outputFilename());
 
     var writer = new QualityProfileGenerator();
 
-    writer.write(qualityProfile, rulesByGroup);
+    writer.write(qualityProfile, language, rulesByGroup);
     log.info("Writing quality profile...done");
   }
 

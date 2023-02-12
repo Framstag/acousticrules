@@ -1,5 +1,4 @@
 {
-  "language": "java",
   "name": "Framstag",
   "output_filename": "Java_QualityProfile.xml",
   "documentation_filename": "Java_QualityProfile.md",

@@ -1,6 +1,6 @@
 /*
  * AcousticRuler
- * Copyright 2022 Tim Teulings
+ * Copyright 2023 Tim Teulings
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,22 +23,33 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 
-public record QualityProfile(String language,
-                             String name,
+public record QualityProfile(String name,
                              Path outputFilename,
                              Path documentationFilename,
                              List<QualityGroup> groups) {
   @JsonbCreator
-  public QualityProfile(@JsonbProperty("language") String language,
-                        @JsonbProperty("name") String name,
+  public QualityProfile(@JsonbProperty("name") String name,
                         @JsonbProperty("output_filename") Path outputFilename,
                         @JsonbProperty("documentation_filename") Path documentationFilename,
                         @JsonbProperty("groups") List<QualityGroup> groups) {
-    this.language = language;
     this.name = name;
     this.outputFilename = outputFilename;
     this.documentationFilename = documentationFilename;
     this.groups = List.copyOf(groups);
+  }
+
+  public QualityProfile withOutputFilename(Path outputFilename) {
+    return new QualityProfile(name,
+      outputFilename,
+      documentationFilename,
+      groups);
+  }
+
+  public QualityProfile withDocumentationFilename(Path documentationFilename) {
+    return new QualityProfile(name,
+      outputFilename,
+      documentationFilename,
+      groups);
   }
 
   public boolean hasDocumentationFilename() {

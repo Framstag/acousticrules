@@ -1,6 +1,6 @@
 /*
  * AcousticRuler
- * Copyright 2022 Tim Teulings
+ * Copyright 2023 Tim Teulings
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ public class QualityProfileGenerator {
   private static final int INDENT = 2;
 
   public void write(QualityProfile qualityProfile,
+                    String language,
                     Map<String, RuleInstanceGroup> rulesByGroup) throws FileNotFoundException, XMLStreamException {
     var outputFactory = XMLOutputFactory.newDefaultFactory();
 
@@ -55,7 +56,7 @@ public class QualityProfileGenerator {
 
     writeIndent(writer, INDENT);
     writer.writeStartElement("language");
-    writer.writeCharacters(qualityProfile.language());
+    writer.writeCharacters(language);
     writer.writeEndElement();
     writeLn(writer);
     writeLn(writer);

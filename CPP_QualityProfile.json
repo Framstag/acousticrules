@@ -1,5 +1,4 @@
 {
-  "language": "cpp",
   "name": "Framstag",
   "output_filename": "CPP_QualityProfile.xml",
   "documentation_filename": "CPP_QualityProfile.md",
@@ -94,7 +93,10 @@
           "@processor": "DisableByKey",
           "reason": "We do not see this as a real problem, dropping the rule",
           "keys": [
-            "cpp:S1915"
+            "cpp:S1915",
+            "cpp:S3539",
+            "cpp:S1772",
+            "cpp:S1774"
           ]
         },
         {
@@ -248,7 +250,8 @@
           "reason": "Not our rule",
           "keys": [
             "cpp:S1117",
-            "cpp:S1005"
+            "cpp:S1005",
+            "cpp:S909"
           ]
         },
         {
