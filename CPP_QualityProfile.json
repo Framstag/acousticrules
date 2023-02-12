@@ -96,6 +96,13 @@
           "keys": [
             "cpp:S1915"
           ]
+        },
+        {
+          "@processor": "DisableByKey",
+          "reason": "We want to use exceptions for low level errors",
+          "keys": [
+            "cpp:S1706"
+          ]
         }
       ]
     },
@@ -228,6 +235,29 @@
           "keys": [
             "cpp:S813"
           ]
+        },
+        {
+          "@processor": "DisableByKey",
+          "reason": "Too many changes in code to support generally",
+          "keys": [
+            "cpp:S994"
+          ]
+        },
+        {
+          "@processor": "DisableByKey",
+          "reason": "Not our rule",
+          "keys": [
+            "cpp:S1117",
+            "cpp:S1005"
+          ]
+        },
+        {
+          "@processor": "SetSeverity",
+          "reason": "In principle important, but not our most important problem",
+          "keys": [
+            "cpp:S997"
+          ],
+          "to": "MINOR"
         }
       ]
     },
@@ -239,6 +269,13 @@
           "reason": "It is about good practices not bugs, so reduce severity for MAJOR",
           "from": "MAJOR",
           "to": "MINOR"
+        },
+        {
+          "@processor": "DisableByKey",
+          "reason": "Perhaps later but currently to many changes to fix",
+          "keys": [
+            "cpp:S994"
+          ]
         }
       ]
     },
