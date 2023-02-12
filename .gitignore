@@ -22,8 +22,14 @@
 # Demo files build results
 /CPP_QualityProfile.md
 /CPP_QualityProfile.xml
+/CSS_QualityProfile.md
+/CSS_QualityProfile.xml
+/HTML_QualityProfile.md
+/HTML_QualityProfile.xml
 /Java_QualityProfile.md
 /Java_QualityProfile.xml
+/TypeScript_QualityProfile.md
+/TypeScript_QualityProfile.xml
 
 # Further rules downloads
 /*rules*.json
