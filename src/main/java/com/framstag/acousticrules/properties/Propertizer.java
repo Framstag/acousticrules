@@ -19,6 +19,7 @@ package com.framstag.acousticrules.properties;
 
 import com.framstag.acousticrules.exceptions.ParameterException;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -35,7 +36,11 @@ public class Propertizer {
   private final Map<String, String> properties;
 
   public Propertizer(Map<String, String> properties) {
-    this.properties = Map.copyOf(properties);
+    if (properties != null) {
+      this.properties = Map.copyOf(properties);
+    } else {
+      this.properties = Collections.emptyMap();
+    }
   }
 
   /**
