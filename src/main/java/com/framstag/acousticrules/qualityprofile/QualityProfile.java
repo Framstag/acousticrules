@@ -38,6 +38,13 @@ public record QualityProfile(String name,
     this.groups = List.copyOf(groups);
   }
 
+  public QualityProfile withName(String name) {
+    return new QualityProfile(name,
+      outputFilename,
+      documentationFilename,
+      groups);
+  }
+
   public QualityProfile withOutputFilename(Path outputFilename) {
     return new QualityProfile(name,
       outputFilename,

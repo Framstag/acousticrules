@@ -96,8 +96,6 @@ public class AcousticRules implements Callable<Integer> {
   public Integer call() throws Exception {
     dumpProperties(propertyMap);
 
-    var propertizer = new Propertizer(propertyMap);
-
     var allRuleDefinitionsList = new RulesRepository().loadRulesFromRulesDownloadFiles(ruleFiles);
 
     var language = verifyAndReturnLanguage(allRuleDefinitionsList);
@@ -123,6 +121,8 @@ public class AcousticRules implements Callable<Integer> {
     log.info("Overall selected rule definitions: {}", usedRuleDefinitions.size());
 
     if (qualityProfileFile != null) {
+      var propertizer = new Propertizer(propertyMap);
+
       var qualityProfile = new QualityProfileRepository().load(qualityProfileFile);
 
       qualityProfile = propertizeQualityProfile(qualityProfile,propertizer);
@@ -220,6 +220,10 @@ public class AcousticRules implements Callable<Integer> {
   }
 
   private static QualityProfile propertizeQualityProfile(QualityProfile qualityProfile, Propertizer propertizer) {
+    if (!propertizer.validate(qualityProfile.name())) {
+      throw new ParameterException("Attribute 'name' of QualityProfile contains unknown Property");
+    }
+
     if (!propertizer.validate(qualityProfile.outputFilename().toString())) {
       throw new ParameterException("Attribute 'outputFilename' of QualityProfile contains unknown Property");
     }
@@ -228,6 +232,8 @@ public class AcousticRules implements Callable<Integer> {
       throw new ParameterException("Attribute 'documentationFilename' of QualityProfile contains unknown Property");
     }
 
+    qualityProfile = qualityProfile.withName(
+      propertizer.resolve(qualityProfile.name()));
     qualityProfile = qualityProfile.withDocumentationFilename(
       Path.of(propertizer.resolve(qualityProfile.documentationFilename().toString())));
     qualityProfile = qualityProfile.withOutputFilename(
