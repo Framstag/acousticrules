@@ -3,7 +3,7 @@
 ## What ist AcousticRules?
 
 It a simple application that works on an exported sonar ruleset
-for a programming lanuage (for example C++ or Java) by using a
+for a programming language (for example C++ or Java) by using a
 simple  JSON-based DSL to define groups of rules by selection and filtering,
 allows modification of these groups of rules or individual rules in a group.
 From these modified rules it then generates a QualityProfile.xml than can get
@@ -22,7 +22,7 @@ of Sonar, you do not have a company-wide Sonar quality profile but want to
 tailor the profile for your application or want to produce a family of 
 similar quality profiles with little variance.
 
-It may be helpful where severity depends and the ranking of quality
+AcousticRules may be helpful in situations where severity depends on the ranking of quality
 features of your software, especially security, maintainability or compatibility
 to some standard may be ranked differently from project to project.
 
@@ -42,7 +42,7 @@ transformations without writing a custom Scanner/Parser or a
 Parser generator tool.
 
 It teaches me how in this case to build JSON based DSLs
-(with their advantages and disandvantages).
+(with their advantages and disadvantages).
 
 ## About the name
 
@@ -52,6 +52,94 @@ a useful association....and in the end, a name is just a unique id.
 ## License
 
 The application and its data files are under Apache License 2.0.
+
+## The idea behind AcousticRules
+
+The idea of AcousticRule sis, the grouping of Sonar rules into disjunctive 
+groups, where each group has a clear topic. Grouping is done based
+on the different information available on rules.
+
+After separating the rules into different groups you can easily manipulate
+rules with in a group together. Examples are 
+
+- Disabling
+- Increasing or decreasing severity
+
+Individual rule manipulation of course is still possible.
+
+Finally, a rich documentation is created state in which group a rule is,
+why it is in group. It also documents manipulation of rules together
+with the reason for manipulation.
+
+It is suggested to start with clarifying the ranking quality requirements
+on your project and this manipulate the severity of rules accordingly.
+
+AcousticRules already comes with a rich et of group definitions, however
+you can write your own groups.
+
+## How does it work?
+
+AcousticRules internal mechanic implements the following steps:
+
+1. Loading of the passed rule export files.
+2. Loading of the processing group definitions (in the standard directory layout (the rules/*.json files)
+3. Executing the processing group definitions resulting in a list of rules for each group
+4. (Optional) Check for rules being in multiple rules
+5. (Optional) Loading of the passed QualityProfile
+6. (Optional) Executing the Quality Profile, resulting in modified group sof rules
+7. (Optional) Generation of the Sonar Quality Profile file (*.xml)
+8. (Optional) Generation of the QualityProfile documentation (*.md))
+
+The execution of the processing group definition consists of the following (sub-) steps:
+
+1. Execution of the list of selectors creating a list of rules
+2. Execution of the list of filters on this list of rules, resulting in a possibly reduced list of rules
+
+The execution of the QualityProfile group definition consists of the following (sub-) steps:
+
+1. Execution of the list of filters, further reducing the list of rules
+2. Execution of the list of modifiers on the list of rules returning the same list, but with potentially modified rules
+
+## Selectors, Filters and Modifier
+
+### Selectors
+
+| Name           | Parameter                |
+|----------------|--------------------------|
+| SelectWithKey  | "keys": Array of String  | 
+| SelectWithTag  | "tags": Array of String  |
+| SelectWithType | "types": Array of String | 
+
+### Filters
+
+| Name              | Parameter                |
+|-------------------|--------------------------|
+| DropWithKey       | "keys": Array of String  |
+| DropWithTag       | "tags": Array of String  |
+| DropWithType      | "types": Array of String |
+| DropNotWithType   | "types": Array of String |
+| RemoveDeprecated  |                          |
+
+### Modifier
+
+| Name           | Parameter                                       |
+|----------------|-------------------------------------------------|
+| ChangeSeverity | "from": String, "to": String                    |
+| DisableByKey   | "keys": Array of String                         |
+| SetParamForKey | "key": String, "param": String, "value": String |
+| SetSeverity    | "keys": Array of String, "to": String           |
+
+### Dropping vs. Disabling
+
+Dropped rules are remove from the internal lists and thus will not occur
+in a documentation (yu also will not se the reason for dropping there). 
+
+Disabled rules will stay in the list but will be removed from the 
+generated QualityProfile. They will however appear in the documentation
+and thus will mention the reason for disabling.
+
+Recommendation: Do not remove rules in the QualityProfile definition, 
+just disabled them since you will get a better documentation.
 
 ## Downloading of rules from a sonar server
 
@@ -69,7 +157,7 @@ where:
 
 | Placeholder  | Meaning                                                        |
 |--------------|----------------------------------------------------------------|
-| user_token   | Sonar user token for authentification                          |
+| user_token   | Sonar user token for authentication                            |
 | organisation | Name of the organisation the user belongs to (e.g. `framstag`) |
  | language     | name of the language, see below                                |
 | page         | Number of page                                                 |
@@ -111,4 +199,4 @@ Bean Validation API in the context of JSON data loading to add simple
 input validation.
 
 Up to that time you will get Null-Pointer Exception and low level JSON
-deserialisation errors.
+deserialization errors.
