@@ -1,6 +1,6 @@
 /*
  * AcousticRuler
- * Copyright 2022 Tim Teulings
+ * Copyright 2023 Tim Teulings
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import com.framstag.acousticrules.rules.Ruleable;
 import jakarta.json.bind.annotation.JsonbCreator;
 import jakarta.json.bind.annotation.JsonbProperty;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,7 +29,11 @@ public class SelectWithKey extends AbstractSelector {
 
   @JsonbCreator
   public SelectWithKey(@JsonbProperty("keys") Set<String> keys) {
-    this.keys = Set.copyOf(keys);
+    if (keys != null) {
+      this.keys = Set.copyOf(keys);
+    } else {
+      this.keys = Collections.emptySet();
+    }
   }
 
   @Override

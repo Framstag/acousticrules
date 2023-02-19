@@ -1,6 +1,6 @@
 /*
  * AcousticRuler
- * Copyright 2022 Tim Teulings
+ * Copyright 2023 Tim Teulings
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,5 +41,4 @@ public abstract class AbstractSelector implements Selector {
   public void setReason(String reason) {
     this.reason = reason;
   }
-
 }
