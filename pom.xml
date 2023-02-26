@@ -258,11 +258,6 @@
             </executions>
             <configuration>
               <fallback>false</fallback>
-              <!--
-              <buildArgs>
-                <arg>-H:DashboardDump=acousticrules -H:+DashboardAll</arg>
-              </buildArgs>
-              -->
               <agent>
                 <enabled>true</enabled>
               </agent>

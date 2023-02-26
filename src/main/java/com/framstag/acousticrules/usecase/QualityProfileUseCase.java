@@ -33,7 +33,8 @@ import java.util.Map;
 
 public class QualityProfileUseCase {
   private final QualityProfileRepository qualityProfileRepository = new QualityProfileRepository();
-  private final QualityProfilePropertizerService qualityProfilePropertizerService = new QualityProfilePropertizerService();
+  private final QualityProfilePropertizerService qualityProfilePropertizerService =
+    new QualityProfilePropertizerService();
   private final RuleInstanceService ruleInstanceService = new RuleInstanceService();
   private final SonarQualityProfileRepository sonarQualityProfileRepository = new SonarQualityProfileRepository();
   private final DocumentationRepository documentationRepository = new DocumentationRepository();

@@ -36,7 +36,8 @@ import java.util.Map;
 public class RuleInstanceService {
   private static final Logger log = LoggerFactory.getLogger(RuleInstanceService.class);
 
-  public Map<String, RuleInstanceGroup> process(QualityProfile qualityProfile, Map<String, RuleDefinitionGroup> ruleDefinitionsByGroup) {
+  public Map<String, RuleInstanceGroup> process(QualityProfile qualityProfile,
+                                                Map<String, RuleDefinitionGroup> ruleDefinitionsByGroup) {
     Map<String, RuleInstanceGroup> ruleInstanceGroupMap = createInstanceGroups(qualityProfile,
       ruleDefinitionsByGroup);
     ruleInstanceGroupMap = filterRules(qualityProfile, ruleInstanceGroupMap);

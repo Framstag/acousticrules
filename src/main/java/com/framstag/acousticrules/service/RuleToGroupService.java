@@ -36,7 +36,7 @@ public class RuleToGroupService {
   private static final Logger log = LoggerFactory.getLogger(RuleToGroupService.class);
 
   public Map<String, RuleDefinitionGroup> processRulesToGroups(RuleDefinitionGroup allRules,
-                                                               List<ProcessingGroup> processingGroups) {
+                                                               Iterable<ProcessingGroup> processingGroups) {
     Map<String, RuleDefinitionGroup> rulesByGroup = new HashMap<>();
 
     for (var group : processingGroups) {

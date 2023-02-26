@@ -18,17 +18,17 @@
 package com.framstag.acousticrules.service;
 
 import com.framstag.acousticrules.exceptions.ParameterException;
-import com.framstag.acousticrules.rules.definition.RuleDefinitionList;
+import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class RulesLanguageService {
   private static final Logger log = LoggerFactory.getLogger(RulesLanguageService.class);
 
-  public String verifyAndReturnLanguage(RuleDefinitionList allRuleDefinitionsList) {
+  public String verifyAndReturnLanguage(RuleDefinitionGroup allRuleDefinitions) {
     var language="";
 
-    for (var rule : allRuleDefinitionsList.getRules()) {
+    for (var rule : allRuleDefinitions.getRules()) {
       if (language.isEmpty()) {
         language = rule.getLang();
       } else {
