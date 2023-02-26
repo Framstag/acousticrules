@@ -14,13 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.framstag.acousticrules;
 
-import picocli.CommandLine;
+package com.framstag.acousticrules.service;
 
-public class AcousticRules {
-  public static void main(String[] args) {
-    int exitCode = new CommandLine(new AcousticRulesCommand()).execute(args);
-    System.exit(exitCode);
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Map;
+
+public class PropertyService {
+  private static final Logger log = LoggerFactory.getLogger(PropertyService.class);
+
+  public void dump(Map<String,String> propertyMap) {
+    if (propertyMap == null) {
+      return;
+    }
+
+    for (var entry : propertyMap.entrySet()) {
+      log.info("Property '{}'='{}'",entry.getKey(),entry.getValue());
+    }
   }
 }

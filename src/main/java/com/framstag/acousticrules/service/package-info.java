@@ -14,13 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.framstag.acousticrules;
 
-import picocli.CommandLine;
-
-public class AcousticRules {
-  public static void main(String[] args) {
-    int exitCode = new CommandLine(new AcousticRulesCommand()).execute(args);
-    System.exit(exitCode);
-  }
-}
+/**
+ * Services that in sum realize the AcousticRules functionality.
+ */
+package com.framstag.acousticrules.service;
