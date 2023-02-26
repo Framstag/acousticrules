@@ -105,6 +105,13 @@
           "keys": [
             "cpp:S1706"
           ]
+        },
+        {
+          "@processor": "DisableByKey",
+          "reason": "This rule creates too much noise currently and does not have a good effort/benefit relation",
+          "keys": [
+            "cpp:S1773"
+          ]
         }
       ]
     },
@@ -309,6 +316,20 @@
           "@processor": "ChangeSeverity",
           "from": "MINOR",
           "to": "MAJOR"
+        },
+        {
+          "@processor": "SetParamForKey",
+          "reason": "We support C++ and Objective C files with the given postfixes",
+          "key": "cpp:S1578",
+          "param": "format",
+          "value": "^[A-Za-z_-][A-Za-z0-9_-]+\\.(mm|cpp|h|hpp)$"
+        },
+        {
+          "@processor": "DisableByKey",
+          "reason": "Too many hits without actual error",
+          "keys": [
+            "cpp:S864"
+          ]
         }
       ]
     }
