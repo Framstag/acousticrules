@@ -16,7 +16,6 @@
  */
 package com.framstag.acousticrules;
 
-import com.framstag.acousticrules.exceptions.ParameterException;
 import com.framstag.acousticrules.filter.Filter;
 import com.framstag.acousticrules.markdowndoc.MarkdownDocGenerator;
 import com.framstag.acousticrules.modifier.Modifier;
@@ -25,7 +24,6 @@ import com.framstag.acousticrules.processing.ProcessingGroupRepository;
 import com.framstag.acousticrules.properties.Propertizer;
 import com.framstag.acousticrules.qualityprofile.QualityGroup;
 import com.framstag.acousticrules.qualityprofile.QualityProfile;
-import com.framstag.acousticrules.qualityprofile.QualityProfileGenerator;
 import com.framstag.acousticrules.qualityprofile.QualityProfileRepository;
 import com.framstag.acousticrules.rules.definition.RuleDefinition;
 import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
@@ -33,14 +31,14 @@ import com.framstag.acousticrules.rules.definition.RulesRepository;
 import com.framstag.acousticrules.rules.instance.RuleInstance;
 import com.framstag.acousticrules.rules.instance.RuleInstanceGroup;
 import com.framstag.acousticrules.service.PropertyService;
+import com.framstag.acousticrules.service.QualityProfilePropertizerService;
 import com.framstag.acousticrules.service.RuleToGroupService;
 import com.framstag.acousticrules.service.RulesLanguageService;
+import com.framstag.acousticrules.service.SonarQualityProfileRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
 
-import javax.xml.stream.XMLStreamException;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
@@ -60,9 +58,11 @@ public class AcousticRulesCommand implements Callable<Integer> {
   private final PropertyService propertyService = new PropertyService();
   private final RulesLanguageService rulesLanguageService = new RulesLanguageService();
   private final RuleToGroupService ruleToGroupService = new RuleToGroupService();
+  private final QualityProfilePropertizerService qualityProfilePropertizerService = new QualityProfilePropertizerService();
   private final RulesRepository rulesRepository = new RulesRepository();
   private final ProcessingGroupRepository processingGroupRepository = new ProcessingGroupRepository();
   private final QualityProfileRepository qualityProfileRepository = new QualityProfileRepository();
+  private final SonarQualityProfileRepository sonarQualityProfileRepository = new SonarQualityProfileRepository();
   @CommandLine.Option(
     names = {"-r", "--rule"},
     paramLabel = "filename",
@@ -82,7 +82,7 @@ public class AcousticRulesCommand implements Callable<Integer> {
     names = {"-p", "--property"},
     paramLabel = "value",
     description = "Definition of a property")
-  private Map<String,String> propertyMap;
+  private Map<String, String> propertyMap;
   @CommandLine.Parameters(
     description = "Rule files"
   )
@@ -103,7 +103,7 @@ public class AcousticRulesCommand implements Callable<Integer> {
     var allRuleDefinitions = RuleDefinitionGroup.fromRuleDefinitionList(allRuleDefinitionsList);
 
     List<ProcessingGroup> processingGroups = processingGroupRepository.loadProcessingGroups(processorSetFiles);
-    Map<String,RuleDefinitionGroup> ruleDefinitionsByGroup = ruleToGroupService.processRulesToGroups(allRuleDefinitions,
+    Map<String, RuleDefinitionGroup> ruleDefinitionsByGroup = ruleToGroupService.processRulesToGroups(allRuleDefinitions,
       processingGroups);
 
     int duplicateCount = dumpRulesInMultipleGroups(allRuleDefinitions, ruleDefinitionsByGroup);
@@ -123,16 +123,17 @@ public class AcousticRulesCommand implements Callable<Integer> {
 
       var qualityProfile = qualityProfileRepository.load(qualityProfileFile);
 
-      qualityProfile = propertizeQualityProfile(qualityProfile,propertizer);
+      qualityProfile = qualityProfilePropertizerService.propertize(qualityProfile, propertizer);
 
-      Map<String,RuleInstanceGroup> ruleInstanceGroupMap = createInstanceGroups(qualityProfile, ruleDefinitionsByGroup);
+      Map<String, RuleInstanceGroup> ruleInstanceGroupMap = createInstanceGroups(qualityProfile,
+        ruleDefinitionsByGroup);
       ruleInstanceGroupMap = filterRules(qualityProfile, ruleInstanceGroupMap);
       modifyRules(qualityProfile, ruleInstanceGroupMap);
 
-      writeSonarQualityProfile(qualityProfile, language, ruleInstanceGroupMap);
+      sonarQualityProfileRepository.writeProfile(qualityProfile, language, ruleInstanceGroupMap);
 
       if (qualityProfile.hasDocumentationFilename()) {
-        generateDocumentationFile(qualityProfile, ruleInstanceGroupMap,unusedRuleDefinitions);
+        generateDocumentationFile(qualityProfile, ruleInstanceGroupMap, unusedRuleDefinitions);
       }
     }
 
@@ -173,31 +174,8 @@ public class AcousticRulesCommand implements Callable<Integer> {
     return duplicateCount;
   }
 
-  private static QualityProfile propertizeQualityProfile(QualityProfile qualityProfile, Propertizer propertizer) {
-    if (!propertizer.validate(qualityProfile.name())) {
-      throw new ParameterException("Attribute 'name' of QualityProfile contains unknown Property");
-    }
-
-    if (!propertizer.validate(qualityProfile.outputFilename().toString())) {
-      throw new ParameterException("Attribute 'outputFilename' of QualityProfile contains unknown Property");
-    }
-
-    if (!propertizer.validate(qualityProfile.documentationFilename().toString())) {
-      throw new ParameterException("Attribute 'documentationFilename' of QualityProfile contains unknown Property");
-    }
-
-    qualityProfile = qualityProfile.withName(
-      propertizer.resolve(qualityProfile.name()));
-    qualityProfile = qualityProfile.withDocumentationFilename(
-      Path.of(propertizer.resolve(qualityProfile.documentationFilename().toString())));
-    qualityProfile = qualityProfile.withOutputFilename(
-      Path.of(propertizer.resolve(qualityProfile.outputFilename().toString())));
-
-    return qualityProfile;
-  }
-
-  private static Map<String,RuleInstanceGroup> createInstanceGroups(QualityProfile qualityProfile,
-                                                             Map<String, RuleDefinitionGroup> ruleDefinitionsByGroup) {
+  private static Map<String, RuleInstanceGroup> createInstanceGroups(QualityProfile qualityProfile,
+                                                                     Map<String, RuleDefinitionGroup> ruleDefinitionsByGroup) {
     Map<String, RuleInstanceGroup> ruleInstanceGroupMap = new HashMap<>();
     for (var group : qualityProfile.groups()) {
       if (!ruleDefinitionsByGroup.containsKey(group.name())) {
@@ -213,8 +191,8 @@ public class AcousticRulesCommand implements Callable<Integer> {
     return ruleInstanceGroupMap;
   }
 
-  private static Map<String,RuleInstanceGroup> filterRules(QualityProfile qualityProfile,
-                                                           Map<String, RuleInstanceGroup> rulesByGroup) {
+  private static Map<String, RuleInstanceGroup> filterRules(QualityProfile qualityProfile,
+                                                            Map<String, RuleInstanceGroup> rulesByGroup) {
     Map<String, RuleInstanceGroup> filteredGroups = new HashMap<>();
     log.info("Filtering rules...");
 
@@ -233,18 +211,6 @@ public class AcousticRulesCommand implements Callable<Integer> {
     // TODO: Return new, changed map
     modifyRules(qualityProfile.groups(), rulesByGroup);
     log.info("Modifying rules done.");
-  }
-
-  private static void writeSonarQualityProfile(QualityProfile qualityProfile,
-                                               String language,
-                                               Map<String, RuleInstanceGroup> rulesByGroup)
-    throws FileNotFoundException, XMLStreamException {
-    log.info("Writing quality profile '{}'...",qualityProfile.outputFilename());
-
-    var writer = new QualityProfileGenerator();
-
-    writer.write(qualityProfile, language, rulesByGroup);
-    log.info("Writing quality profile...done");
   }
 
   private static void generateDocumentationFile(QualityProfile qualityProfile,
@@ -300,7 +266,8 @@ public class AcousticRulesCommand implements Callable<Integer> {
   /**
    * Calls the modifier over the given Collection of rules and return a new collection with the new,
    * modified rules.
-   * @param rules Set of rules
+   *
+   * @param rules     Set of rules
    * @param modifiers collection of modifiers to be applied
    * @return A new set of modified rules.
    */
