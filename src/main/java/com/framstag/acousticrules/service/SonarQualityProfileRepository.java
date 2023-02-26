@@ -23,8 +23,7 @@ import com.framstag.acousticrules.rules.instance.RuleInstanceGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.stream.XMLStreamException;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Map;
 
 public class SonarQualityProfileRepository {
@@ -32,8 +31,7 @@ public class SonarQualityProfileRepository {
 
   public void writeProfile(QualityProfile qualityProfile,
                            String language,
-                           Map<String, RuleInstanceGroup> rulesByGroup)
-    throws FileNotFoundException, XMLStreamException {
+                           Map<String, RuleInstanceGroup> rulesByGroup) throws IOException {
     log.info("Writing quality profile '{}'...", qualityProfile.outputFilename());
 
     var writer = new QualityProfileGenerator();

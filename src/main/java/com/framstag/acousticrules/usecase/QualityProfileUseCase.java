@@ -26,7 +26,6 @@ import com.framstag.acousticrules.service.QualityProfilePropertizerService;
 import com.framstag.acousticrules.service.RuleInstanceService;
 import com.framstag.acousticrules.service.SonarQualityProfileRepository;
 
-import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Map;
@@ -43,7 +42,7 @@ public class QualityProfileUseCase {
                   String language,
                   Path qualityProfileFile,
                   Map<String, RuleDefinitionGroup> ruleDefinitionsByGroup,
-                  RuleDefinitionGroup unusedRuleDefinitions) throws XMLStreamException, IOException {
+                  RuleDefinitionGroup unusedRuleDefinitions) throws IOException {
     var propertizer = new Propertizer(propertyMap);
 
     var qualityProfile = qualityProfileRepository.load(qualityProfileFile);

@@ -26,74 +26,78 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class QualityProfileGenerator {
-
   private static final Logger log = LoggerFactory.getLogger(QualityProfileGenerator.class);
   private static final int INDENT = 2;
 
   public void write(QualityProfile qualityProfile,
                     String language,
-                    Map<String, RuleInstanceGroup> rulesByGroup) throws FileNotFoundException, XMLStreamException {
+                    Map<String, RuleInstanceGroup> rulesByGroup) throws IOException {
     var outputFactory = XMLOutputFactory.newDefaultFactory();
 
-    var writer = outputFactory.createXMLStreamWriter(new FileOutputStream(qualityProfile.outputFilename().toFile()),
-      StandardCharsets.UTF_8.name());
+    try(var fileOutputStream = new FileOutputStream(qualityProfile.outputFilename().toFile())) {
 
-    writer.writeStartDocument(StandardCharsets.UTF_8.name(), "1.0");
-    writeLn(writer);
+      var writer = outputFactory.createXMLStreamWriter(fileOutputStream, StandardCharsets.UTF_8.name());
 
-    writer.writeStartElement("profile");
-    writeLn(writer);
+      writer.writeStartDocument(StandardCharsets.UTF_8.name(), "1.0");
+      writeLn(writer);
 
-    writeIndent(writer, INDENT);
-    writer.writeStartElement("name");
-    writer.writeCharacters(qualityProfile.name());
-    writer.writeEndElement();
-    writeLn(writer);
+      writer.writeStartElement("profile");
+      writeLn(writer);
 
-    writeIndent(writer, INDENT);
-    writer.writeStartElement("language");
-    writer.writeCharacters(language);
-    writer.writeEndElement();
-    writeLn(writer);
-    writeLn(writer);
+      writeIndent(writer, INDENT);
+      writer.writeStartElement("name");
+      writer.writeCharacters(qualityProfile.name());
+      writer.writeEndElement();
+      writeLn(writer);
 
-    writeIndent(writer, INDENT);
-    writer.writeStartElement("rules");
-    writeLn(writer);
-
-    for (QualityGroup group : qualityProfile.groups()) {
-      if (!rulesByGroup.containsKey(group.name())) {
-        log.atError().log("Quality profile requests dump of group '{}', but this group does not exist", group.name());
-        break;
-      }
-
-      log.atInfo().log("Writing group '{}'...", group.name());
-
-      writeIndent(writer, INDENT+INDENT);
-      writer.writeComment(" Group " + group.name() + " ");
+      writeIndent(writer, INDENT);
+      writer.writeStartElement("language");
+      writer.writeCharacters(language);
+      writer.writeEndElement();
       writeLn(writer);
       writeLn(writer);
 
-      RuleInstanceGroup groupRules = rulesByGroup.get(group.name());
+      writeIndent(writer, INDENT);
+      writer.writeStartElement("rules");
+      writeLn(writer);
 
-      for (RuleInstance rule : groupRules.getRuleInstances()) {
-        if (!rule.isDisabled()) {
-          writeRule(writer, rule, INDENT + INDENT);
-          // TODO: Not on the last rule
-          writeLn(writer);
+      for (QualityGroup group : qualityProfile.groups()) {
+        if (!rulesByGroup.containsKey(group.name())) {
+          log.atError().log("Quality profile requests dump of group '{}', but this group does not exist", group.name());
+          break;
+        }
+
+        log.atInfo().log("Writing group '{}'...", group.name());
+
+        writeIndent(writer, INDENT + INDENT);
+        writer.writeComment(" Group " + group.name() + " ");
+        writeLn(writer);
+        writeLn(writer);
+
+        RuleInstanceGroup groupRules = rulesByGroup.get(group.name());
+
+        for (RuleInstance rule : groupRules.getRuleInstances()) {
+          if (!rule.isDisabled()) {
+            writeRule(writer, rule, INDENT + INDENT);
+            // TODO: Not on the last rule
+            writeLn(writer);
+          }
         }
       }
+
+      writeIndent(writer, INDENT);
+      writer.writeEndElement();
+      writeLn(writer);
+
+      writer.writeEndDocument();
+    } catch (FileNotFoundException | XMLStreamException e) {
+      throw new IOException("Error while writing quality profile", e);
     }
-
-    writeIndent(writer, INDENT);
-    writer.writeEndElement();
-    writeLn(writer);
-
-    writer.writeEndDocument();
   }
 
   private static void writeLn(XMLStreamWriter writer) throws XMLStreamException {
