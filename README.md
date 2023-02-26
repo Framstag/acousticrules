@@ -1,6 +1,6 @@
 # AcousticRules
 
-## What ist AcousticRules?
+## What is AcousticRules?
 
 It a simple application that works on an exported sonar ruleset
 for a programming language (for example C++ or Java) by using a
@@ -34,7 +34,7 @@ AcousticRules also generates markdown files for documentation
 while at it, so you do ot only have a QualityProfile but a documentation
 why the severity of a rule is the way it is.
 
-## Other reasons
+## Other Reasons
 
 AcousticRules is also a test application for me in my search to 
 generate simple DSLs for simple data modifications and
@@ -44,7 +44,7 @@ Parser generator tool.
 It teaches me how in this case to build JSON based DSLs
 (with their advantages and disadvantages).
 
-## About the name
+## About the Name
 
 I try to avoid product names in the name of my projects but try to find
 a useful association....and in the end, a name is just a unique id.
@@ -53,7 +53,7 @@ a useful association....and in the end, a name is just a unique id.
 
 The application and its data files are under Apache License 2.0.
 
-## The idea behind AcousticRules
+## The Idea behind AcousticRules
 
 The idea of AcousticRule sis, the grouping of Sonar rules into disjunctive 
 groups, where each group has a clear topic. Grouping is done based
@@ -141,7 +141,22 @@ and thus will mention the reason for disabling.
 Recommendation: Do not remove rules in the QualityProfile definition, 
 just disabled them since you will get a better documentation.
 
-## Downloading of rules from a sonar server
+## Roll your own vs. pull requests...
+
+There is no need to use the rule sin the `rules` subdirectory.
+You can always roll your own rules, diving the rules into
+groups by your own criteria.
+
+However, we are interested to further enhance the quality of groups,
+possibly creating more fine granular groups, allowing even better
+fine-tuning of the QualityProfile.
+
+Especially better separation of toolset, compilers, environments
+would be helpful.
+
+So, patches are welcome :-)
+
+## Downloading of Rules from a Sonar Server
 
 For AcousticRules you need a list of Rules for a programming
 language. You can download such a list via the REST API and for example
@@ -178,7 +193,7 @@ Names for languages:
 | HTML       | web  | 
 | CSS        | css  |
 
-## Commandline options
+## Commandline Options
 
 Commandline options are still quickly changing, so I suggest to simply
 call AcousticRules --help.
@@ -192,7 +207,7 @@ The current command lines for generating a C++ quality profile are:
 where `cpp_rules1.json` and `cpp_rules2.json` are the C++ rules downloaded
 via the Sonar REST API.
 
-## Error handling
+## Error Handling
 
 Currently, there is none. I plan to either do schema validation or use
 Bean Validation API in the context of JSON data loading to add simple
@@ -200,3 +215,14 @@ input validation.
 
 Up to that time you will get Null-Pointer Exception and low level JSON
 deserialization errors.
+
+## How to Build
+
+AcousticRules needs Java 17 or higher to build as it uses some
+feature of this version.
+
+The build creates a `*.jar` and an "all-in-one" jar for execution
+and distribution.
+
+If GraalVM is installed you can create a native executable by setting
+the `native` profile (`mvn -pnative package')
