@@ -212,6 +212,13 @@
           "reason": "Our code must be bug free",
           "from": "CRITICAL",
           "to": "BLOCKER"
+        },
+        {
+          "@processor": "DisableByKey",
+          "reason": "Checked exceptions are not forbidden",
+          "keys": [
+            "java:S1162"
+          ]
         }
       ]
     },
