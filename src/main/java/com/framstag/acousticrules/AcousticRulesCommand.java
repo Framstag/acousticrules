@@ -32,8 +32,8 @@ import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
 import com.framstag.acousticrules.rules.definition.RulesRepository;
 import com.framstag.acousticrules.rules.instance.RuleInstance;
 import com.framstag.acousticrules.rules.instance.RuleInstanceGroup;
-import com.framstag.acousticrules.selector.Selector;
 import com.framstag.acousticrules.service.PropertyService;
+import com.framstag.acousticrules.service.RuleToGroupService;
 import com.framstag.acousticrules.service.RulesLanguageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,11 +45,9 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "AcousticRules",
@@ -60,8 +58,11 @@ public class AcousticRulesCommand implements Callable<Integer> {
 
   private static final Logger log = LoggerFactory.getLogger(AcousticRulesCommand.class);
   private final PropertyService propertyService = new PropertyService();
-  private final RulesRepository rulesRepository = new RulesRepository();
   private final RulesLanguageService rulesLanguageService = new RulesLanguageService();
+  private final RuleToGroupService ruleToGroupService = new RuleToGroupService();
+  private final RulesRepository rulesRepository = new RulesRepository();
+  private final ProcessingGroupRepository processingGroupRepository = new ProcessingGroupRepository();
+  private final QualityProfileRepository qualityProfileRepository = new QualityProfileRepository();
   @CommandLine.Option(
     names = {"-r", "--rule"},
     paramLabel = "filename",
@@ -101,8 +102,8 @@ public class AcousticRulesCommand implements Callable<Integer> {
 
     var allRuleDefinitions = RuleDefinitionGroup.fromRuleDefinitionList(allRuleDefinitionsList);
 
-    List<ProcessingGroup> processingGroups = new ProcessingGroupRepository().loadProcessingGroups(processorSetFiles);
-    Map<String,RuleDefinitionGroup> ruleDefinitionsByGroup = processRulesToGroups(allRuleDefinitions,
+    List<ProcessingGroup> processingGroups = processingGroupRepository.loadProcessingGroups(processorSetFiles);
+    Map<String,RuleDefinitionGroup> ruleDefinitionsByGroup = ruleToGroupService.processRulesToGroups(allRuleDefinitions,
       processingGroups);
 
     int duplicateCount = dumpRulesInMultipleGroups(allRuleDefinitions, ruleDefinitionsByGroup);
@@ -120,7 +121,7 @@ public class AcousticRulesCommand implements Callable<Integer> {
     if (qualityProfileFile != null) {
       var propertizer = new Propertizer(propertyMap);
 
-      var qualityProfile = new QualityProfileRepository().load(qualityProfileFile);
+      var qualityProfile = qualityProfileRepository.load(qualityProfileFile);
 
       qualityProfile = propertizeQualityProfile(qualityProfile,propertizer);
 
@@ -136,23 +137,6 @@ public class AcousticRulesCommand implements Callable<Integer> {
     }
 
     return 0;
-  }
-
-  private static Map<String, RuleDefinitionGroup> processRulesToGroups(RuleDefinitionGroup allRules,
-                                                                       List<ProcessingGroup> processingGroups) {
-    Map<String, RuleDefinitionGroup> rulesByGroup = new HashMap<>();
-
-    for (var group : processingGroups) {
-      log.info("Processing group '{}'...", group.getName());
-      var ruleDefinitionGroup = RuleDefinitionGroup.fromProcessingGroup(group);
-      ruleDefinitionGroup = selectRules(ruleDefinitionGroup,allRules,group.getSelectors());
-      ruleDefinitionGroup = filterRules(ruleDefinitionGroup,group.getFilters());
-      logRules(ruleDefinitionGroup);
-
-      rulesByGroup.put(group.getName(), ruleDefinitionGroup);
-    }
-
-    return rulesByGroup;
   }
 
   private static int dumpRulesInMultipleGroups(RuleDefinitionGroup allRules, Map<String,
@@ -275,68 +259,6 @@ public class AcousticRulesCommand implements Callable<Integer> {
       rulesByGroup,
       unusedRules);
     log.info("Writing quality profile documentation done.");
-  }
-
-  private static RuleDefinitionGroup selectRules(RuleDefinitionGroup processingGroup,
-                                                 RuleDefinitionGroup allRules,
-                                                 List<Selector> selectors) {
-    Set<RuleDefinition> allSelectedRules = new HashSet<>();
-
-    for (var selector : selectors) {
-      Set<RuleDefinition> selectedRules = new HashSet<>();
-      log.info("Selector: {} {}",
-        selector.getDescription(),
-        selector.getReasonString("- "));
-      for (var rule : allRules.getRules()) {
-        boolean selected = selector.select(rule);
-
-        if (selected) {
-          selectedRules.add(rule);
-        }
-      }
-
-      allSelectedRules.addAll(selectedRules);
-      log.info("{} rules selected => {} rules over all", selectedRules.size(), allSelectedRules.size());
-    }
-
-    return processingGroup.addOrUpdate(allSelectedRules);
-  }
-
-  private static RuleDefinitionGroup filterRules(RuleDefinitionGroup groupRuleSet, List<Filter> filters) {
-    var modifiedRulesGroup = groupRuleSet;
-
-    for (var filter : filters) {
-      List<RuleDefinition> filteredRules = new LinkedList<>();
-
-      log.info("Filter: {} {}",
-        filter.getDescription(),
-        filter.getReasonString("- "));
-      for (var rule : groupRuleSet.getRules()) {
-        boolean filtered = filter.filter(rule);
-        if (filtered) {
-          filteredRules.add(rule);
-        }
-      }
-
-      modifiedRulesGroup = modifiedRulesGroup.filter(filteredRules);
-
-      log.info("{} filtered => {} rules over all",
-        filteredRules.size(),
-        modifiedRulesGroup.size());
-    }
-
-    return modifiedRulesGroup;
-  }
-
-  private static void logRules(RuleDefinitionGroup ruleDefinitionGroup) {
-    for (var rule : ruleDefinitionGroup.getRules()) {
-      log.atInfo().log(" * {} {} {} {} ({})",
-        rule.getKey(),
-        rule.getSeverity(),
-        rule.getType(),
-        rule.getName(),
-        String.join(", ", rule.getSysTags()));
-    }
   }
 
   private static RuleInstanceGroup filterRules(RuleInstanceGroup groupRuleSet, List<Filter> filters) {
