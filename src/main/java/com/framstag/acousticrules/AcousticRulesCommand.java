@@ -17,7 +17,6 @@
 package com.framstag.acousticrules;
 
 import com.framstag.acousticrules.filter.Filter;
-import com.framstag.acousticrules.markdowndoc.MarkdownDocGenerator;
 import com.framstag.acousticrules.modifier.Modifier;
 import com.framstag.acousticrules.processing.ProcessingGroup;
 import com.framstag.acousticrules.processing.ProcessingGroupRepository;
@@ -30,6 +29,7 @@ import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
 import com.framstag.acousticrules.rules.definition.RulesRepository;
 import com.framstag.acousticrules.rules.instance.RuleInstance;
 import com.framstag.acousticrules.rules.instance.RuleInstanceGroup;
+import com.framstag.acousticrules.service.DocumentationRepository;
 import com.framstag.acousticrules.service.PropertyService;
 import com.framstag.acousticrules.service.QualityProfilePropertizerService;
 import com.framstag.acousticrules.service.RuleToGroupService;
@@ -39,7 +39,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashMap;
@@ -63,6 +62,7 @@ public class AcousticRulesCommand implements Callable<Integer> {
   private final ProcessingGroupRepository processingGroupRepository = new ProcessingGroupRepository();
   private final QualityProfileRepository qualityProfileRepository = new QualityProfileRepository();
   private final SonarQualityProfileRepository sonarQualityProfileRepository = new SonarQualityProfileRepository();
+  private final DocumentationRepository documentationRepository = new DocumentationRepository();
   @CommandLine.Option(
     names = {"-r", "--rule"},
     paramLabel = "filename",
@@ -133,7 +133,7 @@ public class AcousticRulesCommand implements Callable<Integer> {
       sonarQualityProfileRepository.writeProfile(qualityProfile, language, ruleInstanceGroupMap);
 
       if (qualityProfile.hasDocumentationFilename()) {
-        generateDocumentationFile(qualityProfile, ruleInstanceGroupMap, unusedRuleDefinitions);
+        documentationRepository.writeDocumentation(qualityProfile, ruleInstanceGroupMap, unusedRuleDefinitions);
       }
     }
 
@@ -211,20 +211,6 @@ public class AcousticRulesCommand implements Callable<Integer> {
     // TODO: Return new, changed map
     modifyRules(qualityProfile.groups(), rulesByGroup);
     log.info("Modifying rules done.");
-  }
-
-  private static void generateDocumentationFile(QualityProfile qualityProfile,
-                                                Map<String, RuleInstanceGroup> rulesByGroup,
-                                                RuleDefinitionGroup unusedRules)
-    throws IOException {
-    log.info("Writing quality profile documentation '{}'...", qualityProfile.documentationFilename());
-    var docGenerator = new MarkdownDocGenerator();
-
-    docGenerator.writeMarkdown(qualityProfile,
-      qualityProfile.documentationFilename(),
-      rulesByGroup,
-      unusedRules);
-    log.info("Writing quality profile documentation done.");
   }
 
   private static RuleInstanceGroup filterRules(RuleInstanceGroup groupRuleSet, List<Filter> filters) {
