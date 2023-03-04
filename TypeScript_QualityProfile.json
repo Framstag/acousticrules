@@ -1,5 +1,4 @@
 {
-  "language": "ts",
   "name": "Framstag",
   "output_filename": "TypeScript_QualityProfile.xml",
   "documentation_filename": "TypeScript_QualityProfile.md",
