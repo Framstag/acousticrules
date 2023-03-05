@@ -80,13 +80,14 @@ public class QualityProfileGenerator {
         writeLn(writer);
 
         RuleInstanceGroup groupRules = rulesByGroup.get(group.name());
+        var activeRules = groupRules.getRuleInstances().stream()
+                .filter(RuleInstance::isActive)
+                .sorted()
+                .toList();
 
-        for (RuleInstance rule : groupRules.getRuleInstances()) {
-          if (!rule.isDisabled()) {
-            writeRule(writer, rule, INDENT + INDENT);
-            // TODO: Not on the last rule
-            writeLn(writer);
-          }
+        for (RuleInstance rule : activeRules) {
+          writeRule(writer, rule, INDENT + INDENT);
+          writeLn(writer);
         }
       }
 
