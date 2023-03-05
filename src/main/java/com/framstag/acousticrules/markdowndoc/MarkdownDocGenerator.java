@@ -20,6 +20,7 @@ import com.framstag.acousticrules.qualityprofile.QualityGroup;
 import com.framstag.acousticrules.qualityprofile.QualityProfile;
 import com.framstag.acousticrules.rules.definition.RuleDefinition;
 import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
+import com.framstag.acousticrules.rules.instance.RuleInstance;
 import com.framstag.acousticrules.rules.instance.RuleInstanceGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -226,11 +227,7 @@ public class MarkdownDocGenerator {
 
     // Rule
 
-    if (!ruleIsUsed) {
-      writer.write(strikedThrough(ruleDefinition.getKey()));
-    } else {
-      writer.write(ruleDefinition.getKey());
-    }
+    writeRuleId(writer,ruleDefinition,ruleInstance);
 
     writeSeparator(writer);
 
@@ -256,24 +253,12 @@ public class MarkdownDocGenerator {
 
     // Severity Reason
 
-    if (severityHasChanged && ruleInstance.hasSeverityReason()) {
-      writer.write(ruleInstance.getSeverityReason());
-      writeLinebreak(writer);
-    }
-    if (ruleIsDisabled && ruleInstance.hasStatusReason()) {
-      writer.write(ruleInstance.getStatusReason());
-      writeLinebreak(writer);
-    }
+    writeReasons(writer,ruleDefinition, ruleInstance);
 
     writeSeparator(writer);
 
     if (hasParameter) {
-      for (var entry : ruleInstance.getParameter().entrySet()) {
-        writer.write(entry.getKey());
-        writer.write("=");
-        writer.write(entry.getValue());
-        writeLinebreak(writer);
-      }
+      writeParameter(writer,ruleInstance.getParameter());
     }
 
     writeSeparator(writer);
@@ -285,6 +270,41 @@ public class MarkdownDocGenerator {
 
   private static void writeLinebreak(Writer writer) throws IOException {
     writer.write("<br />");
+  }
+
+  private static void writeRuleId(Writer writer, RuleDefinition definition, RuleInstance instance) throws IOException {
+    var ruleDeletedOrDisabled = instance == null || instance.isDisabled();
+
+    if (ruleDeletedOrDisabled) {
+      writer.write(strikedThrough(definition.getKey()));
+    } else {
+      writer.write(definition.getKey());
+    }
+  }
+
+  private static void writeReasons(Writer writer, RuleDefinition definition, RuleInstance instance) throws IOException {
+    var ruleActive = instance != null && !instance.isDisabled();
+    var severityChanged = ruleActive && definition.getSeverity() != instance.getSeverity();
+    var ruleDisabled = instance != null && instance.isDisabled();
+
+    if (severityChanged && instance.hasSeverityReason()) {
+      writer.write(instance.getSeverityReason());
+      writeLinebreak(writer);
+    }
+
+    if (ruleDisabled && instance.hasStatusReason()) {
+      writer.write(instance.getStatusReason());
+      writeLinebreak(writer);
+    }
+  }
+
+  private static void writeParameter(Writer writer, Map<String,String> parameter) throws IOException {
+    for (var entry : parameter.entrySet()) {
+      writer.write(entry.getKey());
+      writer.write("=");
+      writer.write(entry.getValue());
+      writeLinebreak(writer);
+    }
   }
 
   public void writeMarkdown(QualityProfile qualityProfile,
