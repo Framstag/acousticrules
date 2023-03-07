@@ -42,7 +42,7 @@ public class DisableByKey extends AbstractModifier {
     }
 
     return header +
-      keys.stream().map(tag -> "'"+tag+"'").collect(Collectors.joining(", "));
+      keys.stream().map(tag -> "'"+tag+"'").sorted().collect(Collectors.joining(", "));
   }
 
   @Override

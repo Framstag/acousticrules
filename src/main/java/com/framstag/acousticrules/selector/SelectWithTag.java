@@ -47,7 +47,7 @@ public class SelectWithTag extends AbstractSelector {
     }
 
     return header +
-      tags.stream().map(tag -> "'"+tag+"'").collect(Collectors.joining(", "));
+      tags.stream().map(tag -> "'"+tag+"'").sorted().collect(Collectors.joining(", "));
   }
 
   @Override

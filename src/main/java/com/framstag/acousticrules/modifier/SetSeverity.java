@@ -38,7 +38,7 @@ public class SetSeverity extends AbstractModifier {
   @Override
   public String getDescription() {
     return "Setting severity for key(s) " +
-      keys.stream().map(tag -> "'"+tag+"'").collect(Collectors.joining(", ")) +
+      keys.stream().map(tag -> "'"+tag+"'").sorted().collect(Collectors.joining(", ")) +
       " to "+ to;
   }
 
