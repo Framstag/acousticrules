@@ -65,12 +65,14 @@ public class MarkdownDocGenerator {
 
       var ruleInstanceGroup = rulesByGroup.get(groupName);
 
+      if (ruleInstanceGroup.getRuleInstances().isEmpty()) {
+        log.info("Group is empty, skipping...");
+        continue;
+      }
+
       writeGroupHeader(writer, groupName);
       writeProcessing(writer, ruleInstanceGroup);
-
-      if (!ruleInstanceGroup.getRuleInstances().isEmpty()) {
-        writeGroupTable(writer, ruleInstanceGroup);
-      }
+      writeGroupTable(writer, ruleInstanceGroup);
     }
   }
 
