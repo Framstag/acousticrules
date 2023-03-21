@@ -16,6 +16,7 @@
  */
 package com.framstag.acousticrules.selector;
 
+import com.framstag.acousticrules.annotation.Description;
 import com.framstag.acousticrules.rules.Ruleable;
 import jakarta.json.bind.annotation.JsonbCreator;
 import jakarta.json.bind.annotation.JsonbProperty;
@@ -24,6 +25,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Description("Selects a rule based on one or more rule keys")
 public class SelectWithKey extends AbstractSelector {
   private final Set<String> keys;
 

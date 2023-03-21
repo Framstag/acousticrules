@@ -1,6 +1,6 @@
 /*
  * AcousticRuler
- * Copyright 2022 Tim Teulings
+ * Copyright 2023 Tim Teulings
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,12 @@
  */
 package com.framstag.acousticrules.filter;
 
+import com.framstag.acousticrules.annotation.Description;
 import com.framstag.acousticrules.rules.Ruleable;
 import com.framstag.acousticrules.rules.Status;
 import jakarta.json.bind.annotation.JsonbCreator;
 
+@Description("Remove all rules that are flaged as 'deprecated'")
 public class RemoveDeprecated extends AbstractFilter {
   @JsonbCreator
   public RemoveDeprecated() {

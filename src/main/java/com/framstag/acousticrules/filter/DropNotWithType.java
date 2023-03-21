@@ -1,6 +1,6 @@
 /*
  * AcousticRuler
- * Copyright 2022 Tim Teulings
+ * Copyright 2023 Tim Teulings
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
  */
 package com.framstag.acousticrules.filter;
 
+import com.framstag.acousticrules.annotation.Description;
 import com.framstag.acousticrules.rules.Ruleable;
 import jakarta.json.bind.annotation.JsonbCreator;
 import jakarta.json.bind.annotation.JsonbProperty;
@@ -23,6 +24,7 @@ import jakarta.json.bind.annotation.JsonbProperty;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Description("Drop rules that do not comply to one of the given types")
 public class DropNotWithType extends AbstractFilter {
   private final Set<String> types;
 
