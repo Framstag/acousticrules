@@ -27,10 +27,8 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: Build with maven
+      - name: Build with maven including JQAssistant scan, analyze and report
         run:  mvn --batch-mode --update-snapshots verify
-      - name: JQAssistant Scan, analyze and report
-        run: mvn jqassistant:scan jqassistant:analyze jqassistant:report
       - name: Static code analysis using Sonar
         run:  mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Framstag_acousticrules
         env:
