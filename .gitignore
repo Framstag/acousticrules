@@ -1,6 +1,9 @@
 # Maven target directory
 /target
 
+# Maven temporary file
+/dependency-reduced-pom.xml
+
 # IntelliJ IDEA directory
 /.idea
 
@@ -30,6 +33,8 @@
 /Java_QualityProfile.xml
 /TypeScript_QualityProfile.md
 /TypeScript_QualityProfile.xml
+/XML_QualityProfile.md
+/XML_QualityProfile.xml
 
 # Further rules downloads
-/*rules*.json
+/*Rules*.json

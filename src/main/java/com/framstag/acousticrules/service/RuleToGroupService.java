@@ -43,8 +43,13 @@ public class RuleToGroupService {
       log.info("Processing group '{}'...", group.getName());
       var ruleDefinitionGroup = RuleDefinitionGroup.fromProcessingGroup(group);
       ruleDefinitionGroup = selectRules(ruleDefinitionGroup, allRules, group.getSelectors());
-      ruleDefinitionGroup = filterRules(ruleDefinitionGroup, group.getFilters());
-      logRules(ruleDefinitionGroup);
+
+      if (ruleDefinitionGroup.isEmpty()) {
+        log.info("Group has no rules, skipping...");
+      } else {
+        ruleDefinitionGroup = filterRules(ruleDefinitionGroup, group.getFilters());
+        logRules(ruleDefinitionGroup);
+      }
 
       rulesByGroup.put(group.getName(), ruleDefinitionGroup);
     }

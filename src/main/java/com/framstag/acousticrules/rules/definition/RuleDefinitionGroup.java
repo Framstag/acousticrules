@@ -69,6 +69,9 @@ public final class RuleDefinitionGroup {
     return ruleDefinitions.size();
   }
 
+  public boolean isEmpty() {
+    return ruleDefinitions.isEmpty();
+  }
   public RuleDefinitionGroup filter(Iterable<RuleDefinition> filteredDefinitions) {
     Set<RuleDefinition> newDefinitions = new HashSet<>(ruleDefinitions);
 

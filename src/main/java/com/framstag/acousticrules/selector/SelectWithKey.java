@@ -49,7 +49,7 @@ public class SelectWithKey extends AbstractSelector {
     }
 
     return header +
-      keys.stream().map(key -> "'"+key+"'").collect(Collectors.joining(", "));
+      keys.stream().map(key -> "'"+key+"'").sorted().collect(Collectors.joining(", "));
   }
 
   @Override

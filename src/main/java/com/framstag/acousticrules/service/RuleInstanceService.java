@@ -45,8 +45,9 @@ public class RuleInstanceService {
 
     return ruleInstanceGroupMap;
   }
-  private static Map<String, RuleInstanceGroup> createInstanceGroups(QualityProfile qualityProfile,
-                                                                     Map<String, RuleDefinitionGroup> ruleDefinitionsByGroup) {
+  private static Map<String, RuleInstanceGroup>
+  createInstanceGroups(QualityProfile qualityProfile,
+                       Map<String, RuleDefinitionGroup> ruleDefinitionsByGroup) {
     Map<String, RuleInstanceGroup> ruleInstanceGroupMap = new HashMap<>();
     for (var group : qualityProfile.groups()) {
       if (!ruleDefinitionsByGroup.containsKey(group.name())) {

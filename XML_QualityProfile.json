@@ -1,7 +1,7 @@
 {
   "name": "Framstag",
-  "output_filename": "TypeScript_QualityProfile.xml",
-  "documentation_filename": "TypeScript_QualityProfile.md",
+  "output_filename": "XML_QualityProfile.xml",
+  "documentation_filename": "XML_QualityProfile.md",
   "groups": [
     {
       "name": "Test Improvements",

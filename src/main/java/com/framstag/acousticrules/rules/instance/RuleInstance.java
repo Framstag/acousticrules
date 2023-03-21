@@ -75,6 +75,10 @@ public final class RuleInstance implements Ruleable,Comparable<RuleInstance> {
     return status == UseStatus.DISABLED;
   }
 
+  public boolean isActive() {
+    return !isDisabled();
+  }
+
   public boolean hasStatusReason() {
     return statusReason != null && !statusReason.isBlank();
   }
