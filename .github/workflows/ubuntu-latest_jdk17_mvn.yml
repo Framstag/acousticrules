@@ -12,6 +12,7 @@ jobs:
   build:
     name: ubuntu-latest+JDK17+mvn
     runs-on: ubuntu-latest
+    environment: SONAR
     steps:
       - name: Checkout
         uses: actions/checkout@v3
