@@ -28,6 +28,11 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Build with maven
         run:  mvn --batch-mode --update-snapshots verify
+      - name: Static code analysis using Sonar
+        run:  mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Framstag_acousticrules
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Release
         uses: ncipollo/release-action@v1
         if: ${{ github.ref == 'refs/heads/main' }}
