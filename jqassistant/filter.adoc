@@ -1,0 +1,37 @@
+[[filter:Default]]
+[role=group,severity=blocker,includesConcepts="filter:*"]
+
+=== Filters
+
+The following filter implementation exist:
+
+[[filter:ListFilter]]
+[source,cypher,role=concept,requiredConcepts="description:TypeDescription"]
+.List classes deriving from AbstractFilter as Filter
+----
+MATCH (filter:Class) -[:EXTENDS]-> (af:Class)
+WHERE af.name ="AbstractFilter"
+RETURN filter.name AS Name, filter.description AS Description
+ORDER BY filter.name
+----
+
+This is the package content of the `filter` package:
+
+[[filter:FilterPackage]]
+[source,cypher,role=concept,reportType="plantuml-class-diagram"]
+.Contents of the `filter` Package
+----
+MATCH
+  (main:Main) -[:CONTAINS]->
+  (p:Package)-[:CONTAINS]->
+  (t:Type)-[d:DECLARES]->(m:Member)
+WHERE
+NOT t:Inner
+AND NOT m:Lambda
+AND NOT m:Constructor
+AND p.name = "filter"
+OPTIONAL MATCH
+  (t)-[e:EXTENDS|IMPLEMENTS]->(:Type)
+RETURN
+  t,d,e,m
+----

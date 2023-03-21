@@ -1,6 +1,6 @@
 /*
  * AcousticRuler
- * Copyright 2022 Tim Teulings
+ * Copyright 2023 Tim Teulings
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,9 @@
  */
 
 /**
- * The implementation of a rule together with classes and enum surrounding the rules.
+ * The `Rulable` interface together with some basic value types for rules.
  */
+@Description("The `Rulable` interface together with some basic value types for rules.")
 package com.framstag.acousticrules.rules;
+
+import com.framstag.acousticrules.annotation.Description;

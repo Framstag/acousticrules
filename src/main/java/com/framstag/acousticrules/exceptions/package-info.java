@@ -1,6 +1,6 @@
 /*
  * AcousticRuler
- * Copyright 2022 Tim Teulings
+ * Copyright 2023 Tim Teulings
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,9 @@
  */
 
 /**
- * General exceptions
+ * Some project-specific exception types.
  */
+@Description("Some project-specific exception types.")
 package com.framstag.acousticrules.exceptions;
+
+import com.framstag.acousticrules.annotation.Description;

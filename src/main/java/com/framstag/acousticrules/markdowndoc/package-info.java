@@ -1,6 +1,6 @@
 /*
  * AcousticRuler
- * Copyright 2022 Tim Teulings
+ * Copyright 2023 Tim Teulings
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,4 +18,7 @@
 /**
  * Contains code for generating Markdown documentation.
  */
+@Description("Contains code for generating Markdown documentation.")
 package com.framstag.acousticrules.markdowndoc;
+
+import com.framstag.acousticrules.annotation.Description;

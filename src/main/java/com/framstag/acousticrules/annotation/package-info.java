@@ -18,4 +18,5 @@
 /**
  * Package for custom, project-specific annotations.
  */
+@Description("Package for custom, project-specific annotations.")
 package com.framstag.acousticrules.annotation;

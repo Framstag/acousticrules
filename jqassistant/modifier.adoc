@@ -1,0 +1,37 @@
+[[modifier:Default]]
+[role=group,severity=blocker,includesConcepts="modifier:*"]
+
+=== Modifier
+
+The following modifier implementation exist:
+
+[[modifier:ListModifier]]
+[source,cypher,role=concept,requiredConcepts="description:TypeDescription"]
+.List classes deriving from AbstractModifier as Modifier
+----
+MATCH (modifier:Class) -[:EXTENDS]-> (af:Class)
+WHERE af.name ="AbstractModifier"
+RETURN modifier.name AS Name,modifier.description AS Description
+ORDER BY modifier.name
+----
+
+This is the package content of the `modifier` package:
+
+[[modifier:ModifierPackage]]
+[source,cypher,role=concept,reportType="plantuml-class-diagram"]
+.Contents of the `modifier` Package
+----
+MATCH
+  (main:Main) -[:CONTAINS]->
+  (p:Package)-[:CONTAINS]->
+  (t:Type)-[d:DECLARES]->(m:Member)
+WHERE
+NOT t:Inner
+AND NOT m:Lambda
+AND NOT m:Constructor
+AND p.name = "modifier"
+OPTIONAL MATCH
+  (t)-[e:EXTENDS|IMPLEMENTS]->(:Type)
+RETURN
+  t,d,e,m
+----

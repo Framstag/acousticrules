@@ -1,0 +1,27 @@
+[[build:Default]]
+[role=group,includesConcepts="build:*"]
+
+=== Maven Build dependencies
+
+AcousticRules uses Maven as build tool.
+
+The main dependencies are as follows:
+
+- A JSON parser (yyson)
+- A command line argument parser (picocli)
+- A Logging framework (SLF4J + logback)
+- A Unit Test framework (JUnit 5)
+
+This is the complete dependency tree:
+
+[[build:MavenDependencies]]
+[source,cypher,role=concept, requiresConcepts="dependency:Package", reportType="plantuml-component-diagram"]
+.Build Dependency Tree
+----
+MATCH
+  (:Maven:Project)-[:CREATES]->(artifact:Artifact)
+OPTIONAL MATCH
+  (artifact)-[dependsOn:DEPENDS_ON]->(dependency:Artifact)
+RETURN
+  *
+----

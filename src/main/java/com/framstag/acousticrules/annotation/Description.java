@@ -26,7 +26,7 @@ import java.lang.annotation.Target;
  * An annotation to pass descriptions to JQAssistant
  */
 @Retention(RetentionPolicy.CLASS)
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE,ElementType.PACKAGE})
 public @interface Description {
   String value();
 }

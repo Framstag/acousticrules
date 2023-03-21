@@ -1,0 +1,43 @@
+[[architecture:Default]]
+[role=group,includesConstraints="architecture:*"]
+
+=== Cyclic Dependencies
+
+The following architecture checks are executed.
+
+There should be no dependency cycles between packages:
+
+[[architecture:NoCyclicPackageDependencies]]
+[source,cypher,role=constraint,requiresConcepts="dependency:Package"]
+.No cyclic package dependencies
+----
+MATCH
+    (p1:Package)-[:DEPENDS_ON]->(p2:Package),
+    path=shortestPath((p2)-[:DEPENDS_ON*]->(p1))
+WHERE
+    p1<>p2
+RETURN
+    p1 as Package, nodes(path) as Cycle
+ORDER BY
+    Package.fqn
+----
+
+There must be no dependency cycles between artifacts:
+
+[[architecture:NoCyclicArtefactDependencies]]
+[source,cypher,role=constraint,severity="BLOCKER",requiresConcepts="dependency:Artifact"]
+.No cyclic artifact dependencies
+----
+MATCH
+    (a1:Artifact)-[:DEPENDS_ON]->(a2:Artifact),
+    path=shortestPath((a2)-[:DEPENDS_ON*]->(a1))
+WHERE
+    a1<>a2
+RETURN
+    a1 as Artifact, nodes(path) as Cycle
+ORDER BY
+    Artifact.fqn
+----
+
+
+

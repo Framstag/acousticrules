@@ -1,6 +1,6 @@
 /*
  * AcousticRuler
- * Copyright 2022 Tim Teulings
+ * Copyright 2023 Tim Teulings
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,4 +18,7 @@
 /**
  * All classes surrounding the RuleInstance class.
  */
+@Description("All classes surrounding the RuleInstance class.")
 package com.framstag.acousticrules.rules.instance;
+
+import com.framstag.acousticrules.annotation.Description;

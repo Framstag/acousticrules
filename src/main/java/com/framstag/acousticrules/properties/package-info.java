@@ -1,6 +1,6 @@
 /*
  * AcousticRuler
- * Copyright 2022 Tim Teulings
+ * Copyright 2023 Tim Teulings
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,9 @@
  */
 
 /**
- * Code for resolving properties
+ * Code for resolving properties.
  */
+@Description("Code for resolving properties.")
 package com.framstag.acousticrules.properties;
+
+import com.framstag.acousticrules.annotation.Description;

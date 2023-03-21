@@ -19,4 +19,7 @@
  * Implementation of the high-level use cases, orchestrating the various services
  * to build up the use cases
  */
+@Description("Implementation of the high-level use cases, orchestrating the various services to build up the use cases")
 package com.framstag.acousticrules.usecase;
+
+import com.framstag.acousticrules.annotation.Description;

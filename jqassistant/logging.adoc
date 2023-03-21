@@ -1,0 +1,42 @@
+[[logging:Default]]
+[role=group,severity=blocker,includesConstraints="logging:*"]
+
+The following rules have been defined regarding logging:
+
+[[logging:LoggerArePrivate]]
+[source,cypher,role=constraint]
+.Logger instance should be `private`
+----
+MATCH (c:Type)-[:DECLARES]->(f:Field)-[:OF_TYPE]->(t:Type{fqn:'org.slf4j.Logger'})
+WHERE f.visibility <> 'private'
+RETURN c,f
+----
+
+[[logging:LoggerAreFinal]]
+[source,cypher,role=constraint]
+.Logger instance should be `final`
+----
+MATCH (c:Type)-[:DECLARES]->(f:Field)-[:OF_TYPE]->(t:Type{fqn:'org.slf4j.Logger'})
+WHERE NOT f.final
+RETURN c,f
+----
+
+[[logging:LoggerAreStatic]]
+[source,cypher,role=constraint]
+.Logger instance should be `static`
+----
+MATCH (c:Type)-[:DECLARES]->(f:Field)-[:OF_TYPE]->(t:Type{fqn:'org.slf4j.Logger'})
+WHERE NOT EXISTS(f.static) OR (NOT f.static)
+RETURN c,f
+----
+
+[[logging:LoggerHaveNameLog]]
+[source,cypher,role=constraint]
+.Logger instance should be named `log`
+----
+MATCH (f:Field)-[:OF_TYPE]->(t:Type{fqn:'org.slf4j.Logger'})
+WHERE NOT f.name = "log"
+RETURN f
+----
+
+

@@ -1,6 +1,6 @@
 /*
  * AcousticRuler
- * Copyright 2022 Tim Teulings
+ * Copyright 2023 Tim Teulings
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,4 +18,7 @@
 /**
  * Contains all implementations of the Filter interface.
  */
+@Description("Contains all implementations of the Filter interface for filtering rules.")
 package com.framstag.acousticrules.filter;
+
+import com.framstag.acousticrules.annotation.Description;

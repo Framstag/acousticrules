@@ -29,6 +29,8 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Build with maven
         run:  mvn --batch-mode --update-snapshots verify
+      - name: JQAssistant Scan, analyze and report
+        run: mvn jqassistant:scan jqassistant:analyze jqassistant:report
       - name: Static code analysis using Sonar
         run:  mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Framstag_acousticrules
         env:
@@ -47,4 +49,4 @@ jobs:
           removeArtifacts: true
           replacesArtifacts: true
           tag: latest
-          artifacts: "target/acousticrules-jar-with-dependencies.jar"
+          artifacts: "target/acousticrules-jar-with-dependencies.jar,target/jqassistant/report/*"

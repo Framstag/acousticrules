@@ -1,0 +1,39 @@
+[[packages:Default]]
+[role=group,severity=blocker,includesConcepts="packages:*"]
+
+=== List of Packages
+
+This is the package structure of AcousticRules:
+
+[[filter:PackageStructure]]
+[source,cypher,role=concept,reportType="plantuml-component-diagram"]
+.Hierarchy of Packages
+----
+MATCH
+  (artifact:Main:Artifact)-[:CONTAINS]->(package:Package)
+OPTIONAL MATCH
+  (package)-[contains:CONTAINS]->(:Package)
+RETURN
+  {
+    role : "graph",
+    parent : artifact,
+    nodes : collect(package),
+    relationships: collect(contains)
+  }
+----
+
+The following packages exists:
+
+[[filter:PackageDocumentation]]
+[source,cypher,role=concept,requiredConcepts="description:PackageDescription"]
+.List of Packages and their Description
+----
+MATCH
+  (artifact:Main:Artifact)-[:CONTAINS]->(package:Package)
+OPTIONAL MATCH
+  (package)-[contains:CONTAINS]->(:Package)
+RETURN
+  DISTINCT package.fqn AS Package, package.description AS Description
+ORDER BY
+  package.fqn
+----

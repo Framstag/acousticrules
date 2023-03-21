@@ -1,6 +1,6 @@
 /*
  * AcousticRuler
- * Copyright 2022 Tim Teulings
+ * Copyright 2023 Tim Teulings
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,9 @@
  */
 
 /**
- * Main package containing the Main class (and nothing else).
+ * Main package containing the Main class and the command line handling (and nothing else).
  */
+@Description("Main package containing the Main class and the command line handling (and nothing else).")
 package com.framstag.acousticrules;
+
+import com.framstag.acousticrules.annotation.Description;

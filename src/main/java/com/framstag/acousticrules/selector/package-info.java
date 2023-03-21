@@ -1,6 +1,6 @@
 /*
  * AcousticRuler
- * Copyright 2022 Tim Teulings
+ * Copyright 2023 Tim Teulings
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,4 +18,7 @@
 /**
  * Implementation of the Selector interface for selecting rules based on various criteria.
  */
+@Description("Implementation of the Selector interface for selecting rules based on various criteria.")
 package com.framstag.acousticrules.selector;
+
+import com.framstag.acousticrules.annotation.Description;
