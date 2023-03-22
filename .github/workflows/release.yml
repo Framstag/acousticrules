@@ -22,12 +22,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRO }}
+
+      - name: Cache local Maven repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven-
+
       - name: Version
         id: vars
         shell: bash
         run: |
           VERSION=${{ github.event.inputs.version }}
-          ./mvnw -B versions:set versions:commit -DnewVersion=$VERSION
+          mvn -B versions:set versions:commit -DnewVersion=$VERSION
           git config --global user.email "framstag@users.noreply.github.com"
           git config --global user.name "Framstag"
           git commit -a -m "Releasing version $VERSION"
