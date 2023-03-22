@@ -41,7 +41,7 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-maven-
 
-      - name: Version
+      - name: Get current version
         id: vars
         shell: bash
         run: |
