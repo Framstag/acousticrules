@@ -1,12 +1,11 @@
-name: Ubuntu Latest using JDK 17 and Maven
+name: Release
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    types: [opened, synchronize, reopened]
   workflow_dispatch:
+      inputs:
+          version:
+            description: 'Release version'
+            required: true
 
 env:
   JAVA_VERSION: '17'
@@ -16,47 +15,34 @@ jobs:
   precheck:
     if: github.repository == 'framstag/acousticrules' && startsWith(github.event.head_commit.message, 'Releasing version') != true
     runs-on: ubuntu-latest
+    name: Precheck
     outputs:
       VERSION: ${{ steps.vars.outputs.VERSION }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Cancel previous run
-        uses: styfle/cancel-workflow-action@0.11.0
-        with:
-          access_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: ${{ env.JAVA_DISTRO }}
-
-      - name: Cache local Maven repository
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven-
-
       - name: Version
         id: vars
         shell: bash
         run: |
-          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          echo "VERSION=$(echo $VERSION)" >> $GITHUB_OUTPUT
+          VERSION=${{ github.event.inputs.version }}
+          ./mvnw -B versions:set versions:commit -DnewVersion=$VERSION
+          git config --global user.email "framstag@users.noreply.github.com"
+          git config --global user.name "Framstag"
+          git commit -a -m "Releasing version $VERSION"
+          git push origin main
 
   build:
     needs: [ precheck ]
-    name: ubuntu-latest+JDK17+mvn
-    if: endsWith(${{ needs.precheck.outputs.VERSION }}, '-SNAPSHOT')
+    name: Release
     runs-on: ubuntu-latest
     environment: SONAR
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
+          fref: main
           fetch-depth: 0
 
       - name: Set up JDK 17
@@ -66,14 +52,14 @@ jobs:
           distribution: ${{ env.JAVA_DISTRO }}
 
       - name: Cache Maven packages
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
       - name: Build with maven including JQAssistant scan, analyze and report
-        run:  mvn --batch-mode --update-snapshots verify
+        run:  mvn -ntp --batch-mode --update-snapshots verify
 
       - name: Upload JQAssistant Report
         uses: actions/upload-artifact@v3
@@ -82,12 +68,12 @@ jobs:
           path: target/jqassistant/report
 
       - name: Static code analysis using Sonar
-        run:  mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Framstag_acousticrules
+        run:  mvn -ntp -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Framstag_acousticrules
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      - name: Assemble
+      - name: JReleaser assemble
         if: github.ref == 'refs/heads/main'
         uses: jreleaser/release-action@v2
         with:
@@ -96,7 +82,7 @@ jobs:
           JRELEASER_PROJECT_VERSION: ${{ needs.precheck.outputs.VERSION }}
           JRELEASER_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Prerelease
+      - name: JReleaser full-release
         if: github.ref == 'refs/heads/main'
         uses: jreleaser/release-action@v2
         with:
@@ -105,7 +91,7 @@ jobs:
           JRELEASER_PROJECT_VERSION: ${{ needs.precheck.outputs.VERSION }}
           JRELEASER_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: JReleaser output
+      - name: JReleaser upload output
         if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v3
         with:
