@@ -87,7 +87,7 @@ jobs:
           mvn -B versions:set versions:commit -DnextSnapshot
           git config --global user.email "framstag@users.noreply.github.com"
           git config --global user.name "Tim Teulings"
-          git commit -a -m "Setting version to next snapshot version
+          git commit -a -m "Setting version to next snapshot version"
           git push origin main
 
       - name: JReleaser upload output

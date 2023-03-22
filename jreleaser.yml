@@ -8,25 +8,31 @@ project:
     - Tim Teulings
   license: Apache-2.0
   inceptionYear: 2023
-  stereotype: cli
-  snapshot:
-    pattern: .*-SNAPSHOT
-    label: latest
+  stereotype: CLI
+  vendor: Framstag
   java:
     version: 17
     groupId: com.framstag
     artifactId: acousticrules
     mainClass: com.framstag.acousticrules.AcousticRules
+  tags:
+    - sonarqube
+    - sonar
+    - sonarcloud
 
 release:
   github:
     owner: Framstag
     overwrite: true
+    issues:
+      enabled: true
     changelog:
       formatted: ALWAYS
       preset: conventional-commits
       contributors:
         format: '- {{contributorName}}{{#contributorUsernameAsLink}} ({{.}}){{/contributorUsernameAsLink}}'
+      extraProperties:
+        categorizeScopes: true
 
 assemble:
   javaArchive:
