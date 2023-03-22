@@ -101,6 +101,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         uses: jreleaser/release-action@v2
         with:
+          version: latest
           arguments: full-release
         env:
           JRELEASER_PROJECT_VERSION: ${{ needs.precheck.outputs.VERSION }}

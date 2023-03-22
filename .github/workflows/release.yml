@@ -12,43 +12,7 @@ env:
   JAVA_DISTRO: 'zulu'
 
 jobs:
-  precheck:
-    if: github.repository == 'framstag/acousticrules' && startsWith(github.event.head_commit.message, 'Releasing version') != true
-    runs-on: ubuntu-latest
-    name: Precheck
-    outputs:
-      VERSION: ${{ steps.vars.outputs.VERSION }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: ${{ env.JAVA_DISTRO }}
-
-      - name: Cache local Maven repository
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven-
-
-      - name: Set Maven Version to release version, commit and push
-        id: vars
-        shell: bash
-        run: |
-          echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
-          VERSION=${{ github.event.inputs.version }}
-          mvn -B versions:set versions:commit -DnewVersion=$VERSION
-          git config --global user.email "framstag@users.noreply.github.com"
-          git config --global user.name "Tim Teulings"
-          git commit -a -m "Releasing version $VERSION"
-          git push origin main
-
-  build:
-    needs: [ precheck ]
+  release:
     name: Release
     runs-on: ubuntu-latest
     environment: SONAR
@@ -56,7 +20,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          fref: main
+          ref: main
           fetch-depth: 0
 
       - name: Set up JDK 17
@@ -71,6 +35,17 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+
+      - name: Set Maven Version to release version, commit and push
+        id: vars
+        shell: bash
+        run: |
+          VERSION=${{ github.event.inputs.version }}
+          mvn -B versions:set versions:commit -DnewVersion=$VERSION
+          git config --global user.email "framstag@users.noreply.github.com"
+          git config --global user.name "Tim Teulings"
+          git commit -a -m "Releasing version $VERSION"
+          git push origin main
 
       - name: Build with maven including JQAssistant scan, analyze and report
         run:  mvn -ntp --batch-mode --update-snapshots verify
@@ -113,3 +88,13 @@ jobs:
           path: |
             out/jreleaser/trace.log
             out/jreleaser/output.properties
+
+      - name: Set Maven Version to release version, commit and push
+        shell: bash
+        run: |
+          VERSION=${{ github.event.inputs.version }}
+          mvn -B versions:set versions:commit -DnextSnapshot
+          git config --global user.email "framstag@users.noreply.github.com"
+          git config --global user.name "Tim Teulings"
+          git commit -a -m "Setting version to next snapshot version
+          git push origin main
