@@ -21,6 +21,7 @@ project:
     - sonarcloud
   snapshot:
     fullChangelog: true
+    label: latest
 
 release:
   github:
