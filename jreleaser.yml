@@ -1,0 +1,42 @@
+project:
+  name: acousticrules
+  description: Java Application to create Sonar Quality Profiles
+  longDescription: Java Application to support bulk operations in Sonar rules to create Sonar Quality Profiles
+  links:
+    homepage: https://github.com/Framstag/acousticrules
+  authors:
+    - Tim Teulings
+  license: Apache-2.0
+  inceptionYear: 2023
+  stereotype: cli
+  snapshot:
+    pattern: .*-SNAPSHOT
+    label: latest
+  java:
+    version: 17
+    groupId: com.framstag
+    artifactId: acousticrules
+    mainClass: com.framstag.acousticrules.AcousticRules
+
+release:
+  github:
+    owner: Framstag
+    overwrite: true
+    changelog:
+      formatted: ALWAYS
+      preset: conventional-commits
+      contributors:
+        format: '- {{contributorName}}{{#contributorUsernameAsLink}} ({{.}}){{/contributorUsernameAsLink}}'
+
+assemble:
+  javaArchive:
+    acousticrules:
+      active: ALWAYS
+      formats: [ ZIP,TGZ ]
+      fileSets:
+        - input: '.'
+          includes: [ 'README.md', 'LICENSE.txt', 'rules_import.options', 'download_sonarcloud.sh', 'generate.sh' ]
+        - input: rules
+          output: rules
+      mainJar:
+        path: target/{{distributionName}}-jar-with-dependencies.jar
