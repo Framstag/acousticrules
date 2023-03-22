@@ -33,8 +33,10 @@ import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "AcousticRules",
   mixinStandardHelpOptions = true,
-  version = "AcousticRules 0.9",
-  description = "Generates a Sonar Quality Profile from a list of sonar rules")
+  sortOptions = true,
+  showDefaultValues = true,
+  description = "Generates a Sonar Quality Profile from a list of sonar rules",
+  versionProvider = VersionProvider.class)
 public class AcousticRulesCommand implements Callable<Integer> {
 
   private static final Logger log = LoggerFactory.getLogger(AcousticRulesCommand.class);
