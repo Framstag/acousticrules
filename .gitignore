@@ -38,3 +38,6 @@
 
 # Further rules downloads
 /*Rules*.json
+
+# JReleaser output
+/out
