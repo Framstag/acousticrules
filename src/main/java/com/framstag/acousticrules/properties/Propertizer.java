@@ -17,7 +17,7 @@
 
 package com.framstag.acousticrules.properties;
 
-import com.framstag.acousticrules.exceptions.ParameterException;
+import com.framstag.acousticrules.exception.ParameterException;
 
 import java.util.Collections;
 import java.util.Map;

@@ -17,7 +17,7 @@
 
 package com.framstag.acousticrules.service;
 
-import com.framstag.acousticrules.exceptions.ParameterException;
+import com.framstag.acousticrules.exception.ParameterException;
 import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

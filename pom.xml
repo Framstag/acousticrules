@@ -333,22 +333,6 @@
 
     </plugins>
   </build>
-<!--
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>com.buschmais.jqassistant</groupId>
-        <artifactId>jqassistant-maven-plugin</artifactId>
-        <reportSets>
-          <reportSet>
-            <reports>
-              <report>report</report>
-            </reports>
-          </reportSet>
-        </reportSets>
-      </plugin>
-    </plugins>
-  </reporting>-->
 
   <profiles>
     <profile>

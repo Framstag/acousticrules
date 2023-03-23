@@ -17,7 +17,7 @@
 
 package com.framstag.acousticrules.service;
 
-import com.framstag.acousticrules.exceptions.ParameterException;
+import com.framstag.acousticrules.exception.ParameterException;
 import com.framstag.acousticrules.properties.Propertizer;
 import com.framstag.acousticrules.qualityprofile.QualityProfile;
 

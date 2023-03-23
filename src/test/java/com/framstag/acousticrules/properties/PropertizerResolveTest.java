@@ -17,7 +17,7 @@
 
 package com.framstag.acousticrules.properties;
 
-import com.framstag.acousticrules.exceptions.ParameterException;
+import com.framstag.acousticrules.exception.ParameterException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

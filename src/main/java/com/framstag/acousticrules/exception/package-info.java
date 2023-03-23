@@ -19,6 +19,6 @@
  * Some project-specific exception types.
  */
 @Description("Some project-specific exception types.")
-package com.framstag.acousticrules.exceptions;
+package com.framstag.acousticrules.exception;
 
 import com.framstag.acousticrules.annotation.Description;

@@ -1,0 +1,87 @@
+[[metrics:Default]]
+[role=group,includesConstraints="metrics:*",includesConcepts="metrics:*"]
+
+In this chapter you can find some metrics regarding
+the code. LIst will return the first 20 hits.
+
+The classes with the most methods:
+
+[[metrics:ClassesWithMostMethods]]
+[source,cypher,role=concept]
+.List of classes with the most methods
+----
+MATCH (class:Class)-[:DECLARES]->(method:Method)
+RETURN
+class.fqn, COUNT(method) AS Methods
+ORDER BY
+Methods DESC
+LIMIT 20
+----
+
+The classes with the deepest inheritance hierarchy:
+
+[[metrics:ClassesWithDeepestInheritance]]
+[source,cypher,role=concept]
+.List of classes with the deepest inheritance hierarchy
+----
+MATCH p=(class:Class)-[:EXTENDS*]->(super:Type)
+RETURN class.fqn, LENGTH(p) AS Depth
+ORDER BY Depth DESC
+LIMIT 20
+----
+
+The classes with the most relations:
+
+[[metrics:ClassesWithMostRelations]]
+[source,cypher,role=concept]
+.List of classes with the most relations
+----
+MATCH (c:Class)-[r]-()
+RETURN c.fqn, COUNT(r) AS relations
+ORDER BY relations DESC
+LIMIT 20
+----
+
+List of methods with the most parameter:
+
+[[metrics:MethodsWithMostParameter]]
+[source,cypher,role=concept]
+.List of methods with the most parameter
+----
+MATCH (class:Class)-[:DECLARES]->(m:Method)-[params:HAS]->(p:Parameter)
+RETURN class.fqn, m.name, COUNT(params) AS paramCount
+ORDER BY paramCount DESC
+LIMIT 20
+----
+
+List of the classes with the most lines of code:
+
+[[metrics:ClassesWithMostLoC]]
+[source,cypher,role=concept]
+.List of classes with the most lines of code
+----
+MATCH
+(:Artifact)-[:CONTAINS]->(type:Type)-[:DECLARES]->(method:Method)
+RETURN
+type.fqn AS Type, sum(method.effectiveLineCount) AS LoC
+ORDER BY
+LoC DESC
+LIMIT
+20
+----
+
+List of classes with the highest cyclomatic complexity:
+
+[[metrics:ClassesWithMostCC]]
+[source,cypher,role=concept]
+.List of classes with the highest cyclomatic complexity
+----
+MATCH
+(:Artifact)-[:CONTAINS]->(type:Type)-[:DECLARES]->(method:Method)
+RETURN
+type.fqn AS Type, sum(method.cyclomaticComplexity) AS CC
+ORDER BY
+CC DESC
+LIMIT
+20
+----

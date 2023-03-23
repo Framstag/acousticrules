@@ -4,13 +4,14 @@
 == Index
 
 [[default]]
-[role=group,includesGroups="architecture:Default,build:Default,description:Default,filter:Default,selector:Default,modifier:Default,logging:Default"]
+[role=group,includesGroups="architecture:Default,build:Default,description:Default,packages:Default,filter:Default,selector:Default,modifier:Default,logging:Default,metrics:Default"]
 - <<acousticrules.build>>
 - <<acousticrules.description>>
 - <<acousticrules.packages>>
 - <<acousticrules.architecture>>
 - <<acousticrules.filterselectormodifier>>
 - <<acousticrules.logging>>
+- <<acousticrules.metrics>>
 - <<acousticrules.summary>>
 
 [[acousticrules.build]]
@@ -31,6 +32,8 @@ include::packages.adoc[]
 [[acousticrules.architecture]]
 == Architecture Checks
 
+The following architecture checks are executed.
+
 include::architecture.adoc[]
 
 [[acousticrules.filterselectormodifier]]
@@ -47,6 +50,11 @@ include::modifier.adoc[]
 == Logging
 
 include::logging.adoc[]
+
+[[acousticrules.metrics]]
+== Metrics
+
+include::metrics.adoc[]
 
 [[acousticrules.summary]]
 == All Concepts and Constraints

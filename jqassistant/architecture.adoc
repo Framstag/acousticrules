@@ -3,12 +3,10 @@
 
 === Cyclic Dependencies
 
-The following architecture checks are executed.
-
 There should be no dependency cycles between packages:
 
 [[architecture:NoCyclicPackageDependencies]]
-[source,cypher,role=constraint,requiresConcepts="dependency:Package"]
+[source,cypher,severity=major,role=constraint,requiresConcepts="dependency:Package"]
 .No cyclic package dependencies
 ----
 MATCH
@@ -25,7 +23,7 @@ ORDER BY
 There must be no dependency cycles between artifacts:
 
 [[architecture:NoCyclicArtefactDependencies]]
-[source,cypher,role=constraint,severity="BLOCKER",requiresConcepts="dependency:Artifact"]
+[source,cypher,severity=blocker,role=constraint,severity="BLOCKER",requiresConcepts="dependency:Artifact,packages:Module"]
 .No cyclic artifact dependencies
 ----
 MATCH
@@ -38,6 +36,88 @@ RETURN
 ORDER BY
     Artifact.fqn
 ----
+
+There must be no dependency cycles between modules:
+
+[[architecture:NoCyclicModuleDependencies]]
+[source,cypher,severity=blocker,role=constraint,severity="BLOCKER",requiresConcepts="packages:Module"]
+.No cyclic artifact dependencies
+----
+MATCH
+    (module1:Module)-[:DEPENDS_ON]->(module2:Module),
+    path=shortestPath((m2)-[:DEPENDS_ON*]->(m1))
+WHERE
+    m1<>m2
+RETURN
+    m1 as Module, nodes(path) as Cycle
+ORDER BY
+    Module.fqn
+----
+
+=== Dependency Usage
+
+==== PicoCLI
+
+Only the `cli` module is allowed to have
+dependencies on `picocli`:
+
+[[architecture:OnlyModuleCliDependesOnPicoCli]]
+[source,cypher,severity=blocker,role=constraint,severity="BLOCKER",requiresConcepts="packages:Module"]
+.Only the `cli` module is allowed to use `picocli`
+----
+MATCH (module:Module) -[:CONTAINS]-> (moduleType:Type) -[:DEPENDS_ON] -> (type:Type)
+WHERE
+  type.fqn STARTS WITH "picocli."
+  AND module.name <> "cli"
+RETURN module,moduleType
+----
+
+==== Jsonb/yyson
+
+Only repository classes are allowed to use
+JsonbBuilder (and thus are allowed to load JSON files):
+
+[[architecture:OnlyRepositoryMayUseJsonbBuilder]]
+[source,cypher,severity=blocker,role=constraint,severity="BLOCKER",requiresConcepts="packages:Module"]
+.Only repositories may use JsonbBuilder
+----
+MATCH
+(repository:Type) -[:DEPENDS_ON]-> (yysonType:Type)
+WHERE
+yysonType.fqn = "jakarta.json.bind.JsonbBuilder"
+AND NOT repository.name ENDS WITH "Repository"
+RETURN repository
+----
+
+Outside the repositories only Jsonb annotations are
+allowed:
+
+[[architecture:JsonbAnnotationEveryWhere]]
+[source,cypher,severity=blocker,role=constraint,severity="BLOCKER",requiresConcepts="packages:Module"]
+.Jsonb annotation can be use everywhere
+----
+MATCH
+(class:Type) -[:DEPENDS_ON]-> (yysonType:Type)
+WHERE
+yysonType.fqn STARTS WITH "jakarta.json."
+AND NOT yysonType.fqn STARTS WITH "jakarta.json.bind.annotation."
+AND NOT class.name ENDS WITH "Repository"
+RETURN class
+----
+
+=== Tests
+
+we should have no deactivated tests:
+
+[[architecture:NoDeactivatedTests]]
+[source,cypher,severity=blocker,role=constraint]
+.No deactivated tests
+----
+MATCH (c:Class)-[:DEPENDS_ON*]->(a:Type)
+WHERE a.fqn = "org.junit.jupiter.api.Disabled"
+RETURN c
+----
+
 
 
 

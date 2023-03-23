@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.framstag.acousticrules;
 
-import com.framstag.acousticrules.cli.AcousticRulesCommand;
-import picocli.CommandLine;
+package com.framstag.acousticrules.exception;
 
-public class AcousticRules {
-  public static void main(String[] args) {
-    int exitCode = new CommandLine(new AcousticRulesCommand()).execute(args);
-    System.exit(exitCode);
+public class ParameterException extends RuntimeException {
+  public ParameterException(String message) {
+    super(message);
+  }
+  public ParameterException(String message, Throwable cause) {
+    super(message,cause);
   }
 }

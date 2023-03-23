@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.framstag.acousticrules;
+package com.framstag.acousticrules.cli;
 
 import picocli.CommandLine;
 

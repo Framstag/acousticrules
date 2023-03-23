@@ -1,6 +1,6 @@
 /*
  * AcousticRuler
- * Copyright 2022 Tim Teulings
+ * Copyright 2023 Tim Teulings
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,10 @@
  * limitations under the License.
  */
 
-package com.framstag.acousticrules.exceptions;
+/**
+ * Command line handling and delegation to the use cases
+ */
+@Description("Command line handling and delegation to the use cases")
+package com.framstag.acousticrules.cli;
 
-public class ParameterException extends RuntimeException {
-  public ParameterException(String message) {
-    super(message);
-  }
-  public ParameterException(String message, Throwable cause) {
-    super(message,cause);
-  }
-}
+import com.framstag.acousticrules.annotation.Description;

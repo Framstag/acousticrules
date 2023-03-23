@@ -1,11 +1,12 @@
 [[packages:Default]]
 [role=group,severity=blocker,includesConcepts="packages:*"]
 
+
 === List of Packages
 
 This is the package structure of AcousticRules:
 
-[[filter:PackageStructure]]
+[[packages:PackageStructure]]
 [source,cypher,role=concept,reportType="plantuml-component-diagram"]
 .Hierarchy of Packages
 ----
@@ -24,7 +25,7 @@ RETURN
 
 The following packages exists:
 
-[[filter:PackageDocumentation]]
+[[packages:PackageDocumentation]]
 [source,cypher,role=concept,requiredConcepts="description:PackageDescription"]
 .List of Packages and their Description
 ----
@@ -36,4 +37,51 @@ RETURN
   DISTINCT package.fqn AS Package, package.description AS Description
 ORDER BY
   package.fqn
+----
+
+[[packages:Module]]
+[source,cypher,role=concept]
+.All packages in the root package of the main artifact are labeled as `Module`.
+----
+MATCH
+  (:Main:Artifact)-[:CONTAINS]->(root:Package)-[:CONTAINS]->(module:Package)
+WHERE
+  root.fqn = "com.framstag.acousticrules"
+SET
+  module:Module
+RETURN
+  module.name as Module, module.fqn as Package
+ORDER BY
+  module.name
+----
+
+Dependency graph between modules (including weight),
+excluding the following modules:
+
+- exceptions
+- annotation
+
+[[packages:ModuleDependencies]]
+[source,cypher,role=concept,requiresConcepts="packages:Module",reportType="plantuml-component-diagram"]
+.Dependencies between modules
+----
+MATCH
+  (module1:Module)-[:CONTAINS*]->(t1:Type),
+  (module2:Module)-[:CONTAINS*]->(t2:Type),
+  (t1)-[:DEPENDS_ON]->(t2)
+WHERE
+  module1 <> module2
+  AND module1.fqn <> "com.framstag.acousticrules.annotation"
+  AND module2.fqn <> "com.framstag.acousticrules.annotation"
+  AND module1.fqn <> "com.framstag.acousticrules.exception"
+  AND module2.fqn <> "com.framstag.acousticrules.exception"
+
+WITH
+  module1, module2, COUNT(*) AS weight
+MERGE
+  (module1)-[dependsOn:DEPENDS_ON_MODULE]->(module2)
+SET
+  dependsOn.weight = weight
+RETURN
+  module1, dependsOn, module2
 ----
