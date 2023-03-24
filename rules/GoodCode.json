@@ -46,6 +46,9 @@
         "lock-in",
         "multi-threading",
         "unpredictable"
+      ],
+      "but": [
+        "cpp:S3715"
       ]
     },
     {
@@ -54,6 +57,9 @@
       "tags": [
         "performance",
         "obsolete"
+      ],
+      "but": [
+        "cpp:S3715"
       ]
     },
     {
@@ -72,6 +78,9 @@
         "cert",
         "cwe",
         "owasp-a3"
+      ],
+      "but": [
+        "cpp:S1917"
       ]
     },
     {
