@@ -3,7 +3,7 @@
   "selectors": [
     {
       "@processor": "SelectWithTag",
-      "reason": "All rules makred as performance relevant",
+      "reason": "All rules marked as performance relevant",
       "tags": [
         "performance"
       ]

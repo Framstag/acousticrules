@@ -71,6 +71,9 @@
       "reason": "Drop performance bugs, they have their own group",
       "tags": [
         "performance"
+      ],
+      "but": [
+        "java:S5164"
       ]
     },
     {

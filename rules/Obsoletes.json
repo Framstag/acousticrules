@@ -17,6 +17,10 @@
         "cert",
         "lock-in",
         "pitfall"
+      ],
+      "but": [
+        "java:S1190",
+        "java:S1596"
       ]
     },
     {

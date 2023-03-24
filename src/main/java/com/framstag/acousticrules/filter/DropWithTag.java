@@ -21,36 +21,58 @@ import com.framstag.acousticrules.rules.Ruleable;
 import jakarta.json.bind.annotation.JsonbCreator;
 import jakarta.json.bind.annotation.JsonbProperty;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Description("Drop rules with one of the given tags")
 public class DropWithTag extends AbstractFilter {
   private final Set<String> tags;
+  private final Set<String> but;
 
   @JsonbCreator
-  public DropWithTag(@JsonbProperty("tags") Set<String> tags) {
+  public DropWithTag(
+    @JsonbProperty("tags") Set<String> tags,
+    @JsonbProperty("but") Set<String> but) {
     this.tags = Set.copyOf(tags);
+
+    if (but != null) {
+      this.but = Set.copyOf(but);
+    } else {
+      this.but = Collections.emptySet();
+    }
   }
 
   @Override
   public String getDescription() {
-    String header;
+    String tagString;
 
     if (tags.size() == 1) {
-      header = "Dropping rules with tag ";
+      tagString = "Dropping rules with tag " +
+       tags.stream().map(tag -> "'" + tag + "'").collect(Collectors.joining(", "));
     } else {
-      header = "Dropping rules with tags ";
+      tagString = "Dropping rules with tags " +
+       tags.stream().map(tag -> "'" + tag + "'").collect(Collectors.joining(", "));
     }
 
-    return header + tags.stream().map(tag -> "'" + tag + "'").collect(Collectors.joining(", "));
+    String butString;
+
+    if (but.isEmpty()) {
+      butString = "";
+    } else if (but.size() == 1) {
+      butString = " but not key " + but.stream().map(key -> "'" + key + "'").collect(Collectors.joining(", "));
+    } else {
+      butString = " but not keys " + but.stream().map(key -> "'" + key + "'").collect(Collectors.joining(", "));
+    }
+
+    return tagString + butString;
   }
 
   @Override
   public boolean filter(Ruleable rule) {
     for (String tag : rule.getSysTags()) {
       if (tags.contains(tag)) {
-        return true;
+        return !but.contains(rule.getKey());
       }
     }
 
