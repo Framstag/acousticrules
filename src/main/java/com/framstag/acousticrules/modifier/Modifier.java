@@ -1,6 +1,6 @@
 /*
  * AcousticRuler
- * Copyright 2022 Tim Teulings
+ * Copyright 2023 Tim Teulings
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 
 package com.framstag.acousticrules.modifier;
 
-import com.framstag.acousticrules.rules.instance.RuleInstance;
+import com.framstag.acousticrules.rules.CustomizedRule;
 import jakarta.json.bind.annotation.JsonbSubtype;
 import jakarta.json.bind.annotation.JsonbTypeInfo;
 
@@ -39,5 +39,5 @@ public interface Modifier {
    * @param rule The RuleInstance to modify
    * @return a new instance or null
    */
-  RuleInstance modify(RuleInstance rule);
+  CustomizedRule modify(CustomizedRule rule);
 }

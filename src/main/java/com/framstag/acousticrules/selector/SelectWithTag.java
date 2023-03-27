@@ -17,7 +17,7 @@
 package com.framstag.acousticrules.selector;
 
 import com.framstag.acousticrules.annotation.Description;
-import com.framstag.acousticrules.rules.Ruleable;
+import com.framstag.acousticrules.rules.Rule;
 import jakarta.json.bind.annotation.JsonbCreator;
 import jakarta.json.bind.annotation.JsonbProperty;
 
@@ -53,7 +53,7 @@ public class SelectWithTag extends AbstractSelector {
   }
 
   @Override
-  public boolean select(Ruleable rule) {
+  public boolean select(Rule rule) {
     for (String tag : rule.getSysTags()) {
       if (tags.contains(tag)) {
         return true;

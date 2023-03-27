@@ -1,6 +1,6 @@
 /*
  * AcousticRuler
- * Copyright 2022 Tim Teulings
+ * Copyright 2023 Tim Teulings
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,13 @@
 package com.framstag.acousticrules.rules.definition;
 
 import com.framstag.acousticrules.rules.Parameter;
-import com.framstag.acousticrules.rules.Ruleable;
+import com.framstag.acousticrules.rules.Rule;
 import com.framstag.acousticrules.rules.Severity;
 import com.framstag.acousticrules.rules.Status;
 import jakarta.json.bind.annotation.JsonbCreator;
 import jakarta.json.bind.annotation.JsonbProperty;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -38,7 +37,7 @@ import java.util.stream.Collectors;
  * Sonar JSON file containing rule definitions.
  *
  */
-public class RuleDefinition implements Ruleable, Comparable<RuleDefinition> {
+public class RuleDefinition implements Rule, Comparable<RuleDefinition> {
 
   private final String key;
   private final String name;
@@ -76,10 +75,6 @@ public class RuleDefinition implements Ruleable, Comparable<RuleDefinition> {
     return name;
   }
 
-  public String getRepo() {
-    return repo;
-  }
-
   public String getLang() {
     return lang;
   }
@@ -105,7 +100,11 @@ public class RuleDefinition implements Ruleable, Comparable<RuleDefinition> {
   }
 
   public List<String> getSysTags() {
-    return Collections.unmodifiableList(sysTags);
+    return sysTags;
+  }
+
+  public String getRepo() {
+    return repo;
   }
 
   public boolean hasParams() {

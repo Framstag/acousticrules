@@ -17,7 +17,7 @@
 package com.framstag.acousticrules.modifier;
 
 import com.framstag.acousticrules.annotation.Description;
-import com.framstag.acousticrules.rules.instance.RuleInstance;
+import com.framstag.acousticrules.rules.CustomizedRule;
 import jakarta.json.bind.annotation.JsonbCreator;
 import jakarta.json.bind.annotation.JsonbProperty;
 
@@ -48,7 +48,7 @@ public class DisableByKey extends AbstractModifier {
   }
 
   @Override
-  public RuleInstance modify(RuleInstance rule) {
+  public CustomizedRule modify(CustomizedRule rule) {
     if (keys.contains(rule.getKey())) {
       return rule.disable(getReason());
     }

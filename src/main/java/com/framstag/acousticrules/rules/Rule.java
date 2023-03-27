@@ -1,6 +1,6 @@
 /*
  * AcousticRuler
- * Copyright 2022 Tim Teulings
+ * Copyright 2023 Tim Teulings
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,10 @@ package com.framstag.acousticrules.rules;
 
 import java.util.List;
 
-public interface Ruleable {
+/**
+ * Attributes of Rules in general
+ */
+public interface Rule {
   String getKey();
 
   String getType();
@@ -29,4 +32,6 @@ public interface Ruleable {
   Status getStatus();
 
   List<String> getSysTags();
+
+  String getRepo();
 }

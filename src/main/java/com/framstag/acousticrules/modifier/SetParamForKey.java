@@ -17,7 +17,7 @@
 package com.framstag.acousticrules.modifier;
 
 import com.framstag.acousticrules.annotation.Description;
-import com.framstag.acousticrules.rules.instance.RuleInstance;
+import com.framstag.acousticrules.rules.CustomizedRule;
 import jakarta.json.bind.annotation.JsonbCreator;
 import jakarta.json.bind.annotation.JsonbProperty;
 
@@ -44,7 +44,7 @@ public class SetParamForKey extends AbstractModifier {
   }
 
   @Override
-  public RuleInstance modify(RuleInstance rule) {
+  public CustomizedRule modify(CustomizedRule rule) {
     if (key.equals(rule.getKey())) {
       return rule.setParameter(param,value);
     }

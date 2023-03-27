@@ -1,6 +1,6 @@
 /*
  * AcousticRuler
- * Copyright 2022 Tim Teulings
+ * Copyright 2023 Tim Teulings
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,9 @@ package com.framstag.acousticrules.markdowndoc;
 
 import com.framstag.acousticrules.qualityprofile.QualityGroup;
 import com.framstag.acousticrules.qualityprofile.QualityProfile;
+import com.framstag.acousticrules.rules.CustomizedRule;
 import com.framstag.acousticrules.rules.definition.RuleDefinition;
 import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
-import com.framstag.acousticrules.rules.instance.RuleInstance;
 import com.framstag.acousticrules.rules.instance.RuleInstanceGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -274,7 +274,9 @@ public class MarkdownDocGenerator {
     writer.write("<br />");
   }
 
-  private static void writeRuleId(Writer writer, RuleDefinition definition, RuleInstance instance) throws IOException {
+  private static void writeRuleId(Writer writer,
+                                  RuleDefinition definition,
+                                  CustomizedRule instance) throws IOException {
     var ruleDeletedOrDisabled = instance == null || instance.isDisabled();
 
     if (ruleDeletedOrDisabled) {
@@ -284,7 +286,9 @@ public class MarkdownDocGenerator {
     }
   }
 
-  private static void writeReasons(Writer writer, RuleDefinition definition, RuleInstance instance) throws IOException {
+  private static void writeReasons(Writer writer,
+                                   RuleDefinition definition,
+                                   CustomizedRule instance) throws IOException {
     var ruleActive = instance != null && !instance.isDisabled();
     var severityChanged = ruleActive && definition.getSeverity() != instance.getSeverity();
     var ruleDisabled = instance != null && instance.isDisabled();
