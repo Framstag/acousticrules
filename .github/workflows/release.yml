@@ -80,7 +80,7 @@ jobs:
           JRELEASER_PROJECT_VERSION: ${{ github.event.inputs.version }}
           JRELEASER_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set Maven Version to release version, commit and push
+      - name: Set Maven Version to next version, commit and push
         shell: bash
         run: |
           VERSION=${{ github.event.inputs.version }}

@@ -6,6 +6,8 @@ project:
     homepage: https://github.com/Framstag/acousticrules
   authors:
     - Tim Teulings
+  maintainers:
+    - Framstag
   license: Apache-2.0
   inceptionYear: 2023
   stereotype: CLI
