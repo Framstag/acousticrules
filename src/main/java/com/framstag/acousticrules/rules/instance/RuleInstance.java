@@ -1,6 +1,6 @@
 /*
  * AcousticRuler
- * Copyright 2022 Tim Teulings
+ * Copyright 2023 Tim Teulings
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 
 package com.framstag.acousticrules.rules.instance;
 
-import com.framstag.acousticrules.rules.Ruleable;
+import com.framstag.acousticrules.rules.CustomizedRule;
 import com.framstag.acousticrules.rules.Severity;
 import com.framstag.acousticrules.rules.Status;
 import com.framstag.acousticrules.rules.definition.RuleDefinition;
@@ -32,7 +32,7 @@ import java.util.Objects;
  * Immutable class for holding information of the instantiation of a RuleDefinition. The instantiation
  * process allows to overwrite some of the information in the RuleDefinition.
  */
-public final class RuleInstance implements Ruleable,Comparable<RuleInstance> {
+public final class RuleInstance implements CustomizedRule, Comparable<RuleInstance> {
   private final RuleDefinition definition;
   private final UseStatus status;
   private final String statusReason;
@@ -63,45 +63,17 @@ public final class RuleInstance implements Ruleable,Comparable<RuleInstance> {
       Collections.emptyMap());
   }
 
-  public boolean hasSeverityReason() {
-    return severityReason != null && !severityReason.isBlank();
-  }
-
-  public String getSeverityReason() {
-    return severityReason;
-  }
-
-  public boolean isDisabled() {
-    return status == UseStatus.DISABLED;
-  }
-
-  public boolean isActive() {
-    return !isDisabled();
-  }
-
-  public boolean hasStatusReason() {
-    return statusReason != null && !statusReason.isBlank();
-  }
-
-  public String getStatusReason() {
-    return statusReason;
-  }
-
   public String getName() {
     return definition.getName();
   }
 
-  public String getRepo() {
-    return definition.getRepo();
-  }
-
-  public boolean hasParameter() {
-    return !parameter.isEmpty();
-  }
-
-  public Map<String, String> getParameter() {
-    // Make sure the Map we hand out is immutable and our map cannot be changes via a side effect
-    return Map.copyOf(parameter);
+  public RuleInstance setSeverity(Severity severity, String reason) {
+    return new RuleInstance(definition,
+      status,
+      statusReason,
+      severity,
+      reason,
+      parameter);
   }
 
   public RuleInstance disable(String reason) {
@@ -129,6 +101,39 @@ public final class RuleInstance implements Ruleable,Comparable<RuleInstance> {
       newParameter);
   }
 
+  public boolean isActive() {
+    return !isDisabled();
+  }
+
+  public boolean hasParameter() {
+    return !parameter.isEmpty();
+  }
+
+  public Map<String, String> getParameter() {
+    // Make sure the Map we hand out is immutable and our map cannot be changes via a side effect
+    return Map.copyOf(parameter);
+  }
+
+  public boolean isDisabled() {
+    return status == UseStatus.DISABLED;
+  }
+
+  public boolean hasSeverityReason() {
+    return severityReason != null && !severityReason.isBlank();
+  }
+
+  public String getSeverityReason() {
+    return severityReason;
+  }
+
+  public boolean hasStatusReason() {
+    return statusReason != null && !statusReason.isBlank();
+  }
+
+  public String getStatusReason() {
+    return statusReason;
+  }
+
   public String getKey() {
     return definition.getKey();
   }
@@ -152,13 +157,8 @@ public final class RuleInstance implements Ruleable,Comparable<RuleInstance> {
     return definition.getSysTags();
   }
 
-  public RuleInstance setSeverity(Severity severity, String reason) {
-    return new RuleInstance(definition,
-      status,
-      statusReason,
-      severity,
-      reason,
-      parameter);
+  public String getRepo() {
+    return definition.getRepo();
   }
 
   @Override

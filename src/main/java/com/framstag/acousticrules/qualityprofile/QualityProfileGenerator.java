@@ -16,7 +16,7 @@
  */
 package com.framstag.acousticrules.qualityprofile;
 
-import com.framstag.acousticrules.rules.instance.RuleInstance;
+import com.framstag.acousticrules.rules.CustomizedRule;
 import com.framstag.acousticrules.rules.instance.RuleInstanceGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,11 +81,11 @@ public class QualityProfileGenerator {
 
         RuleInstanceGroup groupRules = rulesByGroup.get(group.name());
         var activeRules = groupRules.getRuleInstances().stream()
-                .filter(RuleInstance::isActive)
+                .filter(CustomizedRule::isActive)
                 .sorted()
                 .toList();
 
-        for (RuleInstance rule : activeRules) {
+        for (CustomizedRule rule : activeRules) {
           writeRule(writer, rule, INDENT + INDENT);
           writeLn(writer);
         }
@@ -111,7 +111,7 @@ public class QualityProfileGenerator {
     }
   }
 
-  private static void writeRule(XMLStreamWriter writer, RuleInstance rule, int indent) throws XMLStreamException {
+  private static void writeRule(XMLStreamWriter writer, CustomizedRule rule, int indent) throws XMLStreamException {
     writeIndent(writer, indent);
     writer.writeStartElement("rule");
     writeLn(writer);
@@ -143,7 +143,7 @@ public class QualityProfileGenerator {
   }
 
   private static void writeParameterList(XMLStreamWriter writer,
-                                         RuleInstance rule,
+                                         CustomizedRule rule,
                                          int indent) throws XMLStreamException {
     writeIndent(writer, indent);
 

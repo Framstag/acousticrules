@@ -21,8 +21,8 @@ import com.framstag.acousticrules.filter.Filter;
 import com.framstag.acousticrules.modifier.Modifier;
 import com.framstag.acousticrules.qualityprofile.QualityGroup;
 import com.framstag.acousticrules.qualityprofile.QualityProfile;
+import com.framstag.acousticrules.rules.CustomizedRule;
 import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
-import com.framstag.acousticrules.rules.instance.RuleInstance;
 import com.framstag.acousticrules.rules.instance.RuleInstanceGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,7 +89,7 @@ public class RuleInstanceService {
     var modifiedRulesGroup = groupRuleSet;
 
     for (var filter : filters) {
-      List<RuleInstance> filteredRules = new LinkedList<>();
+      List<CustomizedRule> filteredRules = new LinkedList<>();
 
       log.info("Filter: {} {}",
         filter.getDescription(),
@@ -125,7 +125,7 @@ public class RuleInstanceService {
     RuleInstanceGroup modifiedRules = rules;
 
     for (var modifier : modifiers) {
-      List<RuleInstance> updatedDefinitions = new LinkedList<>();
+      List<CustomizedRule> updatedDefinitions = new LinkedList<>();
       log.info("Modifier: {} {}",
         modifier.getDescription(),
         modifier.getReasonString("- "));

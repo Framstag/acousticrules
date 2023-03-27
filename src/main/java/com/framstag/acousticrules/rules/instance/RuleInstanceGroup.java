@@ -1,6 +1,6 @@
 /*
  * AcousticRuler
- * Copyright 2022 Tim Teulings
+ * Copyright 2023 Tim Teulings
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 
 package com.framstag.acousticrules.rules.instance;
 
+import com.framstag.acousticrules.rules.CustomizedRule;
 import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
 
 import java.util.Collection;
@@ -27,15 +28,15 @@ import java.util.stream.Collectors;
 
 public final class RuleInstanceGroup {
   private final RuleDefinitionGroup definitionGroup;
-  private final Map<String,RuleInstance> ruleInstances;
+  private final Map<String, CustomizedRule> ruleInstances;
 
-  private RuleInstanceGroup(RuleDefinitionGroup definitionGroup, Map<String,RuleInstance> ruleInstances) {
+  private RuleInstanceGroup(RuleDefinitionGroup definitionGroup, Map<String, CustomizedRule> ruleInstances) {
     this.definitionGroup = definitionGroup;
     this.ruleInstances = Map.copyOf(ruleInstances);
   }
 
   public static RuleInstanceGroup fromDefinitionGroup(RuleDefinitionGroup definitionGroup) {
-    Map<String,RuleInstance> ruleInstances = definitionGroup
+    Map<String, CustomizedRule> ruleInstances = definitionGroup
       .getRules()
       .stream()
       .map(RuleInstance::fromDefinition)
@@ -48,7 +49,7 @@ public final class RuleInstanceGroup {
     return definitionGroup;
   }
 
-  public Collection<RuleInstance> getRuleInstances() {
+  public Collection<CustomizedRule> getRuleInstances() {
     return ruleInstances.values();
   }
 
@@ -56,8 +57,8 @@ public final class RuleInstanceGroup {
     return ruleInstances.size();
   }
 
-  public RuleInstanceGroup filter(Iterable<RuleInstance> filteredInstances) {
-    var newInstances = new HashMap<String,RuleInstance>(ruleInstances);
+  public RuleInstanceGroup filter(Iterable<CustomizedRule> filteredInstances) {
+    var newInstances = new HashMap<>(ruleInstances);
 
     filteredInstances.forEach(rule -> newInstances.remove(rule.getKey()));
 
@@ -69,8 +70,8 @@ public final class RuleInstanceGroup {
    * @param instances instances to update
    * @return a new RuleInstance instance.
    */
-  public RuleInstanceGroup update(Iterable<RuleInstance> instances) {
-    HashMap<String,RuleInstance> newInstances = new HashMap<>(ruleInstances);
+  public RuleInstanceGroup update(Iterable<CustomizedRule> instances) {
+    HashMap<String, CustomizedRule> newInstances = new HashMap<>(ruleInstances);
 
     instances.forEach(rule ->
       newInstances.put(rule.getKey(),rule)
@@ -84,7 +85,7 @@ public final class RuleInstanceGroup {
    * @param key key of the rule
    * @return instance or null
    */
-  public RuleInstance getRuleInstance(String key) {
+  public CustomizedRule getRuleInstance(String key) {
     return ruleInstances.get(key);
   }
 }
