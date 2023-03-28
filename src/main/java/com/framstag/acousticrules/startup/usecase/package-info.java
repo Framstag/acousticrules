@@ -15,13 +15,10 @@
  * limitations under the License.
  */
 
-package com.framstag.acousticrules.usecase;
+/**
+ * The startup use case
+ */
+@Description("The startup use case")
+package com.framstag.acousticrules.startup.usecase;
 
-import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
-
-import java.util.Map;
-
-public record RulesToGroupResult(RuleDefinitionGroup allRuleDefinitions,
-                                 Map<String, RuleDefinitionGroup> ruleDefinitionsByGroup) {
-
-}
+import com.framstag.acousticrules.annotation.Description;

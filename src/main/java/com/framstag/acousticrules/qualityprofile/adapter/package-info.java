@@ -16,10 +16,10 @@
  */
 
 /**
- * Implementation of the high-level use cases, orchestrating the various services
- * to build up the use cases
+ * The various adapters for input and output
  */
-@Description("Implementation of the high-level use cases, orchestrating the various services to build up the use cases")
-package com.framstag.acousticrules.usecase;
+@Description("The various adapters for input and output")
+package com.framstag.acousticrules.qualityprofile.adapter;
+
 
 import com.framstag.acousticrules.annotation.Description;

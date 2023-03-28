@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.framstag.acousticrules.usecase;
+package com.framstag.acousticrules.duplication.usecase;
 
 import com.framstag.acousticrules.rules.definition.RuleDefinition;
 import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;

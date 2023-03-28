@@ -16,9 +16,9 @@
  */
 
 /**
- * Contains code for generating Markdown documentation.
+ * Services needed to implement the use case
  */
-@Description("Contains code for generating Markdown documentation.")
-package com.framstag.acousticrules.markdowndoc;
+@Description("Services needed to implement the use case")
+package com.framstag.acousticrules.startup.service;
 
 import com.framstag.acousticrules.annotation.Description;

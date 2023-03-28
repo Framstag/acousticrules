@@ -16,9 +16,9 @@
  */
 
 /**
- * A number of Services that in sum realize the AcousticRules functionality.
+ * Services to implement the rules to group functionality
  */
-@Description("A number of Services that in sum realize the AcousticRules functionality.")
-package com.framstag.acousticrules.service;
+@Description("Services to implement the rules to group functionality")
+package com.framstag.acousticrules.rulestogroup.service;
 
 import com.framstag.acousticrules.annotation.Description;

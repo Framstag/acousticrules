@@ -15,9 +15,8 @@
  * limitations under the License.
  */
 
-package com.framstag.acousticrules.service;
+package com.framstag.acousticrules.qualityprofile.adapter.documentation;
 
-import com.framstag.acousticrules.markdowndoc.MarkdownDocGenerator;
 import com.framstag.acousticrules.qualityprofile.QualityProfile;
 import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
 import com.framstag.acousticrules.rules.instance.RuleInstanceGroup;

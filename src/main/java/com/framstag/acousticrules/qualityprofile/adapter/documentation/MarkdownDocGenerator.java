@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.framstag.acousticrules.markdowndoc;
+package com.framstag.acousticrules.qualityprofile.adapter.documentation;
 
 import com.framstag.acousticrules.qualityprofile.QualityGroup;
 import com.framstag.acousticrules.qualityprofile.QualityProfile;
