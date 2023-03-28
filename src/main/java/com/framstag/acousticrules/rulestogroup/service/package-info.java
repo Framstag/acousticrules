@@ -15,16 +15,10 @@
  * limitations under the License.
  */
 
-package com.framstag.acousticrules.usecase;
+/**
+ * Services to implement the rules to group functionality
+ */
+@Description("Services to implement the rules to group functionality")
+package com.framstag.acousticrules.rulestogroup.service;
 
-import com.framstag.acousticrules.service.PropertyService;
-
-import java.util.Map;
-
-public class StartupUseCase {
-  private final PropertyService propertyService = new PropertyService();
-
-  public void run(Map<String, String> propertyMap) {
-    propertyService.dump(propertyMap);
-  }
-}
+import com.framstag.acousticrules.annotation.Description;

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.framstag.acousticrules.service;
+package com.framstag.acousticrules.rulestogroup.service;
 
 import com.framstag.acousticrules.filter.Filter;
 import com.framstag.acousticrules.processing.ProcessingGroup;

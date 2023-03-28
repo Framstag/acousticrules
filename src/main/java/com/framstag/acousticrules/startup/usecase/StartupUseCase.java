@@ -15,10 +15,16 @@
  * limitations under the License.
  */
 
-/**
- * Contains code for generating Markdown documentation.
- */
-@Description("Contains code for generating Markdown documentation.")
-package com.framstag.acousticrules.markdowndoc;
+package com.framstag.acousticrules.startup.usecase;
 
-import com.framstag.acousticrules.annotation.Description;
+import com.framstag.acousticrules.startup.service.PropertyDumpService;
+
+import java.util.Map;
+
+public class StartupUseCase {
+  private final PropertyDumpService propertyService = new PropertyDumpService();
+
+  public void run(Map<String, String> propertyMap) {
+    propertyService.dump(propertyMap);
+  }
+}

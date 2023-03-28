@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-package com.framstag.acousticrules.usecase;
+package com.framstag.acousticrules.rulestogroup.usecase;
 
 import com.framstag.acousticrules.processing.ProcessingGroup;
 import com.framstag.acousticrules.processing.ProcessingGroupRepository;
 import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
 import com.framstag.acousticrules.rules.definition.RulesRepository;
-import com.framstag.acousticrules.service.RuleToGroupService;
+import com.framstag.acousticrules.rulestogroup.service.RuleToGroupService;
 
 import java.nio.file.Path;
 import java.util.List;

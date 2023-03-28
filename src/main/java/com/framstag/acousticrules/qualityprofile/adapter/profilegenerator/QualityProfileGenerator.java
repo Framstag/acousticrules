@@ -14,8 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.framstag.acousticrules.qualityprofile;
+package com.framstag.acousticrules.qualityprofile.adapter.profilegenerator;
 
+import com.framstag.acousticrules.qualityprofile.QualityGroup;
+import com.framstag.acousticrules.qualityprofile.QualityProfile;
 import com.framstag.acousticrules.rules.CustomizedRule;
 import com.framstag.acousticrules.rules.instance.RuleInstanceGroup;
 import org.slf4j.Logger;

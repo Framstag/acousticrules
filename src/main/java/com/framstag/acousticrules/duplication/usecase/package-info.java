@@ -15,23 +15,10 @@
  * limitations under the License.
  */
 
-package com.framstag.acousticrules.service;
+/**
+ * Implementation of the duplication detected use case
+ */
+@Description("Implementation of the duplication detected use case")
+package com.framstag.acousticrules.duplication.usecase;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Map;
-
-public class PropertyService {
-  private static final Logger log = LoggerFactory.getLogger(PropertyService.class);
-
-  public void dump(Map<String,String> propertyMap) {
-    if (propertyMap == null) {
-      return;
-    }
-
-    for (var entry : propertyMap.entrySet()) {
-      log.info("Property '{}'='{}'",entry.getKey(),entry.getValue());
-    }
-  }
-}
+import com.framstag.acousticrules.annotation.Description;

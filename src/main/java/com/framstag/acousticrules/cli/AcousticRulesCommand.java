@@ -17,10 +17,10 @@
 package com.framstag.acousticrules.cli;
 
 import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
-import com.framstag.acousticrules.usecase.DuplicationUseCase;
-import com.framstag.acousticrules.usecase.QualityProfileUseCase;
-import com.framstag.acousticrules.usecase.RulesToGroupsUseCase;
-import com.framstag.acousticrules.usecase.StartupUseCase;
+import com.framstag.acousticrules.duplication.usecase.DuplicationUseCase;
+import com.framstag.acousticrules.qualityprofile.usecase.QualityProfileUseCase;
+import com.framstag.acousticrules.rulestogroup.usecase.RulesToGroupsUseCase;
+import com.framstag.acousticrules.startup.usecase.StartupUseCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import picocli.CommandLine;

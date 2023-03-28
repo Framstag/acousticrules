@@ -14,9 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.framstag.acousticrules.qualityprofile;
+package com.framstag.acousticrules.qualityprofile.adapter.qualityprofile;
 
 import com.framstag.acousticrules.exception.ParameterException;
+import com.framstag.acousticrules.qualityprofile.QualityProfile;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
 import org.eclipse.yasson.YassonConfig;

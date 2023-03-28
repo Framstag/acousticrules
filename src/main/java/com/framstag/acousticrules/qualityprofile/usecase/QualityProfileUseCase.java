@@ -15,17 +15,17 @@
  * limitations under the License.
  */
 
-package com.framstag.acousticrules.usecase;
+package com.framstag.acousticrules.qualityprofile.usecase;
 
 import com.framstag.acousticrules.properties.Propertizer;
-import com.framstag.acousticrules.qualityprofile.QualityProfileRepository;
+import com.framstag.acousticrules.qualityprofile.adapter.qualityprofile.QualityProfileRepository;
 import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
 import com.framstag.acousticrules.rules.instance.RuleInstanceGroup;
-import com.framstag.acousticrules.service.DocumentationRepository;
-import com.framstag.acousticrules.service.QualityProfilePropertizerService;
-import com.framstag.acousticrules.service.RuleInstanceService;
-import com.framstag.acousticrules.service.RulesLanguageService;
-import com.framstag.acousticrules.service.SonarQualityProfileRepository;
+import com.framstag.acousticrules.qualityprofile.adapter.documentation.DocumentationRepository;
+import com.framstag.acousticrules.qualityprofile.service.QualityProfilePropertizerService;
+import com.framstag.acousticrules.qualityprofile.service.RuleInstanceService;
+import com.framstag.acousticrules.qualityprofile.service.RulesLanguageService;
+import com.framstag.acousticrules.qualityprofile.adapter.profilegenerator.SonarQualityProfileRepository;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -47,13 +47,13 @@ public class QualityProfileUseCase {
                   Map<String, RuleDefinitionGroup> ruleDefinitionsByGroup) throws IOException {
     var propertizer = new Propertizer(propertyMap);
 
-    var language = rulesLanguageService.verifyAndReturnLanguage(allRuleDefinitions);
-
-    var unusedRuleDefinitions = allRuleDefinitions.filter(usedRuleDefinitions.getRules());
-
     var qualityProfile = qualityProfileRepository.load(qualityProfileFile);
 
     qualityProfile = qualityProfilePropertizerService.propertize(qualityProfile, propertizer);
+
+    var language = rulesLanguageService.verifyAndReturnLanguage(allRuleDefinitions);
+
+    var unusedRuleDefinitions = allRuleDefinitions.filter(usedRuleDefinitions.getRules());
 
     Map<String, RuleInstanceGroup> ruleInstanceGroupMap = ruleInstanceService.process(qualityProfile,
       ruleDefinitionsByGroup);
