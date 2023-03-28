@@ -17,11 +17,10 @@
 package com.framstag.acousticrules.cli;
 
 import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
-import com.framstag.acousticrules.service.PropertyService;
-import com.framstag.acousticrules.service.RulesLanguageService;
 import com.framstag.acousticrules.usecase.DuplicationUseCase;
 import com.framstag.acousticrules.usecase.QualityProfileUseCase;
 import com.framstag.acousticrules.usecase.RulesToGroupsUseCase;
+import com.framstag.acousticrules.usecase.StartupUseCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
@@ -40,8 +39,6 @@ import java.util.concurrent.Callable;
 public class AcousticRulesCommand implements Callable<Integer> {
 
   private static final Logger log = LoggerFactory.getLogger(AcousticRulesCommand.class);
-  private final PropertyService propertyService = new PropertyService();
-  private final RulesLanguageService rulesLanguageService = new RulesLanguageService();
   @CommandLine.Option(
     names = {"-r", "--rule"},
     paramLabel = "filename",
@@ -73,7 +70,7 @@ public class AcousticRulesCommand implements Callable<Integer> {
 
   @Override
   public Integer call() throws Exception {
-    propertyService.dump(propertyMap);
+    new StartupUseCase().run(propertyMap);
 
     var rulesToGroupsResult = new RulesToGroupsUseCase().run(ruleFiles,processorSetFiles);
 
@@ -88,14 +85,11 @@ public class AcousticRulesCommand implements Callable<Integer> {
     log.info("Overall selected rule definitions: {}", usedRuleDefinitions.size());
 
     if (qualityProfileFile != null) {
-      var language = rulesLanguageService.verifyAndReturnLanguage(rulesToGroupsResult.allRuleDefinitions());
-      var unusedRuleDefinitions = rulesToGroupsResult.allRuleDefinitions().filter(usedRuleDefinitions.getRules());
-
       new QualityProfileUseCase().run(propertyMap,
-        language,
         qualityProfileFile,
-        rulesToGroupsResult.ruleDefinitionsByGroup(),
-        unusedRuleDefinitions);
+        usedRuleDefinitions,
+        rulesToGroupsResult.allRuleDefinitions(),
+        rulesToGroupsResult.ruleDefinitionsByGroup());
     }
 
     return 0;

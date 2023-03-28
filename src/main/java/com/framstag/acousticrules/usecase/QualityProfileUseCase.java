@@ -24,6 +24,7 @@ import com.framstag.acousticrules.rules.instance.RuleInstanceGroup;
 import com.framstag.acousticrules.service.DocumentationRepository;
 import com.framstag.acousticrules.service.QualityProfilePropertizerService;
 import com.framstag.acousticrules.service.RuleInstanceService;
+import com.framstag.acousticrules.service.RulesLanguageService;
 import com.framstag.acousticrules.service.SonarQualityProfileRepository;
 
 import java.io.IOException;
@@ -31,19 +32,24 @@ import java.nio.file.Path;
 import java.util.Map;
 
 public class QualityProfileUseCase {
-  private final QualityProfileRepository qualityProfileRepository = new QualityProfileRepository();
+  private final RulesLanguageService rulesLanguageService = new RulesLanguageService();
   private final QualityProfilePropertizerService qualityProfilePropertizerService =
     new QualityProfilePropertizerService();
   private final RuleInstanceService ruleInstanceService = new RuleInstanceService();
+  private final QualityProfileRepository qualityProfileRepository = new QualityProfileRepository();
   private final SonarQualityProfileRepository sonarQualityProfileRepository = new SonarQualityProfileRepository();
   private final DocumentationRepository documentationRepository = new DocumentationRepository();
 
   public void run(Map<String, String> propertyMap,
-                  String language,
                   Path qualityProfileFile,
-                  Map<String, RuleDefinitionGroup> ruleDefinitionsByGroup,
-                  RuleDefinitionGroup unusedRuleDefinitions) throws IOException {
+                  RuleDefinitionGroup usedRuleDefinitions,
+                  RuleDefinitionGroup allRuleDefinitions,
+                  Map<String, RuleDefinitionGroup> ruleDefinitionsByGroup) throws IOException {
     var propertizer = new Propertizer(propertyMap);
+
+    var language = rulesLanguageService.verifyAndReturnLanguage(allRuleDefinitions);
+
+    var unusedRuleDefinitions = allRuleDefinitions.filter(usedRuleDefinitions.getRules());
 
     var qualityProfile = qualityProfileRepository.load(qualityProfileFile);
 
