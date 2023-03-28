@@ -16,9 +16,9 @@
  */
 
 /**
- * Code for defining groups of rules.
+ * Adapter for input and output
  */
-@Description("Code for defining groups of rules.")
-package com.framstag.acousticrules.processing;
+@Description("Adapter for input and output")
+package com.framstag.acousticrules.rulestogroup.adapter;
 
 import com.framstag.acousticrules.annotation.Description;

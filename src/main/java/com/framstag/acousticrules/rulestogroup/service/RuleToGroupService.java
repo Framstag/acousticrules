@@ -18,7 +18,7 @@
 package com.framstag.acousticrules.rulestogroup.service;
 
 import com.framstag.acousticrules.filter.Filter;
-import com.framstag.acousticrules.processing.ProcessingGroup;
+import com.framstag.acousticrules.rulestogroup.ProcessingGroup;
 import com.framstag.acousticrules.rules.definition.RuleDefinition;
 import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
 import com.framstag.acousticrules.selector.Selector;

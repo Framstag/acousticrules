@@ -1,6 +1,6 @@
 /*
  * AcousticRuler
- * Copyright 2022 Tim Teulings
+ * Copyright 2023 Tim Teulings
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 
 package com.framstag.acousticrules.rules.definition;
 
-import com.framstag.acousticrules.processing.ProcessingGroup;
+import com.framstag.acousticrules.rulestogroup.ProcessingGroup;
 
 import java.util.Collection;
 import java.util.Collections;

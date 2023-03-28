@@ -17,8 +17,8 @@
 
 package com.framstag.acousticrules.rulestogroup.usecase;
 
-import com.framstag.acousticrules.processing.ProcessingGroup;
-import com.framstag.acousticrules.processing.ProcessingGroupRepository;
+import com.framstag.acousticrules.rulestogroup.ProcessingGroup;
+import com.framstag.acousticrules.rulestogroup.adapter.processinggroup.ProcessingGroupRepository;
 import com.framstag.acousticrules.rules.definition.RuleDefinitionGroup;
 import com.framstag.acousticrules.rules.definition.RulesRepository;
 import com.framstag.acousticrules.rulestogroup.service.RuleToGroupService;
