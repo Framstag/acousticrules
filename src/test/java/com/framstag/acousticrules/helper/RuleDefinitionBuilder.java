@@ -31,6 +31,8 @@ public class RuleDefinitionBuilder {
   private String key="";
   private String type="";
 
+  private Status status = Status.READY;
+
   public static RuleDefinitionBuilder rule() {
     return new RuleDefinitionBuilder();
   }
@@ -53,12 +55,18 @@ public class RuleDefinitionBuilder {
     return this;
   }
 
+  public RuleDefinitionBuilder isDeprecated() {
+    this.status = Status.DEPRECATED;
+
+    return this;
+  }
+
   public RuleDefinition build() {
     return new RuleDefinition(key,
       key,
       "",
       Severity.BLOCKER,
-      Status.READY,
+      status,
       "",
       type,
       sysTags,

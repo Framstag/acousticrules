@@ -37,13 +37,15 @@ public class DropNotWithType extends AbstractFilter {
   public String getDescription() {
     String header;
 
-    if (types.size() == 1) {
+    if (types.isEmpty()) {
+      header = "Dropping all rules";
+    } else if (types.size() == 1) {
       header = "Dropping rules not having type ";
     } else {
       header = "Dropping rules not having types ";
     }
 
-    return header + types.stream().map(type -> "'"+type+"'").collect(Collectors.joining(", "));
+    return header + types.stream().map(type -> "'"+type+"'").sorted().collect(Collectors.joining(", "));
   }
 
   @Override

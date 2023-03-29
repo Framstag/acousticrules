@@ -37,13 +37,15 @@ public class DropWithKey extends AbstractFilter {
   public String getDescription() {
     String header;
 
-    if (keys.size() == 1) {
+    if (keys.isEmpty()) {
+      header = "Dropping no rules";
+    } else if (keys.size() == 1) {
       header = "Dropping rules with key ";
     } else {
       header = "Dropping rules with keys ";
     }
 
-    return header + keys.stream().map(key -> "'"+key+"'").collect(Collectors.joining(", "));
+    return header + keys.stream().map(key -> "'"+key+"'").sorted().collect(Collectors.joining(", "));
   }
 
   @Override
