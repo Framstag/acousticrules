@@ -43,8 +43,8 @@ public class DuplicationUseCase {
     return true;
   }
 
-  private static int dumpRulesInMultipleGroups(RuleDefinitionGroup allRules, Map<String,
-    RuleDefinitionGroup> rulesByGroup) {
+  private static int dumpRulesInMultipleGroups(RuleDefinitionGroup allRules,
+                                               Map<String,RuleDefinitionGroup> rulesByGroup) {
     Map<RuleDefinition, List<String>> ruleGroupMap = new HashMap<>();
 
     // Initialize map

@@ -82,6 +82,18 @@ jobs:
           name: JQAssistant-Report
           path: target/jqassistant/report
 
+      - name: Upload Cucumber Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: Cucumber-Report
+          path: target/cucumber-reports/cucumber-html-reports
+
+      - name: Upload Jacoco Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: Jacoco-Report
+          path: target/site/jacoco
+
       - name: Static code analysis using Sonar
         run:  mvn -ntp -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Framstag_acousticrules
         env:

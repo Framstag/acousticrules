@@ -47,12 +47,14 @@ public class DropWithTag extends AbstractFilter {
   public String getDescription() {
     String tagString;
 
-    if (tags.size() == 1) {
+    if (tags.isEmpty()) {
+      tagString = "Dropping no rules";
+    } else if (tags.size() == 1) {
       tagString = "Dropping rules with tag " +
-       tags.stream().map(tag -> "'" + tag + "'").collect(Collectors.joining(", "));
+       tags.stream().map(tag -> "'" + tag + "'").sorted().collect(Collectors.joining(", "));
     } else {
       tagString = "Dropping rules with tags " +
-       tags.stream().map(tag -> "'" + tag + "'").collect(Collectors.joining(", "));
+       tags.stream().map(tag -> "'" + tag + "'").sorted().collect(Collectors.joining(", "));
     }
 
     String butString;
