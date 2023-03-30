@@ -6,18 +6,18 @@ Feature: The DropNotWithType filter works as expected
     Given the filter DropNotWithType with types:
       |BUG|
       |OTHER|
-    And a rule definition 'ID1' of type 'BUG'
-    And a rule definition 'ID2' of type 'NO_BUG'
-    And a rule definition 'ID3' of type 'OTHER'
+    And a rule definition ID1 of type BUG
+    And a rule definition ID2 of type NO_BUG
+    And a rule definition ID3 of type OTHER
     When I pass the rules to the filter
     Then The following rule definitions have been filtered out:
       |ID2|
 
   Scenario: The DropNotWithType filter removes all rules if no type is given
     Given the filter DropNotWithType
-    And a rule definition 'ID1' of type 'BUG'
-    And a rule definition 'ID2' of type 'NO_BUG'
-    And a rule definition 'ID3' of type 'OTHER'
+    And a rule definition ID1 of type 'BUG
+    And a rule definition ID2 of type NO_BUG
+    And a rule definition ID3 of type OTHER
     When I pass the rules to the filter
     Then The following rule definitions have been filtered out:
       |ID1|

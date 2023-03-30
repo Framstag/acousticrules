@@ -64,7 +64,11 @@ public class DropWithTag extends AbstractFilter {
     } else if (but.size() == 1) {
       butString = " but not key " + but.stream().map(key -> "'" + key + "'").collect(Collectors.joining(", "));
     } else {
-      butString = " but not keys " + but.stream().map(key -> "'" + key + "'").collect(Collectors.joining(", "));
+      butString = " but not keys " + but
+        .stream()
+        .map(key -> "'" + key + "'")
+        .sorted()
+        .collect(Collectors.joining(", "));
     }
 
     return tagString + butString;

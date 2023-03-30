@@ -28,7 +28,7 @@ public class RuleDefinitionBuilderSteps {
     this.ruledefinitions = ruledefinitions;
   }
 
-  @Given("a rule definition {string}")
+  @Given("a rule definition {word}")
   public void ruleWithId(String id) {
     var rule = new RuleDefinitionBuilder()
       .withKey(id)
@@ -36,7 +36,7 @@ public class RuleDefinitionBuilderSteps {
     ruledefinitions.rules.add(rule);
   }
 
-  @Given("a rule definition {string} of type {string}")
+  @Given("a rule definition {word} of type {word}")
   public void ruleWithIdAndType(String id, String type) {
     var rule = new RuleDefinitionBuilder()
       .withKey(id)
@@ -45,7 +45,7 @@ public class RuleDefinitionBuilderSteps {
     ruledefinitions.rules.add(rule);
   }
 
-  @Given("a rule definition {string} with tag {string}")
+  @Given("a rule definition {word} with tag {word}")
   public void ruleWithIdAndTag(String id, String tag) {
     var rule = new RuleDefinitionBuilder()
       .withKey(id)
@@ -54,7 +54,7 @@ public class RuleDefinitionBuilderSteps {
     ruledefinitions.rules.add(rule);
   }
 
-  @Given("a deprecated rule definition {string}")
+  @Given("a deprecated rule definition {word}")
   public void ruleDeprecatedWithId(String key) {
     var rule = new RuleDefinitionBuilder()
       .withKey(key)

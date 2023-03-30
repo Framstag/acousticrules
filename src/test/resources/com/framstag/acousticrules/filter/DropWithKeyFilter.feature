@@ -6,9 +6,9 @@ Feature: The DropWithKey filter works as expected
     Given the filter DropWithKey with keys:
       |ID1|
       |ID3|
-    And a rule definition 'ID1'
-    And a rule definition 'ID2'
-    And a rule definition 'ID3'
+    And a rule definition ID1
+    And a rule definition ID2
+    And a rule definition ID3
     When I pass the rules to the filter
     Then The following rule definitions have been filtered out:
       |ID1|
@@ -36,6 +36,3 @@ Feature: The DropWithKey filter works as expected
       |B|
       |XXX|
     Then filter has description 'Dropping rules with keys \'B\', \'C\', \'XXX\', \'ZZZ\''
-
-
-

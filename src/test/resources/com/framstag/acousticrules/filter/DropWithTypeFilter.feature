@@ -6,9 +6,9 @@ Feature: The DropWithType filter works as expected
     Given the filter DropWithType with types:
       |BUG|
       |OTHER|
-    And a rule definition 'ID1' of type 'BUG'
-    And a rule definition 'ID2' of type 'CODE_SMELL'
-    And a rule definition 'ID3' of type 'OTHER'
+    And a rule definition ID1 of type BUG
+    And a rule definition ID2 of type CODE_SMELL
+    And a rule definition ID3 of type OTHER
     When I pass the rules to the filter
     Then The following rule definitions have been filtered out:
       |ID1|
