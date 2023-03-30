@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class FilterSteps {
@@ -73,6 +74,11 @@ public class FilterSteps {
   @Given("the filter DropWithTag with tags:")
   public void createFilterDropWithTagsWithTags(List<String> tags) {
     filter = new DropWithTag(tags.stream().collect(Collectors.toUnmodifiableSet()), Collections.emptySet());
+  }
+
+  @Given("the filter DropWithTag with tag {word} but keys:")
+  public void createFilterDropWithTagsWithTags(String tag, List<String> keys) {
+    filter = new DropWithTag(Set.of(tag), keys.stream().collect(Collectors.toUnmodifiableSet()));
   }
 
   @Given("the filter DropWithKey")
