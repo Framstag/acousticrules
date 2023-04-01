@@ -22,7 +22,7 @@ import com.framstag.acousticrules.rules.Severity;
 import jakarta.json.bind.annotation.JsonbCreator;
 import jakarta.json.bind.annotation.JsonbProperty;
 
-@Description("Change the severity of all rules with the gieven severity to a new one")
+@Description("Change the severity of all rules with the given severity to a new one")
 public class ChangeSeverity extends AbstractModifier {
   private final Severity from;
   private final Severity to;

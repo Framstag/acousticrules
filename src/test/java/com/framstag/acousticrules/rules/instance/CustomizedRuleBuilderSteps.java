@@ -15,51 +15,51 @@
  * limitations under the License.
  */
 
-package com.framstag.acousticrules.rules;
+package com.framstag.acousticrules.rules.instance;
 
-import com.framstag.acousticrules.helper.RuleDefinitionBuilder;
+import com.framstag.acousticrules.rules.Severity;
 import io.cucumber.java.en.Given;
 
-public class RuleDefinitionBuilderSteps {
+public class CustomizedRuleBuilderSteps {
 
-  private final RuleDefinitions ruledefinitions;
+  private final CustomizedRules customizedRules;
 
-  public RuleDefinitionBuilderSteps(RuleDefinitions ruledefinitions) {
-    this.ruledefinitions = ruledefinitions;
+  public CustomizedRuleBuilderSteps(CustomizedRules customizedRules) {
+    this.customizedRules = customizedRules;
   }
 
-  @Given("a rule definition {word}")
+  @Given("a customized rule {word}")
   public void ruleWithId(String id) {
-    var rule = new RuleDefinitionBuilder()
+    var rule = new CustomizedRuleBuilder()
       .withKey(id)
       .build();
-    ruledefinitions.rules.add(rule);
+    customizedRules.rules.add(rule);
   }
 
-  @Given("a rule definition {word} of type {word}")
+  @Given("a customized rule {word} of type {word}")
   public void ruleWithIdAndType(String id, String type) {
-    var rule = new RuleDefinitionBuilder()
+    var rule = new CustomizedRuleBuilder()
       .withKey(id)
       .withType(type)
       .build();
-    ruledefinitions.rules.add(rule);
+    customizedRules.rules.add(rule);
   }
 
-  @Given("a rule definition {word} with tag {word}")
+  @Given("a customized rule {word} with tag {word}")
   public void ruleWithIdAndTag(String id, String tag) {
-    var rule = new RuleDefinitionBuilder()
+    var rule = new CustomizedRuleBuilder()
       .withKey(id)
       .withTag(tag)
       .build();
-    ruledefinitions.rules.add(rule);
+    customizedRules.rules.add(rule);
   }
 
-  @Given("a deprecated rule definition {word}")
-  public void ruleDeprecatedWithId(String key) {
-    var rule = new RuleDefinitionBuilder()
-      .withKey(key)
-      .isDeprecated()
+  @Given("a customized rule {word} with severity {severity}")
+  public void ruleWithIdAndTag(String id, Severity severity) {
+    var rule = new CustomizedRuleBuilder()
+      .withKey(id)
+      .withSeverity(severity)
       .build();
-    ruledefinitions.rules.add(rule);
+    customizedRules.rules.add(rule);
   }
 }

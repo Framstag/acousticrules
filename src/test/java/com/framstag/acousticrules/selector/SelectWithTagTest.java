@@ -17,7 +17,7 @@
 
 package com.framstag.acousticrules.selector;
 
-import com.framstag.acousticrules.helper.RuleDefinitionBuilder;
+import com.framstag.acousticrules.rules.definition.RuleDefinitionBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
