@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-package com.framstag.acousticrules.rules;
+package com.framstag.acousticrules.rules.instance;
 
-import com.framstag.acousticrules.rules.definition.RuleDefinition;
+import com.framstag.acousticrules.rules.CustomizedRule;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class RuleDefinitions {
-  public List<RuleDefinition> rules = new LinkedList<>();
+public class CustomizedRules {
+  public List<CustomizedRule> rules = new LinkedList<>();
 }

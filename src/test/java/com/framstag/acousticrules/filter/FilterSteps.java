@@ -17,8 +17,8 @@
 
 package com.framstag.acousticrules.filter;
 
-import com.framstag.acousticrules.rules.RuleDefinitions;
-import com.framstag.acousticrules.rules.definition.RuleDefinition;
+import com.framstag.acousticrules.rules.Rule;
+import com.framstag.acousticrules.rules.definition.RuleDefinitions;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 
 public class FilterSteps {
 
-  private final Map<String, RuleDefinition> filteredRules = new HashMap<>();
+  private final Map<String, Rule> filteredRules = new HashMap<>();
   private final RuleDefinitions ruleDefinitions;
   private Filter filter;
 

@@ -170,7 +170,7 @@
     <dependency>
       <groupId>me.jvt.cucumber</groupId>
       <artifactId>reporting-plugin</artifactId>
-      <version>5.0.0</version>
+      <version>7.11.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

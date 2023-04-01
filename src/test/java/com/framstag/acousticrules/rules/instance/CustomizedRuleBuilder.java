@@ -15,62 +15,73 @@
  * limitations under the License.
  */
 
-package com.framstag.acousticrules.helper;
+package com.framstag.acousticrules.rules.instance;
 
+import com.framstag.acousticrules.rules.CustomizedRule;
 import com.framstag.acousticrules.rules.Severity;
 import com.framstag.acousticrules.rules.Status;
 import com.framstag.acousticrules.rules.definition.RuleDefinition;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class RuleDefinitionBuilder {
+public class CustomizedRuleBuilder {
 
   private final List<String> sysTags = new LinkedList<>();
+  private final UseStatus useStatus = UseStatus.ACTIVE;
+  private final Status status = Status.READY;
+  private Severity severity = Severity.BLOCKER;
   private String key="";
   private String type="";
 
-  private Status status = Status.READY;
-
-  public static RuleDefinitionBuilder rule() {
-    return new RuleDefinitionBuilder();
+  public static CustomizedRuleBuilder rule() {
+    return new CustomizedRuleBuilder();
   }
 
-  public RuleDefinitionBuilder withKey(String key) {
+  public CustomizedRuleBuilder withKey(String key) {
     this.key = key;
 
     return this;
   }
 
-  public RuleDefinitionBuilder withTag(String tag) {
+  public CustomizedRuleBuilder withTag(String tag) {
     sysTags.add(tag);
 
     return this;
   }
 
-  public RuleDefinitionBuilder withType(String type) {
+  public CustomizedRuleBuilder withType(String type) {
     this.type = type;
 
     return this;
   }
 
-  public RuleDefinitionBuilder isDeprecated() {
-    this.status = Status.DEPRECATED;
+  public CustomizedRuleBuilder withSeverity(Severity severity) {
+    this.severity = severity;
 
     return this;
   }
 
-  public RuleDefinition build() {
-    return new RuleDefinition(key,
+  public CustomizedRule build() {
+    RuleDefinition definition = new RuleDefinition(key,
       key,
       "",
-      Severity.BLOCKER,
+      severity,
       status,
       "",
       type,
       sysTags,
       Collections.emptySet()
     );
+
+    return new RuleInstance(definition,
+      useStatus,
+      "",
+      severity,
+      "",
+      new HashMap<>()
+      );
   }
 }

@@ -40,12 +40,12 @@ public final class RuleInstance implements CustomizedRule, Comparable<RuleInstan
   private final Severity severity;
   private final String severityReason;
 
-  private RuleInstance(RuleDefinition definition,
-                       UseStatus status,
-                       String statusReason,
-                       Severity severity,
-                       String severityReason,
-                       Map<String,String> parameter) {
+  RuleInstance(RuleDefinition definition,
+               UseStatus status,
+               String statusReason,
+               Severity severity,
+               String severityReason,
+               Map<String, String> parameter) {
     this.definition = definition;
     this.status = status;
     this.statusReason = statusReason;
@@ -67,21 +67,21 @@ public final class RuleInstance implements CustomizedRule, Comparable<RuleInstan
     return definition.getName();
   }
 
-  public RuleInstance setSeverity(Severity severity, String reason) {
-    return new RuleInstance(definition,
-      status,
-      statusReason,
-      severity,
-      reason,
-      parameter);
-  }
-
   public RuleInstance disable(String reason) {
     return new RuleInstance(definition,
       UseStatus.DISABLED,
       reason,
       severity,
       severityReason,
+      parameter);
+  }
+
+  public RuleInstance setSeverity(Severity severity, String reason) {
+    return new RuleInstance(definition,
+      status,
+      statusReason,
+      severity,
+      reason,
       parameter);
   }
 
@@ -101,6 +101,10 @@ public final class RuleInstance implements CustomizedRule, Comparable<RuleInstan
       newParameter);
   }
 
+  public boolean isDisabled() {
+    return status == UseStatus.DISABLED;
+  }
+
   public boolean isActive() {
     return !isDisabled();
   }
@@ -112,10 +116,6 @@ public final class RuleInstance implements CustomizedRule, Comparable<RuleInstan
   public Map<String, String> getParameter() {
     // Make sure the Map we hand out is immutable and our map cannot be changes via a side effect
     return Map.copyOf(parameter);
-  }
-
-  public boolean isDisabled() {
-    return status == UseStatus.DISABLED;
   }
 
   public boolean hasSeverityReason() {
