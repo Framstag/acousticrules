@@ -27,6 +27,8 @@ import io.cucumber.java.en.When;
 import org.junit.jupiter.api.Assertions;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -57,6 +59,32 @@ public class ModifierSteps {
     this.modifier = modifier;
   }
 
+  @Given("the modifier 'SetSeverity' to {severity} for keys:")
+  public void createModifierSetSeverity(Severity to, List<String> keys) {
+    this.modifier = new SetSeverity(new HashSet<>(keys), to);
+  }
+
+  @Given("the modifier 'SetSeverity' to {severity} with reason {string} for keys:")
+  public void createModifierSetSeverity(Severity to, String reason, List<String> keys) {
+    var modifier = new SetSeverity(new HashSet<>(keys), to);
+    modifier.setReason(reason);
+
+    this.modifier = modifier;
+  }
+
+  @Given("the modifier 'DisableByKey' for keys:")
+  public void createModifierDisableByKey(List<String> keys) {
+    this.modifier = new DisableByKey(new HashSet<>(keys));
+  }
+
+  @Given("the modifier 'DisableByKey' with reason {string} for keys:")
+  public void createModifierDisableByKeWithReason(String reason, List<String> keys) {
+    var modifier = new DisableByKey(new HashSet<>(keys));
+    modifier.setReason(reason);
+
+    this.modifier = modifier;
+  }
+
   @When("the modifier is executed for all customized rules")
   public void executeModifier() {
     for (var rule : customizedRules.rules) {
@@ -80,6 +108,30 @@ public class ModifierSteps {
 
     Assertions.assertNotNull(rule,"Queried rule must exist");
     Assertions.assertEquals(reason,rule.getSeverityReason(),"Rule must have expected severity reason");
+  }
+
+  @Then("customized rule {word} has status reason {string}")
+  public void ruleHasStatusReason(String key, String reason) {
+    var rule = modifiedRules.get(key);
+
+    Assertions.assertNotNull(rule,"Queried rule must exist");
+    Assertions.assertEquals(reason,rule.getStatusReason(),"Rule must have expected status reason");
+  }
+
+  @Then("customized rule {word} is disabled")
+  public void ruleIsDisabled(String key) {
+    var rule = modifiedRules.get(key);
+
+    Assertions.assertNotNull(rule,"Queried rule must exist");
+    Assertions.assertTrue(rule.isDisabled(),"Rule must be disabled");
+  }
+
+  @Then("customized rule {word} is not disabled")
+  public void ruleIsotDisabled(String key) {
+    var rule = modifiedRules.get(key);
+
+    Assertions.assertNotNull(rule,"Queried rule must exist");
+    Assertions.assertFalse(rule.isDisabled(),"Rule must be disabled");
   }
 
   @Then("modifier has description {string}")

@@ -26,10 +26,10 @@ import org.junit.jupiter.api.Assertions;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class FilterSteps {
 
@@ -53,7 +53,7 @@ public class FilterSteps {
 
   @Given("the filter DropWithType with types:")
   public void createFilterDropWithTypeWithTypes(List<String> types) {
-    filter = new DropWithType(types.stream().collect(Collectors.toUnmodifiableSet()));
+    filter = new DropWithType(new HashSet<>(types));
   }
 
   @Given("the filter DropNotWithType")
@@ -63,7 +63,7 @@ public class FilterSteps {
 
   @Given("the filter DropNotWithType with types:")
   public void createFilterDropNotWithTypeWithTypes(List<String> types) {
-    filter = new DropNotWithType(types.stream().collect(Collectors.toUnmodifiableSet()));
+    filter = new DropNotWithType(new HashSet<>(types));
   }
 
   @Given("the filter DropWithTag")
@@ -73,12 +73,12 @@ public class FilterSteps {
 
   @Given("the filter DropWithTag with tags:")
   public void createFilterDropWithTagsWithTags(List<String> tags) {
-    filter = new DropWithTag(tags.stream().collect(Collectors.toUnmodifiableSet()), Collections.emptySet());
+    filter = new DropWithTag(new HashSet<>(tags), Collections.emptySet());
   }
 
   @Given("the filter DropWithTag with tag {word} but keys:")
   public void createFilterDropWithTagsWithTags(String tag, List<String> keys) {
-    filter = new DropWithTag(Set.of(tag), keys.stream().collect(Collectors.toUnmodifiableSet()));
+    filter = new DropWithTag(Set.of(tag), new HashSet<>(keys));
   }
 
   @Given("the filter DropWithKey")
@@ -88,7 +88,7 @@ public class FilterSteps {
 
   @Given("the filter DropWithKey with keys:")
   public void createFilterDropWithKeysWithKeys(List<String> keys) {
-    filter = new DropWithKey(keys.stream().collect(Collectors.toUnmodifiableSet()));
+    filter = new DropWithKey(new HashSet<>(keys));
   }
 
   @When("I pass the rules to the filter")
