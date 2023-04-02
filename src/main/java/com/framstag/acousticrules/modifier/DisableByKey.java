@@ -40,7 +40,7 @@ public class DisableByKey extends AbstractModifier {
     if (keys.size() == 1) {
       header = "Disabled rule with key ";
     } else {
-      header = "Disable rules with keys ";
+      header = "Disabled rules with keys ";
     }
 
     return header +
