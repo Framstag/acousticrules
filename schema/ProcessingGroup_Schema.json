@@ -1,0 +1,25 @@
+{
+    "$id": "https://github.com/Framstag/acousticrules/ProcessingGroup_Schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "AcousticRules ProcessingGroup Schema",
+    "type": "object",
+    "required": ["name"],
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "selectors": {
+            "type":"array",
+            "items": {
+                "type": "object",
+                "$ref": "https://github.com/Framstag/acousticrules/Selector_Schema.json"
+            }
+        },
+        "filters": {
+            "type":"array",
+            "items": {
+                "$ref": "https://github.com/Framstag/acousticrules/Filter_Schema.json"
+            }
+        }
+    }
+}

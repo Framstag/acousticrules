@@ -1,0 +1,132 @@
+{
+    "$id": "https://github.com/Framstag/acousticrules/Modifier_Schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "AcousticRules Modifier Schema",
+    "type": "object",
+    "required": ["@processor"],
+    "properties": {
+        "@processor": {
+            "enum": [
+                "ChangeSeverity",
+                "SetSeverity",
+                "DisableByKey",
+                "SetParamForKey"
+            ]
+        },
+        "reason": {
+            "type": "string"
+        }
+    },
+    "allOf": [
+        {
+            "if": {
+                "properties": {
+                    "@processor": {
+                        "const": "ChangeSeverity"
+                    }
+                }
+            },
+            "then": {
+                "type": "object",
+                "$ref": "#/$defs/ChangeSeverity"
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "@processor": {
+                        "const": "SetSeverity"
+                    }
+                }
+            },
+            "then": {
+                "type": "object",
+                "$ref": "#/$defs/SetSeverity"
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "@processor": {
+                        "const": "DisableByKey"
+                    }
+                }
+            },
+            "then": {
+                "type": "object",
+                "$ref": "#/$defs/DisableByKey"
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "@processor": {
+                        "const": "SetParamForKey"
+                    }
+                }
+            },
+            "then": {
+                "type": "object",
+                "$ref": "#/$defs/SetParamForKey"
+            }
+        }
+    ],
+    "$defs": {
+        "ChangeSeverity": {
+            "type": "object",
+            "required": ["from", "to"],
+            "properties": {
+                "from": {
+                    "type": "string"
+                },
+                "to": {
+                    "type": "string"
+                }
+
+            }
+        },
+        "SetSeverity": {
+            "type": "object",
+            "required": ["keys", "to"],
+            "properties": {
+                "keys": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "to": {
+                    "type": "string"
+                }
+
+            }
+        },
+        "DisableByKey": {
+            "type": "object",
+            "required": ["keys"],
+            "properties": {
+                "keys": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "SetParamForKey": {
+            "type": "object",
+            "required": ["key","param","value"],
+            "properties": {
+                "key": {
+                    "type": "string"
+                },
+                "param": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
