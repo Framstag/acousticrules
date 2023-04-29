@@ -18,5 +18,6 @@ package com.framstag.acousticrules.rules;
 
 public enum Status {
   DEPRECATED,
+  BETA,
   READY
 }

@@ -13,7 +13,8 @@
     {
       "@processor": "DropWithType",
       "types": [
-        "BUG"
+        "BUG",
+        "VULNERABILITY"
       ]
     },
     {
