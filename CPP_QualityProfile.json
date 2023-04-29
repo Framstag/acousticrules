@@ -79,7 +79,8 @@
           "reason": "We do not restrict the use of // or /* ... */ commands",
           "keys": [
             "cpp:S1708",
-            "cpp:S139"
+            "cpp:S139",
+            "cpp:S1917"
           ]
         },
         {
@@ -184,12 +185,11 @@
           "to": "MAJOR"
         },
         {
-          "@processor": "SetSeverity",
-          "reason": "For normal getters this does not have any side-effects, reduce severity",
+          "@processor": "DisableByKey",
+          "reason": "For normal getters this does not have any side-effects, we are dropping it, because there are too many unhelpful positives",
           "keys": [
             "cpp:S6007"
-          ],
-          "to": "INFO"
+          ]
         }
       ]
     },
@@ -219,6 +219,13 @@
             "cpp:S3656"
           ],
           "to": "MAJOR"
+        },
+        {
+          "@processor": "DisableByKey",
+          "reason": "In general we do not want implicit conversion, but want to work with explicit types. Fried operators thus will be more of an exception than the default.",
+          "keys": [
+            "cpp:S2807"
+          ]
         }
       ]
     },
@@ -258,7 +265,9 @@
           "keys": [
             "cpp:S1117",
             "cpp:S1005",
-            "cpp:S909"
+            "cpp:S909",
+            "cpp:S868",
+            "cpp:S126"
           ]
         },
         {
