@@ -1,0 +1,99 @@
+{
+    "$id": "https://github.com/Framstag/acousticrules/Selector_Schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "AcousticRules Selector Schema",
+    "type": "object",
+    "required": ["@processor"],
+    "properties": {
+        "@processor": {
+            "enum": [
+                "SelectWithKey",
+                "SelectWithTag",
+                "SelectWithType"
+            ]
+        },
+        "reason": {
+            "type": "string"
+        }
+    },
+    "allOf": [
+        {
+            "if": {
+                "properties": {
+                    "@processor": {
+                        "const": "SelectWithKey"
+                    }
+                }
+            },
+            "then": {
+                "type": "object",
+                "$ref": "#/$defs/SelectWithKey"
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "@processor": {
+                        "const": "SelectWithTag"
+                    }
+                }
+            },
+            "then": {
+                "type": "object",
+                "$ref": "#/$defs/SelectWithTag"
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "@processor": {
+                        "const": "SelectWithType"
+                    }
+                }
+            },
+            "then": {
+                "type": "object",
+                "$ref": "#/$defs/SelectWithTyp"
+            }
+        }
+    ],
+    "$defs": {
+        "SelectWithKey": {
+            "type": "object",
+            "required": ["keys"],
+            "properties": {
+                "keys": {
+                    "key": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "SelectWithTag": {
+            "type": "object",
+            "required": ["tags"],
+            "properties": {
+                "tags": {
+                    "key": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "SelectWithType": {
+            "type": "object",
+            "required": ["types"],
+            "properties": {
+                "types": {
+                    "key": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+
+    }
+}

@@ -1,0 +1,141 @@
+{
+    "$id": "https://github.com/Framstag/acousticrules/Filter_Schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "AcousticRules Filter Schema",
+    "type": "object",
+    "required": ["@processor"],
+    "properties": {
+        "@processor": {
+            "enum": [
+                "DropNotWithType",
+                "DropWithKey",
+                "DropWithTag",
+                "DropWithType",
+                "RemoveDeprecated"
+            ]
+        },
+        "reason": {
+            "type": "string"
+        }
+    },
+    "allOf": [
+        {
+            "if": {
+                "properties": {
+                    "@processor": {
+                        "const": "DropNotWithType"
+                    }
+                }
+            },
+            "then": {
+                "type": "object",
+                "$ref": "#/$defs/DropNotWithType"
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "@processor": {
+                        "const": "DropWithKey"
+                    }
+                }
+            },
+            "then": {
+                "type": "object",
+                "$ref": "#/$defs/DropWithKey"
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "@processor": {
+                        "const": "DropWithTag"
+                    }
+                }
+            },
+            "then": {
+                "type": "object",
+                "$ref": "#/$defs/DropWithTag"
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "@processor": {
+                        "const": "DropWithType"
+                    }
+                }
+            },
+            "then": {
+                "type": "object",
+                "$ref": "#/$defs/DropWithType"
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "@processor": {
+                        "const": "RemoveDeprecated"
+                    }
+                }
+            },
+            "then": {
+                "type": "object",
+                "$ref": "#/$defs/RemoveDeprecated"
+            }
+        }
+    ],
+    "$defs": {
+        "DropNotWithType": {
+            "type": "object",
+            "required": ["types"],
+            "properties": {
+                "types": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "DropWithKey": {
+            "type": "object",
+            "required": ["keys"],
+            "properties": {
+                "keys": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "DropWithTag": {
+            "type": "object",
+            "required": ["tags"],
+            "properties": {
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "DropWithType": {
+            "type": "object",
+            "required": ["types"],
+            "properties": {
+                "types": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "RemoveDeprecated": {
+            "type": "object"
+        }
+    }
+}

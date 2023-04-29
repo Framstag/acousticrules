@@ -1,0 +1,48 @@
+{
+    "$id": "https://github.com/Framstag/acousticrules/QualityProfile_Schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "AcousticRules QualityProfile Schema",
+    "type": "object",
+    "required": ["name", "output_filename", "documentation_filename"],
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "output_filename": {
+            "type": "string"
+        },
+        "documentation_filename": {
+            "type": "string"
+        },
+        "groups": {
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/group"
+            }
+        }
+    },
+    "$defs": {
+        "group": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "filters": {
+                    "type":"array",
+                    "items": {
+                        "$ref": "https://github.com/Framstag/acousticrules/Filter_Schema.json"
+                    }
+                        },
+                "modifier": {
+                    "type":"array",
+                    "items": {
+                        "type": "object",
+                        "$ref": "https://github.com/Framstag/acousticrules/Modifier_Schema.json"
+                    }
+                }
+            }
+        }
+    }
+}
