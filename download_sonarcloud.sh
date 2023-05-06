@@ -11,6 +11,8 @@ ORGANISATION="$2"
 curl -u "$TOKEN:" -o Java_Rules1.json "https://sonarcloud.io/api/rules/search?organization=$ORGANISATION&languages=java&ps=500&p=1"
 curl -u "$TOKEN:" -o Java_Rules2.json "https://sonarcloud.io/api/rules/search?organization=$ORGANISATION&languages=java&ps=500&p=2"
 
+curl -u "$TOKEN:" -o Kotlin_Rules1.json "https://sonarcloud.io/api/rules/search?organization=$ORGANISATION&languages=kotlin&ps=500&p=1"
+
 curl -u "$TOKEN:" -o CPP_Rules1.json "https://sonarcloud.io/api/rules/search?organization=$ORGANISATION&languages=cpp&ps=500&p=1"
 curl -u "$TOKEN:" -o CPP_Rules2.json "https://sonarcloud.io/api/rules/search?organization=$ORGANISATION&languages=cpp&ps=500&p=2"
 

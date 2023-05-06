@@ -19,6 +19,7 @@
     },
     {
       "@processor": "DropWithTag",
+      "reason": "Drop security issues, they have their own category",
       "tags": [
         "cert",
         "cwe"

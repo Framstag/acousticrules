@@ -33,5 +33,7 @@ public interface Rule {
 
   List<String> getSysTags();
 
+  String getLang();
+
   String getRepo();
 }

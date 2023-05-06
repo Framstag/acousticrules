@@ -23,6 +23,9 @@
 -r rules/Java17Improvements.json
 -r rules/Java17Bugs.json
 
+-r rules/KotlinImprovements.json
+-r rules/KotlinBugs.json
+
 -r rules/CPP11Improvements.json
 -r rules/CPP11Bugs.json
 -r rules/CPP14Improvements.json

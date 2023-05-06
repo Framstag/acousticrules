@@ -57,7 +57,8 @@
       "reason": "These are not security issues or have their own group",
       "keys": [
         "cpp:S1917",
-        "typescript:S1874"
+        "typescript:S1874",
+        "kotlin:S1874"
       ]
     },
     {
