@@ -157,6 +157,11 @@ public final class RuleInstance implements CustomizedRule, Comparable<RuleInstan
     return definition.getSysTags();
   }
 
+  @Override
+  public String getLang() {
+    return definition.getLang();
+  }
+
   public String getRepo() {
     return definition.getRepo();
   }

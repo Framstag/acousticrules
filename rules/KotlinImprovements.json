@@ -1,0 +1,43 @@
+{
+  "name": "Kotlin Improvements",
+  "selectors": [
+    {
+      "@processor": "SelectWithLang",
+      "reason": "Select Kotlin-specific rules",
+      "langs": [
+        "kotlin"
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "@processor": "DropWithType",
+      "reason": "Kotlin bugs have their own group",
+      "types": [
+        "BUG"
+      ]
+    },
+    {
+      "@processor": "DropWithTag",
+      "reason": "Drop security issues, they have their own category",
+      "tags": [
+        "cert",
+        "cwe"
+      ]
+    },
+    {
+      "@processor": "DropWithKey",
+      "reason": "These have their own group",
+      "keys": [
+        "kotlin:S1313",
+        "kotlin:S6313",
+        "kotlin:S1133",
+        "kotlin:S6307"
+      ]
+    },
+
+    {
+      "@processor": "RemoveDeprecated"
+    }
+  ]
+}

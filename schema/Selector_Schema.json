@@ -9,7 +9,8 @@
             "enum": [
                 "SelectWithKey",
                 "SelectWithTag",
-                "SelectWithType"
+                "SelectWithType",
+                "SelectWithLang"
             ]
         },
         "reason": {
@@ -55,6 +56,19 @@
                 "type": "object",
                 "$ref": "#/$defs/SelectWithTyp"
             }
+        },
+        {
+            "if": {
+                "properties": {
+                    "@processor": {
+                        "const": "SelectWithLang"
+                    }
+                }
+            },
+            "then": {
+                "type": "object",
+                "$ref": "#/$defs/SelectWithLang"
+            }
         }
     ],
     "$defs": {
@@ -94,6 +108,18 @@
                 }
             }
         }
-
+        ,
+        "SelectWithLang": {
+            "type": "object",
+            "required": ["langs"],
+            "properties": {
+                "types": {
+                    "key": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
     }
 }

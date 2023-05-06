@@ -24,6 +24,7 @@ import jakarta.json.bind.annotation.JsonbTypeInfo;
 @JsonbTypeInfo(key = "@processor", value = {
   @JsonbSubtype(alias = "DropWithTag", type = DropWithTag.class),
   @JsonbSubtype(alias = "DropWithKey", type = DropWithKey.class),
+  @JsonbSubtype(alias = "DropWithLang", type = DropWithLang.class),
   @JsonbSubtype(alias = "DropWithType", type = DropWithType.class),
   @JsonbSubtype(alias = "DropNotWithType", type = DropNotWithType.class),
   @JsonbSubtype(alias = "RemoveDeprecated", type = RemoveDeprecated.class)

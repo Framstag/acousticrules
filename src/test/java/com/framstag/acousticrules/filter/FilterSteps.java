@@ -46,6 +46,16 @@ public class FilterSteps {
     filter = new RemoveDeprecated();
   }
 
+  @Given("the filter DropWithLang")
+  public void createFilterDropWithLang() {
+    filter = new DropWithLang(Collections.emptySet());
+  }
+
+  @Given("the filter DropWithLang with languages:")
+  public void createFilterDropWithLangWithLangs(List<String> langs) {
+    filter = new DropWithLang(new HashSet<>(langs));
+  }
+
   @Given("the filter DropWithType")
   public void createFilterDropWithType() {
     filter = new DropWithType(Collections.emptySet());
@@ -102,9 +112,9 @@ public class FilterSteps {
 
   @Then("The following rule definitions have been filtered out:")
   public void checkFilteredRules(List<String> keys) {
-    for (var key : keys) {
-      Assertions.assertTrue(filteredRules.containsKey(key),"rule with key has to be filtered out");
-    }
+    Assertions.assertArrayEquals(keys.stream().sorted().toArray(),
+      filteredRules.keySet().stream().sorted().toArray(),
+      "Filtered rules must exactly match");
   }
 
   @Then("no rule definitions have been filtered out")

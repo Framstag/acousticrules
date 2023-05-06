@@ -9,6 +9,7 @@
             "enum": [
                 "DropNotWithType",
                 "DropWithKey",
+                "DropWithLang",
                 "DropWithTag",
                 "DropWithType",
                 "RemoveDeprecated"
@@ -19,6 +20,19 @@
         }
     },
     "allOf": [
+        {
+            "if": {
+                "properties": {
+                    "@processor": {
+                        "const": "DropNotWithLang"
+                    }
+                }
+            },
+            "then": {
+                "type": "object",
+                "$ref": "#/$defs/DropNotWithLang"
+            }
+        },
         {
             "if": {
                 "properties": {
@@ -86,6 +100,18 @@
         }
     ],
     "$defs": {
+        "DropWithLang": {
+            "type": "object",
+            "required": ["langs"],
+            "properties": {
+                "lags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
         "DropNotWithType": {
             "type": "object",
             "required": ["types"],

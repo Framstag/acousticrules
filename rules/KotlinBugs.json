@@ -1,18 +1,18 @@
 {
-  "name": "Java 8 Improvements",
+  "name": "Kotlin Bugs",
   "selectors": [
     {
-      "@processor": "SelectWithTag",
-      "reason": "Select JDK specific rules",
-      "tags": [
-        "java8"
+      "@processor": "SelectWithLang",
+      "reason": "Select Kotlin-specific rules",
+      "langs": [
+        "kotlin"
       ]
     }
   ],
   "filters": [
     {
-      "@processor": "DropWithType",
-      "reason": "JDK-specific bugs have their own group",
+      "@processor": "DropNotWithType",
+      "reason": "JDK specific bugs have their own group",
       "types": [
         "BUG"
       ]

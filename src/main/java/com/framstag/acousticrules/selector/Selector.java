@@ -24,7 +24,8 @@ import jakarta.json.bind.annotation.JsonbTypeInfo;
 @JsonbTypeInfo(key = "@processor", value = {
   @JsonbSubtype(alias = "SelectWithKey", type = SelectWithKey.class),
   @JsonbSubtype(alias = "SelectWithTag", type = SelectWithTag.class),
-  @JsonbSubtype(alias = "SelectWithType", type = SelectWithType.class)
+  @JsonbSubtype(alias = "SelectWithType", type = SelectWithType.class),
+  @JsonbSubtype(alias = "SelectWithLang", type = SelectWithLang.class)
 })
 public interface Selector {
   boolean hasReason();

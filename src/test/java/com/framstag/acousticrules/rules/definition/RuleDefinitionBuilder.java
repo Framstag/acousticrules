@@ -30,6 +30,7 @@ public class RuleDefinitionBuilder {
   private final List<String> sysTags = new LinkedList<>();
   private String key="";
   private String type="";
+  private String lang="";
 
   private Status status = Status.READY;
 
@@ -55,6 +56,12 @@ public class RuleDefinitionBuilder {
     return this;
   }
 
+  public RuleDefinitionBuilder withLang(String lang) {
+    this.lang = lang;
+
+    return this;
+  }
+
   public RuleDefinitionBuilder isDeprecated() {
     this.status = Status.DEPRECATED;
 
@@ -67,7 +74,7 @@ public class RuleDefinitionBuilder {
       "",
       Severity.BLOCKER,
       status,
-      "",
+      lang,
       type,
       sysTags,
       Collections.emptySet()

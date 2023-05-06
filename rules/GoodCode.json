@@ -84,28 +84,12 @@
       ]
     },
     {
-      "@processor": "DropWithTag",
-      "reason": "JDKs have their own group",
-      "tags": [
-        "java8",
-        "java9",
-        "java10",
-        "java11",
-        "java12",
-        "java14",
-        "java15",
-        "java16",
-        "java17"
-      ]
-    },
-    {
-      "@processor": "DropWithTag",
-      "reason": "C++ language versions have their own group",
-      "tags": [
-        "since-c++11",
-        "since-c++14",
-        "since-c++17",
-        "since-c++20"
+      "@processor": "DropWithLang",
+      "reason": "Languages have their own group",
+      "langs": [
+        "java",
+        "cpp",
+        "kotlin"
       ]
     },
     {

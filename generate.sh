@@ -6,6 +6,8 @@ $PROGRAM --stopOnDuplicates @rules_import.options -q CPP_QualityProfile.json CPP
 
 $PROGRAM --stopOnDuplicates @rules_import.options -q Java_QualityProfile.json Java_Rules1.json Java_Rules2.json
 
+$PROGRAM --stopOnDuplicates @rules_import.options -q Kotlin_QualityProfile.json Kotlin_Rules1.json
+
 $PROGRAM --stopOnDuplicates @rules_import.options -q TypeScript_QualityProfile.json TypeScript_Rules1.json
 
 $PROGRAM --stopOnDuplicates @rules_import.options -q XML_QualityProfile.json XML_Rules1.json

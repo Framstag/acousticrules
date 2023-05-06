@@ -35,6 +35,15 @@ public class RuleDefinitionBuilderSteps {
     ruledefinitions.rules.add(rule);
   }
 
+  @Given("a rule definition {word} of language {word}")
+  public void ruleWithIdAndLang(String id, String lang) {
+    var rule = new RuleDefinitionBuilder()
+      .withKey(id)
+      .withLang(lang)
+      .build();
+    ruledefinitions.rules.add(rule);
+  }
+
   @Given("a rule definition {word} of type {word}")
   public void ruleWithIdAndType(String id, String type) {
     var rule = new RuleDefinitionBuilder()
