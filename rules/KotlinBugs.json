@@ -1,0 +1,32 @@
+{
+  "name": "Kotlin Bugs",
+  "selectors": [
+    {
+      "@processor": "SelectWithLang",
+      "reason": "Select Kotlin-specific rules",
+      "langs": [
+        "kotlin"
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "@processor": "DropNotWithType",
+      "reason": "JDK specific bugs have their own group",
+      "types": [
+        "BUG"
+      ]
+    },
+    {
+      "@processor": "DropWithTag",
+      "reason": "Drop security issues, they have their own category",
+      "tags": [
+        "cert",
+        "cwe"
+      ]
+    },
+    {
+      "@processor": "RemoveDeprecated"
+    }
+  ]
+}
