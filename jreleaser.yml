@@ -37,6 +37,7 @@ release:
   github:
     owner: Framstag
     overwrite: true
+    catalogs: true
     issues:
       enabled: true
     changelog:
