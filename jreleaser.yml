@@ -27,11 +27,10 @@ project:
 
 catalog:
   sbom:
-    cyclonedx:
-      acousticrules:
-        active: ALWAYS
-        pack:
-          enabled: true
+    syft:
+      active: ALWAYS
+      pack:
+        enabled: true
 
 release:
   github:
