@@ -27,7 +27,7 @@
 
   <groupId>com.framstag</groupId>
   <artifactId>acousticrules</artifactId>
-  <version>1.1.1-SNAPSHOT</version>
+  <version>1.2.1-SNAPSHOT</version>
 
   <packaging>jar</packaging>
 
