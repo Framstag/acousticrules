@@ -27,7 +27,7 @@ project:
 
 catalog:
   sbom:
-    syft:
+    cyclonedx:
       active: ALWAYS
       pack:
         enabled: true
