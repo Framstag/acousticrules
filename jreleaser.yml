@@ -25,6 +25,14 @@ project:
     fullChangelog: true
     label: latest
 
+catalog:
+  sbom:
+    cyclonedx:
+      app:
+        active: ALWAYS
+        pack:
+          enabled: true
+
 release:
   github:
     owner: Framstag
