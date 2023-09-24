@@ -1,3 +1,4 @@
+@filter
 Feature: The RemoveDeprecated filter works as expected
   The RemoveDeprecated filter removes deprecated rules
   and no other rules.

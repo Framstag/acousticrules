@@ -1,3 +1,4 @@
+@modifier
 Feature: The DisableByKey Modifier disables rules with a given key
 
   Scenario: Disables rules with one of the given keys

@@ -1,3 +1,4 @@
+@filter
 Feature: The DropWithType filter works as expected
   The DropWithType filter should remove rules with one
   of the given types.

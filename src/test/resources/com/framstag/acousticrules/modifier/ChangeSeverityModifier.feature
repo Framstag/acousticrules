@@ -1,3 +1,4 @@
+@modifier
 Feature: The ChangeSeverityModifier changes the severity
   for all passed customized rules with severity `from`
   to severity `to`

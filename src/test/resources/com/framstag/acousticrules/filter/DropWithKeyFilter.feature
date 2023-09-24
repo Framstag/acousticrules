@@ -1,3 +1,4 @@
+@filter
 Feature: The DropWithKey filter works as expected
   The DropWithKey filter should remove rules with one
   of the given keys.

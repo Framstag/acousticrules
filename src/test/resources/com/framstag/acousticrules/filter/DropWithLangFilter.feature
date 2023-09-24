@@ -1,3 +1,4 @@
+@filter
 Feature: The DropWithLang filter works as expected
   The DropWithLang filter should remove rules with one
   of the given types.

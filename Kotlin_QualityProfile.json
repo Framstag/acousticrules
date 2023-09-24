@@ -66,6 +66,13 @@
           "reason": "Our code should reflect good use of the JDK",
           "from": "MINOR",
           "to": "MAJOR"
+        },
+        {
+          "@processor": "DisableByKey",
+          "reason": "No copyright header",
+          "keys": [
+            "kotlin:S1451"
+          ]
         }
       ]
     },

@@ -1,3 +1,4 @@
+@filter
 Feature: The DropWithTag filter works as expected
   The DropWithTag filter should remove rules with one
   of the given tags.

@@ -1,3 +1,4 @@
+@modifier
 Feature: The SetSeverity modifier changes the severity
   for rules referenced by key to severity `to`
 
