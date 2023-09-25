@@ -31,6 +31,8 @@
 /HTML_QualityProfile.xml
 /Java_QualityProfile.md
 /Java_QualityProfile.xml
+/Kotlin_QualityProfile.md
+/Kotlin_QualityProfile.xml
 /TypeScript_QualityProfile.md
 /TypeScript_QualityProfile.xml
 /XML_QualityProfile.md
@@ -41,3 +43,6 @@
 
 # JReleaser output
 /out
+
+# VisualStudioCode
+.vscode
