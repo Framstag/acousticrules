@@ -15,7 +15,7 @@ The main dependencies are as follows:
 This is the complete dependency tree:
 
 [[build:MavenDependencies]]
-[source,cypher,role=concept, requiresConcepts="dependency:Package", reportType="plantuml-component-diagram"]
+[source,cypher,role=concept, requiresConcepts="java:PackageDependency", reportType="plantuml-component-diagram"]
 .Build Dependency Tree
 ----
 MATCH

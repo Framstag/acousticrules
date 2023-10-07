@@ -6,7 +6,7 @@
 There should be no dependency cycles between packages:
 
 [[architecture:NoCyclicPackageDependencies]]
-[source,cypher,severity=major,role=constraint,requiresConcepts="dependency:Package"]
+[source,cypher,severity=major,role=constraint,requiresConcepts="java:PackageDependency"]
 .No cyclic package dependencies
 ----
 MATCH
@@ -23,7 +23,7 @@ ORDER BY
 There must be no dependency cycles between artifacts:
 
 [[architecture:NoCyclicArtefactDependencies]]
-[source,cypher,severity=blocker,role=constraint,severity="BLOCKER",requiresConcepts="dependency:Artifact,packages:Module"]
+[source,cypher,severity=blocker,role=constraint,severity="BLOCKER",requiresConcepts="java:ArtifactDependency,packages:Module"]
 .No cyclic artifact dependencies
 ----
 MATCH
