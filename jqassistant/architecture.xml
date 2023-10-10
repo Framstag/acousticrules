@@ -1,0 +1,128 @@
+<!--
+  ~ AcousticRuler
+  ~ Copyright 2023 Tim Teulings
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<jqassistant-rules
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://schema.jqassistant.org/rule/v2.0"
+        xsi:schemaLocation="http://schema.jqassistant.org/rule/v2.0 https://schema.jqassistant.org/rule/jqassistant-rule-v2.0.xsd">
+
+    <group id="architecture">
+        <includeConstraint refId="architecture:NoCyclicPackageDependencies"/>
+        <includeConstraint refId="architecture:NoCyclicArtefactDependencies"/>
+        <!--<includeConstraint refId="architecture:NoCyclicModuleDependencies"/>-->
+        <includeConstraint refId="architecture:OnlyModuleCliDependesOnPicoCli"/>
+        <includeConstraint refId="architecture:OnlyRepositoryMayUseJsonbBuilder"/>
+        <includeConstraint refId="architecture:JsonbAnnotationEveryWhere"/>
+        <includeConstraint refId="architecture:NoDeactivatedTests"/>
+    </group>
+
+    <constraint id="architecture:NoCyclicPackageDependencies" severity="blocker">
+        <requiresConcept refId="java:PackageDependency" />
+        <description>No cyclic package dependencies</description>
+        <cypher><![CDATA[
+MATCH
+    (p1:Package)-[:DEPENDS_ON]->(p2:Package),
+    path=shortestPath((p2)-[:DEPENDS_ON*]->(p1))
+WHERE
+    p1<>p2
+RETURN
+    p1 as Package, nodes(path) as Cycle
+ORDER BY
+    Package.fqn
+    ]]></cypher>
+    </constraint>
+
+    <constraint id="architecture:NoCyclicArtefactDependencies" severity="blocker">
+        <requiresConcept refId="java:ArtifactDependency" />
+        <description>No cyclic artifact dependencies</description>
+        <cypher><![CDATA[
+MATCH
+    (a1:Artifact)-[:DEPENDS_ON]->(a2:Artifact),
+    path=shortestPath((a2)-[:DEPENDS_ON*]->(a1))
+WHERE
+    a1<>a2
+RETURN
+    a1 as Artifact, nodes(path) as Cycle
+ORDER BY
+    Artifact.fqn
+    ]]></cypher>
+    </constraint>
+
+    <constraint id="architecture:NoCyclicModuleDependencies" severity="blocker">
+        <requiresConcept refId="packages:Module" />
+        <description>No cyclic module dependencies</description>
+        <cypher><![CDATA[
+MATCH
+    (module1:Module)-[:DEPENDS_ON]->(module2:Module),
+    path=shortestPath((m2)-[:DEPENDS_ON*]->(m1))
+WHERE
+    m1<>m2
+RETURN
+    m1 as Module, nodes(path) as Cycle
+ORDER BY
+    Module.fqn
+    ]]></cypher>
+    </constraint>
+
+    <constraint id="architecture:OnlyModuleCliDependesOnPicoCli" severity="blocker">
+        <requiresConcept refId="packages:Module" />
+        <description>Only the `cli` module is allowed to use `picocli`</description>
+        <cypher><![CDATA[
+MATCH (module:Module) -[:CONTAINS]-> (moduleType:Type) -[:DEPENDS_ON] -> (type:Type)
+WHERE
+  type.fqn STARTS WITH "picocli."
+  AND module.name <> "cli"
+RETURN module,moduleType
+    ]]></cypher>
+    </constraint>
+
+    <constraint id="architecture:OnlyRepositoryMayUseJsonbBuilder" severity="blocker">
+        <requiresConcept refId="packages:Module" />
+        <description>Only repositories may use JsonbBuilder</description>
+        <cypher><![CDATA[
+MATCH
+(repository:Type) -[:DEPENDS_ON]-> (yysonType:Type)
+WHERE
+yysonType.fqn = "jakarta.json.bind.JsonbBuilder"
+AND NOT repository.name ENDS WITH "Repository"
+RETURN repository
+    ]]></cypher>
+    </constraint>
+
+    <constraint id="architecture:JsonbAnnotationEveryWhere" severity="blocker">
+        <description>Jsonb annotation can be use everywhere</description>
+        <cypher><![CDATA[
+MATCH
+(class:Type) -[:DEPENDS_ON]-> (yysonType:Type)
+WHERE
+yysonType.fqn STARTS WITH "jakarta.json."
+AND NOT yysonType.fqn STARTS WITH "jakarta.json.bind.annotation."
+AND NOT class.name ENDS WITH "Repository"
+RETURN class
+    ]]></cypher>
+    </constraint>
+
+    <constraint id="architecture:NoDeactivatedTests" severity="blocker">
+        <requiresConcept refId="packages:Module" />
+        <description>No deactivated tests</description>
+        <cypher><![CDATA[
+MATCH (c:Class)-[:DEPENDS_ON*]->(a:Type)
+WHERE a.fqn = "org.junit.jupiter.api.Disabled"
+RETURN c
+    ]]></cypher>
+    </constraint>
+</jqassistant-rules>

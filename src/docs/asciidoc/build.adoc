@@ -1,0 +1,14 @@
+=== Maven Build dependencies
+
+AcousticRules uses Maven as build tool.
+
+The main dependencies are as follows:
+
+- A JSON parser (yyson)
+- A command line argument parser (picocli)
+- A Logging framework (SLF4J + logback)
+- A Unit Test framework (JUnit 5)
+
+This is the complete dependency tree:
+
+include::jQAssistant:Rules[concepts="build:MavenDependencies", leveloffset=+3]

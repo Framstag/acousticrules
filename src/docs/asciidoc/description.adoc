@@ -1,0 +1,12 @@
+[[description:Default]]
+
+AcousticRules uses a `@Description` annotation to
+"tunnel" documentation to JQAssistant.
+
+The following Types are documented this way:
+
+include::jQAssistant:Rules[concepts="description:TypeDescription", leveloffset=+1]
+
+The following packages are documented this way, too:
+
+include::jQAssistant:Rules[concepts="description:PackageDescription", leveloffset=+1]

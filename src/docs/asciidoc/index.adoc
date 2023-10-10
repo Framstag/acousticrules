@@ -4,7 +4,6 @@
 == Index
 
 [[default]]
-[role=group,includesGroups="architecture:Default,build:Default,description:Default,packages:Default,filter:Default,selector:Default,modifier:Default,logging:Default,metrics:Default"]
 - <<acousticrules.build>>
 - <<acousticrules.description>>
 - <<acousticrules.packages>>
@@ -59,4 +58,4 @@ include::metrics.adoc[]
 [[acousticrules.summary]]
 == All Concepts and Constraints
 
-include::jQA:Summary[]
+include::jQAssistant:Summary[constraints="architecture:*,build:*,description:*,filter:*,logging:*,metrics:*,modifier:*,packages:*,selector:*", concepts="architecture:*,build:*,description:*,filter:*,logging:*,metrics:*,modifier:*,packages:*,selector:*", leveloffset=+1]

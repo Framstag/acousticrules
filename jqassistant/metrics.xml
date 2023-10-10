@@ -1,0 +1,101 @@
+<!--
+  ~ AcousticRuler
+  ~ Copyright 2023 Tim Teulings
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<jqassistant-rules
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://schema.jqassistant.org/rule/v2.0"
+        xsi:schemaLocation="http://schema.jqassistant.org/rule/v2.0 https://schema.jqassistant.org/rule/jqassistant-rule-v2.0.xsd">
+
+    <group id="metrics">
+        <includeConcept refId="metrics:ClassesWithMostMethods"/>
+        <includeConcept refId="metrics:ClassesWithDeepestInheritance"/>
+        <includeConcept refId="metrics:ClassesWithMostRelations"/>
+        <includeConcept refId="metrics:MethodsWithMostParameter"/>
+        <includeConcept refId="metrics:ClassesWithMostLoC"/>
+        <includeConcept refId="metrics:ClassesWithMostCC"/>
+    </group>
+
+    <concept id="metrics:ClassesWithMostMethods">
+        <description>List of first 20 classes with the most methods</description>
+        <cypher><![CDATA[
+MATCH (class:Class)-[:DECLARES]->(method:Method)
+RETURN
+class.fqn, COUNT(method) AS Methods
+ORDER BY
+Methods DESC
+LIMIT 20
+    ]]></cypher>
+    </concept>
+
+    <concept id="metrics:ClassesWithDeepestInheritance">
+        <description>List of first 20 classes with the deepest inheritance hierarchy</description>
+        <cypher><![CDATA[
+MATCH p=(class:Class)-[:EXTENDS*]->(super:Type)
+RETURN class.fqn, LENGTH(p) AS Depth
+ORDER BY Depth DESC
+LIMIT 20
+    ]]></cypher>
+    </concept>
+
+    <concept id="metrics:ClassesWithMostRelations">
+        <description>List of first 20 classes with the most relations</description>
+        <cypher><![CDATA[
+MATCH (c:Class)-[r]-()
+RETURN c.fqn, COUNT(r) AS relations
+ORDER BY relations DESC
+LIMIT 20
+    ]]></cypher>
+    </concept>
+
+    <concept id="metrics:MethodsWithMostParameter">
+        <description>List of first 20 methods with the most parameter</description>
+        <cypher><![CDATA[
+MATCH (class:Class)-[:DECLARES]->(m:Method)-[params:HAS]->(p:Parameter)
+RETURN class.fqn, m.name, COUNT(params) AS paramCount
+ORDER BY paramCount DESC
+LIMIT 20
+    ]]></cypher>
+    </concept>
+
+    <concept id="metrics:ClassesWithMostLoC">
+        <description>List of first 20 classes with the most lines of code</description>
+        <cypher><![CDATA[
+MATCH
+(:Artifact)-[:CONTAINS]->(type:Type)-[:DECLARES]->(method:Method)
+RETURN
+type.fqn AS Type, sum(method.effectiveLineCount) AS LoC
+ORDER BY
+LoC DESC
+LIMIT
+20
+    ]]></cypher>
+    </concept>
+
+    <concept id="metrics:ClassesWithMostCC">
+        <description>List of first 20 classes with the highest cyclomatic complexity</description>
+        <cypher><![CDATA[
+MATCH
+(:Artifact)-[:CONTAINS]->(type:Type)-[:DECLARES]->(method:Method)
+RETURN
+type.fqn AS Type, sum(method.cyclomaticComplexity) AS CC
+ORDER BY
+CC DESC
+LIMIT
+20
+    ]]></cypher>
+    </concept>
+</jqassistant-rules>

@@ -80,7 +80,9 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: JQAssistant-Report
-          path: target/jqassistant/report
+          path: |
+            target/generated-docs/index.html
+            target/generated-docs/*.svg
 
       - name: Upload Cucumber Report
         uses: actions/upload-artifact@v3
