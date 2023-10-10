@@ -22,6 +22,8 @@
 
     <group id="build">
         <includeConcept refId="build:MavenDependencies"/>
+        <includeConcept refId="build:ProjectVersion"/>
+        <includeConcept refId="build:MavenDependenciesVersion"/>
     </group>
 
     <concept id="build:MavenDependencies">
@@ -29,12 +31,41 @@
         <description>Build Dependency Tree</description>
         <cypher><![CDATA[
     MATCH
-    (:Maven:Project)-[:CREATES]->(artifact:Artifact)
+      (:Maven:Project)-[:CREATES]->(artifact:Artifact)
     OPTIONAL MATCH
-    (artifact)-[dependsOn:DEPENDS_ON]->(dependency:Artifact)
+      (artifact)-[dependsOn:DEPENDS_ON]->(dependency:Artifact)
     RETURN
-    *
+      *
     ]]></cypher>
         <report type="plantuml-component-diagram"/>
+    </concept>
+
+    <concept id="build:ProjectVersion">
+        <description>Return the current project version</description>
+        <cypher><![CDATA[
+    MATCH
+      (project:Maven:Project)
+    RETURN
+      project.version
+    ]]></cypher>
+    </concept>
+
+
+    <concept id="build:MavenDependenciesVersion">
+        <description>Return the version of all dependencies</description>
+        <cypher><![CDATA[
+    MATCH
+      (project:Maven:Project)-[:CREATES]->(artifact:Artifact)
+    OPTIONAL MATCH
+      (artifact)-[dependsOn:DEPENDS_ON]->(dependency:Artifact WHERE dependency.group <> project.groupId AND dependency.name <> project.artifactId)
+    RETURN
+      dependency.group AS Group, dependency.name AS Name, dependency.version AS Version,
+      CASE artifact.type
+        WHEN "jar" THEN "main"
+        WHEN "test-jar" THEN "test"
+      END AS type
+    ORDER BY
+      type, dependency.group, dependency.name
+    ]]></cypher>
     </concept>
 </jqassistant-rules>

@@ -21,14 +21,50 @@
         xsi:schemaLocation="http://schema.jqassistant.org/rule/v2.0 https://schema.jqassistant.org/rule/jqassistant-rule-v2.0.xsd">
 
     <group id="architecture">
-        <includeConstraint refId="architecture:NoCyclicPackageDependencies"/>
+        <includeConcept refId="architecture:EfferentModuleDependencies"/>
+        <includeConcept refId="architecture:AfferentModuleDependencies"/>
+
         <includeConstraint refId="architecture:NoCyclicArtefactDependencies"/>
-        <!--<includeConstraint refId="architecture:NoCyclicModuleDependencies"/>-->
+        <includeConstraint refId="architecture:NoCyclicPackageDependencies"/>
+        <includeConstraint refId="architecture:NoCyclicModuleDependencies"/>
+
         <includeConstraint refId="architecture:OnlyModuleCliDependesOnPicoCli"/>
+
         <includeConstraint refId="architecture:OnlyRepositoryMayUseJsonbBuilder"/>
         <includeConstraint refId="architecture:JsonbAnnotationEveryWhere"/>
+
         <includeConstraint refId="architecture:NoDeactivatedTests"/>
     </group>
+
+    <concept id="architecture:EfferentModuleDependencies">
+        <requiresConcept refId="java:PackageDependency" />
+        <description>Outgoing dependencies from one module to all others</description>
+        <cypher><![CDATA[
+MATCH
+    (module1:Module)-[depends:DEPENDS_ON]->(module2:Module)
+WHERE
+    module1<>module2
+RETURN
+    module1.fqn, count(module2) AS Count, collect(module2.fqn) AS Dependencies
+ORDER BY
+    module1.fqn
+    ]]></cypher>
+    </concept>
+
+    <concept id="architecture:AfferentModuleDependencies">
+        <requiresConcept refId="java:PackageDependency" />
+        <description>Incoming dependencies of one module from all others</description>
+        <cypher><![CDATA[
+MATCH
+    (module1:Module)-[depends:DEPENDS_ON]->(module2:Module)
+WHERE
+    module1<>module2
+RETURN
+    module2.fqn, COUNT(module1) AS Count, collect(module1.fqn) AS Dependencies
+ORDER BY
+    module2.fqn
+    ]]></cypher>
+    </concept>
 
     <constraint id="architecture:NoCyclicPackageDependencies" severity="blocker">
         <requiresConcept refId="java:PackageDependency" />
@@ -68,11 +104,11 @@ ORDER BY
         <cypher><![CDATA[
 MATCH
     (module1:Module)-[:DEPENDS_ON]->(module2:Module),
-    path=shortestPath((m2)-[:DEPENDS_ON*]->(m1))
+    path=shortestPath((module2)-[:DEPENDS_ON*]->(module1))
 WHERE
-    m1<>m2
+    module1<>module2
 RETURN
-    m1 as Module, nodes(path) as Cycle
+    module1 as Module, nodes(path) as Cycle
 ORDER BY
     Module.fqn
     ]]></cypher>
@@ -82,11 +118,13 @@ ORDER BY
         <requiresConcept refId="packages:Module" />
         <description>Only the `cli` module is allowed to use `picocli`</description>
         <cypher><![CDATA[
-MATCH (module:Module) -[:CONTAINS]-> (moduleType:Type) -[:DEPENDS_ON] -> (type:Type)
+MATCH
+  (module:Module) -[:CONTAINS]-> (moduleType:Type) -[:DEPENDS_ON] -> (type:Type)
 WHERE
   type.fqn STARTS WITH "picocli."
   AND module.name <> "cli"
-RETURN module,moduleType
+RETURN
+   module,moduleType
     ]]></cypher>
     </constraint>
 
@@ -95,11 +133,12 @@ RETURN module,moduleType
         <description>Only repositories may use JsonbBuilder</description>
         <cypher><![CDATA[
 MATCH
-(repository:Type) -[:DEPENDS_ON]-> (yysonType:Type)
+  (repository:Type) -[:DEPENDS_ON]-> (yysonType:Type)
 WHERE
-yysonType.fqn = "jakarta.json.bind.JsonbBuilder"
-AND NOT repository.name ENDS WITH "Repository"
-RETURN repository
+  yysonType.fqn = "jakarta.json.bind.JsonbBuilder"
+  AND NOT repository.name ENDS WITH "Repository"
+RETURN
+  repository
     ]]></cypher>
     </constraint>
 
@@ -107,12 +146,13 @@ RETURN repository
         <description>Jsonb annotation can be use everywhere</description>
         <cypher><![CDATA[
 MATCH
-(class:Type) -[:DEPENDS_ON]-> (yysonType:Type)
+  (class:Type) -[:DEPENDS_ON]-> (yysonType:Type)
 WHERE
-yysonType.fqn STARTS WITH "jakarta.json."
-AND NOT yysonType.fqn STARTS WITH "jakarta.json.bind.annotation."
-AND NOT class.name ENDS WITH "Repository"
-RETURN class
+  yysonType.fqn STARTS WITH "jakarta.json."
+  AND NOT yysonType.fqn STARTS WITH "jakarta.json.bind.annotation."
+  AND NOT class.name ENDS WITH "Repository"
+RETURN
+  class
     ]]></cypher>
     </constraint>
 
@@ -120,8 +160,10 @@ RETURN class
         <requiresConcept refId="packages:Module" />
         <description>No deactivated tests</description>
         <cypher><![CDATA[
-MATCH (c:Class)-[:DEPENDS_ON*]->(a:Type)
-WHERE a.fqn = "org.junit.jupiter.api.Disabled"
+MATCH
+   (c:Class)-[:DEPENDS_ON*]->(a:Type)
+WHERE
+   a.fqn = "org.junit.jupiter.api.Disabled"
 RETURN c
     ]]></cypher>
     </constraint>

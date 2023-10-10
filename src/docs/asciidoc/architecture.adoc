@@ -1,43 +1,53 @@
 === Cyclic Dependencies
 
+There must be no dependency cycles between modules:
+
+include::jQAssistant:Rules[constraints="architecture:NoCyclicModuleDependencies", leveloffset=+3]
+
 There should be no dependency cycles between packages:
 
-include::jQAssistant:Rules[constraints="architecture:NoCyclicPackageDependencies", leveloffset=+1]
+include::jQAssistant:Rules[constraints="architecture:NoCyclicPackageDependencies", leveloffset=+3]
 
 There must be no dependency cycles between artifacts:
 
-include::jQAssistant:Rules[constraints="architecture:NoCyclicArtefactDependencies", leveloffset=+1]
-
-There must be no dependency cycles between modules:
-
-include::jQAssistant:Rules[constraints="architecture:NoCyclicModuleDependencies", leveloffset=+1]
+include::jQAssistant:Rules[constraints="architecture:NoCyclicArtefactDependencies", leveloffset=+3]
 
 === Dependency Usage
+
+=== Afferent and efferent module dependencies
+
+Efferent dependencies of modules:
+
+include::jQAssistant:Rules[concepts="architecture:EfferentModuleDependencies", leveloffset=+3]
+
+Afferent dependencies of modules:
+
+include::jQAssistant:Rules[concepts="architecture:AfferentModuleDependencies", leveloffset=+3]
 
 ==== PicoCLI
 
 Only the `cli` module is allowed to have
 dependencies on `picocli`:
 
-include::jQAssistant:Rules[constraints="architecture:OnlyModuleCliDependesOnPicoCli", leveloffset=+1]
+include::jQAssistant:Rules[constraints="architecture:OnlyModuleCliDependesOnPicoCli", leveloffset=+3]
 
 ==== Jsonb/yyson
 
 Only repository classes are allowed to use
 JsonbBuilder (and thus are allowed to load JSON files):
 
-include::jQAssistant:Rules[constraints="architecture:OnlyRepositoryMayUseJsonbBuilder", leveloffset=+1]
+include::jQAssistant:Rules[constraints="architecture:OnlyRepositoryMayUseJsonbBuilder", leveloffset=+4]
 
 Outside the repositories only Jsonb annotations are
 allowed:
 
-include::jQAssistant:Rules[constraints="architecture:JsonbAnnotationEveryWhere", leveloffset=+1]
+include::jQAssistant:Rules[constraints="architecture:JsonbAnnotationEveryWhere", leveloffset=+4]
 
 === Tests
 
 we should have no deactivated tests:
 
-include::jQAssistant:Rules[constraints="architecture:NoDeactivatedTests", leveloffset=+1]
+include::jQAssistant:Rules[constraints="architecture:NoDeactivatedTests", leveloffset=+3]
 
 
 
