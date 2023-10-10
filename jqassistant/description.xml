@@ -21,27 +21,31 @@
         xsi:schemaLocation="http://schema.jqassistant.org/rule/v2.0 https://schema.jqassistant.org/rule/jqassistant-rule-v2.0.xsd">
 
     <group id="description">
-        <includeConcept refId="description:TypeDescription"/>
+        <includeConcept refId="description:ModuleDescription"/>
         <includeConcept refId="description:PackageDescription"/>
+        <includeConcept refId="description:TypeDescription"/>
     </group>
 
-    <concept id="description:TypeDescription">
-        <description>Types with `Description` annotation</description>
+    <concept id="description:ModuleDescription">
+        <requiresConcept refId="packages:Module"/>
+        <description>Modules with `Description` annotation</description>
         <cypher><![CDATA[
 MATCH
-  (type:Type) -[ab:ANNOTATED_BY]-> (annotation)
+  (module:Module) -[:CONTAINS]->(type)
+MATCH
+  (type:Interface) -[ab:ANNOTATED_BY]-> (annotation)
 MATCH
   (annotation) -[has:HAS]-> (value {name: "value"})
 MATCH
   (annotation) -[ofType:OF_TYPE]-> (annotationType {fqn: "com.framstag.acousticrules.annotation.Description"})
 WHERE
-  type.name <> "package-info"
+  type.name = "package-info"
 SET
-  type.description=value.value
+  module.description=value.value
 RETURN
-  type.fqn AS Type, type.description AS Description
+  module.fqn AS Module, module.description AS Description
 ORDER BY
-  type.fqn
+  module.fqn
     ]]></cypher>
     </concept>
 
@@ -64,6 +68,26 @@ RETURN
   package.fqn AS Package, package.description AS Description
 ORDER BY
   package.fqn
+    ]]></cypher>
+    </concept>
+
+    <concept id="description:TypeDescription">
+        <description>Types with `Description` annotation</description>
+        <cypher><![CDATA[
+MATCH
+  (type:Type) -[ab:ANNOTATED_BY]-> (annotation)
+MATCH
+  (annotation) -[has:HAS]-> (value {name: "value"})
+MATCH
+  (annotation) -[ofType:OF_TYPE]-> (annotationType {fqn: "com.framstag.acousticrules.annotation.Description"})
+WHERE
+  type.name <> "package-info"
+SET
+  type.description=value.value
+RETURN
+  type.fqn AS Type, type.description AS Description
+ORDER BY
+  type.fqn
     ]]></cypher>
     </concept>
 </jqassistant-rules>
