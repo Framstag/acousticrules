@@ -1,0 +1,9 @@
+=== Filters
+
+The following filter implementation exist:
+
+include::jQAssistant:Rules[concepts="filter:ListFilter", leveloffset=+1]
+
+This is the package content of the `filter` package:
+
+include::jQAssistant:Rules[concepts="filter:FilterPackage", leveloffset=+1]

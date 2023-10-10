@@ -1,0 +1,9 @@
+=== Selector
+
+The following selectors implementation exist:
+
+include::jQAssistant:Rules[concepts="selector:ListSelector", leveloffset=+1]
+
+This is the package content of the `selector` package:
+
+include::jQAssistant:Rules[concepts="selector:SelectorPackage", leveloffset=+1]

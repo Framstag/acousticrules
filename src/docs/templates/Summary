@@ -1,0 +1,14 @@
+[opts="header"]
+|===
+|Id |Type|Description |Severity |Status
+<#list concepts as concept>
+|<<jqassistant_${concept.id}>> |Concept|${concept.description} |${concept.severity}
+|[<#if concept.status == "SUCCESS">green<#elseif concept.status == "FAILURE">red<#elseif concept.status == "WARNING">yellow<#else>grey</#if>]#${concept.status}#
+</#list>
+<#list constraints as constraint>
+|<<jqassistant_${constraint.id}>> |Constraint|${constraint.description} |${constraint.severity}
+|[<#if constraint.status == "SUCCESS">green<#elseif constraint.status == "FAILURE">red<#elseif constraint.status == "WARNING">yellow<#else>grey</#if>]#${constraint.status}#
+</#list>
+|===
+
+Bla Bla Bla

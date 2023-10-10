@@ -386,6 +386,39 @@
         </executions>
       </plugin>
 
+      <plugin>
+        <groupId>org.asciidoctor</groupId>
+        <artifactId>asciidoctor-maven-plugin</artifactId>
+        <version>2.2.4</version>
+        <configuration>
+          <backend>html5</backend>
+          <attributes>
+            <jqassistant-report-path>
+              ${project.build.directory}/jqassistant/jqassistant-report.xml
+            </jqassistant-report-path>
+            <jqassistant-templates-path>
+              ${project.basedir}/src/docs/templates
+            </jqassistant-templates-path>
+          </attributes>
+        </configuration>
+        <executions>
+          <execution>
+            <id>output-html</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>process-asciidoc</goal>
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <!-- jQAssistant AsciidoctorJ Extension -->
+          <dependency>
+            <groupId>org.jqassistant.tooling.asciidoctorj</groupId>
+            <artifactId>jqassistant-asciidoctorj-extensions</artifactId>
+            <version>1.0.0</version>
+          </dependency>
+        </dependencies>
+      </plugin>
     </plugins>
   </build>
 

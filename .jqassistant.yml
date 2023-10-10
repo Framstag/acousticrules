@@ -1,9 +1,6 @@
 jqassistant:
   plugins:
     - group-id: org.jqassistant.plugin
-      artifact-id: jqassistant-asciidoc-report-plugin
-      version: 2.0.0
-    - group-id: org.jqassistant.plugin
       artifact-id: jqassistant-plantuml-report-plugin
       version: 2.0.1
   scan:
@@ -20,4 +17,4 @@ jqassistant:
       continue-on-failure: false
       create-archive: true
     groups:
-      - default
+      - AcousticRules

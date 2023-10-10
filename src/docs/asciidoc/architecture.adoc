@@ -1,0 +1,44 @@
+=== Cyclic Dependencies
+
+There should be no dependency cycles between packages:
+
+include::jQAssistant:Rules[constraints="architecture:NoCyclicPackageDependencies", leveloffset=+1]
+
+There must be no dependency cycles between artifacts:
+
+include::jQAssistant:Rules[constraints="architecture:NoCyclicArtefactDependencies", leveloffset=+1]
+
+There must be no dependency cycles between modules:
+
+include::jQAssistant:Rules[constraints="architecture:NoCyclicModuleDependencies", leveloffset=+1]
+
+=== Dependency Usage
+
+==== PicoCLI
+
+Only the `cli` module is allowed to have
+dependencies on `picocli`:
+
+include::jQAssistant:Rules[constraints="architecture:OnlyModuleCliDependesOnPicoCli", leveloffset=+1]
+
+==== Jsonb/yyson
+
+Only repository classes are allowed to use
+JsonbBuilder (and thus are allowed to load JSON files):
+
+include::jQAssistant:Rules[constraints="architecture:OnlyRepositoryMayUseJsonbBuilder", leveloffset=+1]
+
+Outside the repositories only Jsonb annotations are
+allowed:
+
+include::jQAssistant:Rules[constraints="architecture:JsonbAnnotationEveryWhere", leveloffset=+1]
+
+=== Tests
+
+we should have no deactivated tests:
+
+include::jQAssistant:Rules[constraints="architecture:NoDeactivatedTests", leveloffset=+1]
+
+
+
+
