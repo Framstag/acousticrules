@@ -1,30 +1,26 @@
 <#list constraints as rule>
-[#jqassistant_${rule.id}]
-= ${rule.id}
 ****
 <#if rule.status == "SUCCESS">
-TIP: ${rule.description} +
-Status: [green]#${rule.status}#, Severity: ${rule.severity}
+TIP: ${rule.id} +
+${rule.description}
 <#elseif rule.status == "WARNING">
-WARNING: ${rule.description} +
-Status: [yellow]#${rule.status}#, Severity: ${rule.severity}
+WARNING: ${rule.id} +
+${rule.description}
 <#elseif rule.status == "FAILURE">
-CAUTION: ${rule.description} +
-Status: [red]#${rule.status}#, Severity: ${rule.severity}
+CAUTION: ${rule.id} +
+${rule.description}
 <#else>
-NOTE: ${rule.description} +
-Status: [grey]#${rule.status}#, Severity: ${rule.severity}
+NOTE: ${rule.id} +
+${rule.description}
 </#if>
-
 <#if rule.hasReports>
 <#list rule.reports.links as labeledLink>
 link:${labeledLink.link}[${labeledLink.label}]
-
 </#list>
 <#list rule.reports.images as labeledImage>
-[caption="", title=${labeledImage.label}]
+.${rule.description}
+[#${rule.id},link=${labeledImage.link}]
 image::${labeledImage.link}[${labeledImage.label}]
-
 </#list>
 <#elseif rule.hasResult>
 [opts="header"]

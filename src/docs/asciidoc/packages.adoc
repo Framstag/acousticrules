@@ -2,13 +2,13 @@
 
 This is the package structure of AcousticRules:
 
-include::jQAssistant:Rules[concepts="packages:PackageStructure", leveloffset=+1]
+include::jQAssistant:Rules[concepts="packages:PackageStructure"]
 
 The following packages exists:
 
-include::jQAssistant:Rules[concepts="packages:PackageDocumentation", leveloffset=+1]
+include::jQAssistant:Rules[concepts="packages:PackageDocumentation"]
 
-include::jQAssistant:Rules[concepts="packages:Module", leveloffset=+1]
+include::jQAssistant:Rules[concepts="packages:Module"]
 
 Dependency graph between modules (including weight),
 excluding the following modules:
@@ -16,4 +16,4 @@ excluding the following modules:
 - exceptions
 - annotation
 
-include::jQAssistant:Rules[concepts="packages:ModuleDependencies", leveloffset=+1]
+include::jQAssistant:Rules[concepts="packages:ModuleDependencies"]

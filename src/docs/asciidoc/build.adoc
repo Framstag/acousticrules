@@ -1,10 +1,12 @@
-=== Maven Build dependencies
+== Build Information
 
-AcousticRules uses Maven as build tool.
+=== Project Version
 
-The current project version is:
+AcousticRules uses Maven as build tool. The current project version is:
 
-include::jQAssistant:Rules[concepts="build:ProjectVersion", leveloffset=+3]
+include::jQAssistant:Rules[concepts="build:ProjectVersion"]
+
+=== Maven Build Dependencies
 
 The main dependencies are as follows:
 
@@ -15,8 +17,8 @@ The main dependencies are as follows:
 
 This is the complete dependency tree:
 
-include::jQAssistant:Rules[concepts="build:MavenDependencies", leveloffset=+3]
+include::jQAssistant:Rules[concepts="build:MavenDependencies"]
 
-Currently the following dependency versions are used:
+Currently, the following dependency versions are used:
 
-include::jQAssistant:Rules[concepts="build:MavenDependenciesVersion", leveloffset=+3]
+include::jQAssistant:Rules[concepts="build:MavenDependenciesVersion"]

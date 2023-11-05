@@ -1,32 +1,24 @@
 <#list concepts as rule>
-[#jqassistant_${rule.id}]
-= ${rule.id} ZickeZacke
-****
-<#if rule.status == "SUCCESS">
-TIP: ${rule.description} +
-Status: [green]#${rule.status}#, Severity: ${rule.severity}
-<#elseif rule.status == "WARNING">
-WARNING: ${rule.description} +
-Status: [yellow]#${rule.status}#, Severity: ${rule.severity}
-<#elseif rule.status == "FAILURE">
-CAUTION: ${rule.description} +
-Status: [red]#${rule.status}#, Severity: ${rule.severity}
-<#else>
-NOTE: ${rule.description} +
-Status: [grey]#${rule.status}#, Severity: ${rule.severity}
-</#if>
-
 <#if rule.hasReports>
 <#list rule.reports.links as labeledLink>
 link:${labeledLink.link}[${labeledLink.label}]
-
 </#list>
 <#list rule.reports.images as labeledImage>
-[caption="", title=${labeledImage.label}]
+.${rule.description}
+[#${rule.id},link=${labeledImage.link}]
 image::${labeledImage.link}[${labeledImage.label}]
-
 </#list>
 <#elseif rule.hasResult>
+<#if rule.resultColumnKeys?size == 1 && rule.resultRows?size == 1 >
+****
+<#list rule.resultRows as row>
+<#list row as cell>
+${cell}
+</#list>
+</#list>
+****
+<#else>
+.${rule.description}
 [opts="header"]
 |===
 <#list rule.resultColumnKeys as key>|${key} </#list>
@@ -37,5 +29,6 @@ image::${labeledImage.link}[${labeledImage.label}]
 </#list>
 |===
 </#if>
-****
+</#if>
+(See <<jqassistant_${rule.id},${rule.id}>>)
 </#list>

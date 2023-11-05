@@ -1,26 +1,40 @@
+== Metrics
+
 In this chapter you can find some metrics regarding
 the code. LIst will return the first 20 hits.
 
+=== Method Count
+
 The classes with the most methods:
 
-include::jQAssistant:Rules[concepts="metrics:ClassesWithMostMethods", leveloffset=+1]
+include::jQAssistant:Rules[concepts="metrics:ClassesWithMostMethods"]
+
+=== Inheritance Hierarchy
 
 The classes with the deepest inheritance hierarchy:
 
-include::jQAssistant:Rules[concepts="metrics:ClassesWithDeepestInheritance", leveloffset=+1]
+include::jQAssistant:Rules[concepts="metrics:ClassesWithDeepestInheritance"]
+
+=== Class Relations
 
 The classes with the most relations:
 
-include::jQAssistant:Rules[concepts="metrics:ClassesWithMostRelations", leveloffset=+1]
+include::jQAssistant:Rules[concepts="metrics:ClassesWithMostRelations"]
+
+=== Parameter Count
 
 List of methods with the most parameter:
 
-include::jQAssistant:Rules[concepts="metrics:MethodsWithMostParameter", leveloffset=+1]
+include::jQAssistant:Rules[concepts="metrics:MethodsWithMostParameter"]
+
+=== LoC
 
 List of the classes with the most lines of code:
 
-include::jQAssistant:Rules[concepts="metrics:ClassesWithMostLoC", leveloffset=+1]
+include::jQAssistant:Rules[concepts="metrics:ClassesWithMostLoC"]
+
+=== Cyclomatic Complexity
 
 List of classes with the highest cyclomatic complexity:
 
-include::jQAssistant:Rules[concepts="metrics:ClassesWithMostCC", leveloffset=+1]
+include::jQAssistant:Rules[concepts="metrics:ClassesWithMostCC"]

@@ -2,8 +2,8 @@
 
 The following modifier implementation exist:
 
-include::jQAssistant:Rules[concepts="modifier:ListModifier", leveloffset=+1]
+include::jQAssistant:Rules[concepts="modifier:ListModifier"]
 
 This is the package content of the `modifier` package:
 
-include::jQAssistant:Rules[concepts="modifier:ModifierPackage", leveloffset=+1]
+include::jQAssistant:Rules[concepts="modifier:ModifierPackage"]

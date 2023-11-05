@@ -1,41 +1,46 @@
-[[acousticrules]]
-= AcousticRules
+= AcousticRules: Architecture Documentation
+:author: Tim Teulings
+:email: tim@framstag.com
+:description: Architecture documentation of AcousticRules using JQAssistant reporting functionality
+:toc: left
+:toc-title: Contents
+:toclevels: 4
+:sectlinks:
+:sectanchors:
+:sectnums:
+:optimize: screen
+:lang: en
+:attribute-missing: warn
+:keywords: JQAssistant, Sonar, SonarQube, Living Documentation
 
-== Index
+== Documentation Tooling
 
-[[default]]
-- <<acousticrules.build>>
-- <<acousticrules.description>>
-- <<acousticrules.packages>>
-- <<acousticrules.architecture>>
-- <<acousticrules.filterselectormodifier>>
-- <<acousticrules.logging>>
-- <<acousticrules.metrics>>
-- <<acousticrules.summary>>
+This project uses:
 
-[[acousticrules.build]]
-== Build Information
+[opts="header"]
+|===
+|Tool|Link|Description
+|JQAssistant|https://github.com/jqassistant|For generation reports and checks
+|Asciidoc|https://docs.asciidoctor.org/asciidoc/latest/|For this documentation
+|jqassistant-asciidoctorj-extensions|https://github.com/jqassistant-tooling/jqassistant-asciidoctorj-extensions|As postprocessor to integrate JQAssistant output to Asciidoc
+|Freemaker|https://freemarker.apache.org/docs/index.html|As template engine between JQAssistant and Asdciidoc
+|===
+
 
 include::build.adoc[]
 
-[[acousticrules.description]]
 == Description information
 
 include::description.adoc[]
 
-[[acousticrules.packages]]
 == Package Structure and Information
 
 include::packages.adoc[]
-
-[[acousticrules.architecture]]
-== Architecture Checks
 
 The following architecture checks are executed.
 
 include::architecture.adoc[]
 
-[[acousticrules.filterselectormodifier]]
 == Filter, Selector and Modifier
 
 AcousticRules uses selector, filter and modifier to
@@ -44,18 +49,9 @@ manipulate list of rules.
 include::filter.adoc[]
 include::selector.adoc[]
 include::modifier.adoc[]
-
-[[acousticrules.logging]]
-== Logging
-
 include::logging.adoc[]
-
-[[acousticrules.metrics]]
-== Metrics
-
 include::metrics.adoc[]
 
-[[acousticrules.summary]]
 == All Concepts and Constraints
 
-include::jQAssistant:Summary[constraints="architecture:*,build:*,description:*,filter:*,logging:*,metrics:*,modifier:*,packages:*,selector:*", concepts="architecture:*,build:*,description:*,filter:*,logging:*,metrics:*,modifier:*,packages:*,selector:*", leveloffset=+1]
+include::jQAssistant:Summary[constraints="architecture:*,build:*,description:*,filter:*,logging:*,metrics:*,modifier:*,packages:*,selector:*", concepts="architecture:*,build:*,description:*,filter:*,logging:*,metrics:*,modifier:*,packages:*,selector:*"]
