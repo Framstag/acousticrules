@@ -1,0 +1,5 @@
+== License Informationen
+
+=== Licenses of Dependencies
+
+include::jQAssistant:Rules[concepts="license:DependencyLicenses"]

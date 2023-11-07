@@ -20,16 +20,21 @@
         xmlns="http://schema.jqassistant.org/rule/v2.0"
         xsi:schemaLocation="http://schema.jqassistant.org/rule/v2.0 https://schema.jqassistant.org/rule/jqassistant-rule-v2.0.xsd">
 
-    <group id="AcousticRules">
-        <includeGroup refId="architecture"/>
-        <includeGroup refId="build"/>
-        <includeGroup refId="license"/>
-        <includeGroup refId="description"/>
-        <includeGroup refId="filter"/>
-        <includeGroup refId="logging"/>
-        <includeGroup refId="metrics"/>
-        <includeGroup refId="modifier"/>
-        <includeGroup refId="packages"/>
-        <includeGroup refId="selector"/>
+    <group id="license">
+        <includeConcept refId="license:DependencyLicenses"/>
     </group>
+
+    <concept id="license:DependencyLicenses">
+        <description>Build Dependency Tree</description>
+        <cypher><![CDATA[
+          MATCH
+            (c:Component)-[DECLARES_LICENSE]->(license)
+          WHERE
+            license.id is not null
+          RETURN
+            DISTINCT c.group as Group,c.name as Name, license.id as License
+          ORDER BY
+            Group, Name, License
+          ]]></cypher>
+    </concept>
 </jqassistant-rules>

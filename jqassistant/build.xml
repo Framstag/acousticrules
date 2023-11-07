@@ -63,9 +63,9 @@
       CASE artifact.type
         WHEN "jar" THEN "main"
         WHEN "test-jar" THEN "test"
-      END AS type
+      END AS Type
     ORDER BY
-      type, dependency.group, dependency.name
+      Type, dependency.group, dependency.name
     ]]></cypher>
     </concept>
 </jqassistant-rules>

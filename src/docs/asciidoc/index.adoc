@@ -33,6 +33,8 @@ include::build.adoc[]
 
 include::description.adoc[]
 
+include::licenses.adoc[]
+
 == Package Structure and Information
 
 include::packages.adoc[]
@@ -49,7 +51,12 @@ manipulate list of rules.
 include::filter.adoc[]
 include::selector.adoc[]
 include::modifier.adoc[]
+
+== Logging
+
 include::logging.adoc[]
+
+
 include::metrics.adoc[]
 
 == All Concepts and Constraints

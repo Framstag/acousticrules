@@ -1,6 +1,3 @@
-== Logging
-
 The following rules have been defined regarding logging:
 
 include::jQAssistant:Rules[constraints="logging:*"]
-
