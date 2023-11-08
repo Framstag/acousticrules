@@ -381,6 +381,9 @@
                 <goals>
                     <goal>makeAggregateBom</goal>
                 </goals>
+                <configuration>
+                  <projectType>application</projectType>
+                </configuration>
             </execution>
         </executions>
     </plugin>
@@ -407,6 +410,9 @@
         <artifactId>asciidoctor-maven-plugin</artifactId>
         <version>2.2.4</version>
         <configuration>
+          <requires>
+            <require>asciidoctor-diagram</require>
+        </requires>
           <backend>html5</backend>
           <attributes>
             <headerFooter>true</headerFooter>
@@ -437,6 +443,18 @@
             <groupId>org.jqassistant.tooling.asciidoctorj</groupId>
             <artifactId>jqassistant-asciidoctorj-extensions</artifactId>
             <version>1.0.1</version>
+          </dependency>
+
+          <!-- Diagram support -->
+          <dependency>
+            <groupId>org.asciidoctor</groupId>
+            <artifactId>asciidoctorj-diagram</artifactId>
+            <version>2.2.13</version>
+          </dependency>
+          <dependency>
+            <groupId>org.asciidoctor</groupId>
+            <artifactId>asciidoctorj-diagram-plantuml</artifactId>
+            <version>1.2023.10</version>
           </dependency>
         </dependencies>
       </plugin>

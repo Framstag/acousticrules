@@ -20,17 +20,20 @@
         xmlns="http://schema.jqassistant.org/rule/v2.0"
         xsi:schemaLocation="http://schema.jqassistant.org/rule/v2.0 https://schema.jqassistant.org/rule/jqassistant-rule-v2.0.xsd">
 
-    <group id="AcousticRules">
-        <includeGroup refId="architecture"/>
-        <includeGroup refId="c4"/>
-        <includeGroup refId="build"/>
-        <includeGroup refId="license"/>
-        <includeGroup refId="description"/>
-        <includeGroup refId="filter"/>
-        <includeGroup refId="logging"/>
-        <includeGroup refId="metrics"/>
-        <includeGroup refId="modifier"/>
-        <includeGroup refId="packages"/>
-        <includeGroup refId="selector"/>
+    <group id="c4">
+        <includeConstraint refId="c4:isInComponentDiagram"/>
     </group>
+
+    <constraint id="c4:isInComponentDiagram" severity="minor">
+      <requiresConcept refId="packages:Module" />
+      <description>Check if Module is represented in component diagram</description>
+        <cypher><![CDATA[
+          MATCH
+            (m:Module)
+          WHERE
+            NOT EXISTS {MATCH (c:C4:Component) WHERE toLower(c.name)=m.name}
+          RETURN
+            m.fqn AS Module
+        ]]></cypher>
+    </constraint>
 </jqassistant-rules>

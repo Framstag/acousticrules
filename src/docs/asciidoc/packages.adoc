@@ -17,3 +17,16 @@ excluding the following modules:
 - annotation
 
 include::jQAssistant:Rules[concepts="packages:ModuleDependencies"]
+
+=== C4 Component Diagram
+
+Regarding module structure we have created the following C4 component diagram:
+
+[plantuml]
+----
+include::../c4/Component_Diagram.puml[]
+----
+
+The following modules are currently **not** part of the C4 component diagram:
+
+include::jQAssistant:Rules[constraints="c4:isInComponentDiagram"]

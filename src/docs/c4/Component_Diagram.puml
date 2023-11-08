@@ -1,0 +1,18 @@
+@startuml "Component Diagram"
+!include <C4/C4_Component>
+
+Container_Boundary(app, "AcousticRules") {
+    Component(cli, "CLI", "Package", "Parsing of command line arguments and call of use cases")
+
+    Component(startup, "Startup", "Usecase", "Implementation of startup sequence")
+    Component(rulesToGroup, "RulesToGroup", "Usecase", "Splits the rules to thematic groups")
+    Component(duplication, "Duplication", "Usecase", "Checks for rules in multiple groups")
+    Component(qualityProfile, "QualityProfile", "Usecase", "Generates a quality profile")
+
+    Rel(cli, startup, "Uses")
+    Rel(cli, rulesToGroup, "Uses")
+    Rel(cli, duplication, "Uses")
+    Rel(cli, qualityProfile, "Uses")
+}
+
+@enduml
