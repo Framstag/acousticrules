@@ -1,3 +1,5 @@
+
+
 jqassistant:
   plugins:
     - group-id: org.jqassistant.plugin
@@ -9,6 +11,7 @@ jqassistant:
     - group-id: org.jqassistant.plugin
       artifact-id: jqassistant-c4-plugin
       version: 2.0.0
+
   scan:
     include:
       files:
@@ -20,6 +23,8 @@ jqassistant:
         - cyclonedx:sbom::target/bom.json
         - src/docs/c4/
   analyze:
+    rule-parameters:
+      rootPackage: com.framstag.acousticrules
     report:
       warn-on-severity: MINOR
       fail-on-severity: BLOCKER

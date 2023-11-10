@@ -22,3 +22,9 @@ include::jQAssistant:Rules[concepts="build:MavenDependencies"]
 Currently, the following dependency versions are used:
 
 include::jQAssistant:Rules[concepts="build:MavenDependenciesVersion"]
+
+=== Status of Tests
+
+All Tests should be successful (no errors, no disabled tests)
+
+include::jQAssistant:Rules[constraints="build:AllTestsSuccessful"]

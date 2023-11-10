@@ -1,3 +1,9 @@
+=== Overall Structure
+
+All code is located under the root package `com.framstag.acousticrules`.
+
+include::jQAssistant:Rules[constraints="package:RootPackage"]
+
 === List of Packages
 
 This is the package structure of AcousticRules:

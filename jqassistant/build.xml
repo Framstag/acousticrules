@@ -24,6 +24,7 @@
         <includeConcept refId="build:MavenDependencies"/>
         <includeConcept refId="build:ProjectVersion"/>
         <includeConcept refId="build:MavenDependenciesVersion"/>
+        <includeConstraint refId="build:AllTestsSuccessful"/>
     </group>
 
     <concept id="build:MavenDependencies">
@@ -68,4 +69,16 @@
       Type, dependency.group, dependency.name
     ]]></cypher>
     </concept>
+
+    <constraint id="build:AllTestsSuccessful">
+      <description>All tests are successful</description>
+      <cypher><![CDATA[
+        MATCH
+          (s:JUnit:TestSuite)-[CONTAINS]->(t:JUnit:TestCase)
+        WHERE
+          t.result <> "SUCCESS"
+        RETURN
+          s.name,t.name,t.result
+  ]]></cypher>
+      </constraint>
 </jqassistant-rules>

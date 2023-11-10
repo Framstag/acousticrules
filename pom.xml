@@ -405,6 +405,8 @@
         </executions>
       </plugin>
 
+      <!-- Generation of AsciiDoc documentation using jQAssistant results -->
+
       <plugin>
         <groupId>org.asciidoctor</groupId>
         <artifactId>asciidoctor-maven-plugin</artifactId>
