@@ -1,0 +1,5 @@
+We require all tests to be successful:
+
+All Tests should be successful (no errors, no disabled tests)
+
+include::jQAssistant:Rules[constraints="framstag:junit:AllTestsSuccessful"]

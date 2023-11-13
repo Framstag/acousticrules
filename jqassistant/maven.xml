@@ -1,0 +1,155 @@
+<!--
+  ~ AcousticRuler
+  ~ Copyright 2023 Tim Teulings
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<jqassistant-rules
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://schema.jqassistant.org/rule/v2.0"
+        xsi:schemaLocation="http://schema.jqassistant.org/rule/v2.0 https://schema.jqassistant.org/rule/jqassistant-rule-v2.0.xsd">
+
+    <group id="framstag:maven">
+        <includeConcept refId="framstag:maven:ProjectCoordinates"/>
+        <includeConcept refId="framstag:maven:ProjectVersion"/>
+        <includeConcept refId="framstag:maven:ProjectDescription"/>
+        <includeConcept refId="framstag:maven:MavenMainDependencies"/>
+        <includeConcept refId="framstag:maven:MavenTestDependencies"/>
+        <includeConcept refId="framstag:maven:MavenJarDependenciesVersion"/>
+        <includeConcept refId="framstag:maven:MavenTestJarDependenciesVersion"/>
+
+        <includeConstraint refId="framstag:maven:IsMavenProject"/>
+    </group>
+
+    <constraint id="framstag:maven:IsMavenProject" severity="blocker">
+        <description>Check, if there is a maven project</description>
+        <cypher><![CDATA[
+            MATCH
+              (project:Maven:Project)
+            RETURN
+              project as Project
+     ]]></cypher>
+        <verify>
+            <rowCount min="1" max="1"/>
+        </verify>
+    </constraint>
+
+    <concept id="framstag:maven:ProjectCoordinates">
+        <description>Return the current project coordinates</description>
+        <cypher><![CDATA[
+            MATCH
+              (project:Maven:Project) -[HAS_EFFECTIVE_MODEL]-> (pom:Effective:Maven:Pom)
+            RETURN
+              pom.groupId As GroupId, pom.artifactId AS ArtifactId, pom.packaging AS Packaging
+    ]]></cypher>
+    </concept>
+
+    <concept id="framstag:maven:ProjectVersion">
+        <description>Return the current project version</description>
+        <cypher><![CDATA[
+            MATCH
+              (project:Maven:Project) -[HAS_EFFECTIVE_MODEL]-> (pom:Effective:Maven:Pom)
+            RETURN
+              pom.version
+    ]]></cypher>
+    </concept>
+
+    <concept id="framstag:maven:ProjectDescription">
+        <description>Return the project description</description>
+        <cypher><![CDATA[
+            MATCH
+              (project:Maven:Project) -[HAS_EFFECTIVE_MODEL]-> (pom:Effective:Maven:Pom)
+            RETURN
+              pom.description AS Description
+    ]]></cypher>
+    </concept>
+
+    <concept id="framstag:maven:MavenMainDependencies">
+        <requiresConcept refId="java:PackageDependency" />
+        <description>Build Dependency Tree</description>
+        <cypher><![CDATA[
+            MATCH
+              (pom:Pom:Xml)
+              -[declares:DECLARES_DEPENDENCY]->(dependency:Dependency)
+              -[toArtifact:TO_ARTIFACT]->(artifact:Artifact)
+            WHERE
+              dependency.scope IS NULL OR dependency.scope <> "test"
+            RETURN *
+        ]]></cypher>
+        <report type="plantuml-component-diagram"/>
+    </concept>
+
+    <concept id="framstag:maven:MavenTestDependencies">
+        <requiresConcept refId="java:PackageDependency" />
+        <description>Build Dependency Tree</description>
+        <cypher><![CDATA[
+            MATCH
+              (pom:Pom:Xml)
+              -[declares:DECLARES_DEPENDENCY]->(dependency:Dependency)
+              -[toArtifact:TO_ARTIFACT]->(artifact:Artifact)
+            WHERE
+              dependency.scope = "test"
+            RETURN *
+        ]]></cypher>
+        <report type="plantuml-component-diagram"/>
+    </concept>
+
+    <concept id="framstag:maven:MavenJarDependenciesVersion">
+        <description>Return for all jars the dependencies and their version</description>
+        <cypher><![CDATA[
+            MATCH
+              (project:Maven:Project)
+              -[:CREATES]->(artifact:Artifact)
+              -[:DEPENDS_ON*]->(dependency:Artifact)
+            WHERE
+              artifact.type = "jar"
+            RETURN DISTINCT
+              artifact.group AS Artifact_Group,
+              artifact.name AS Artifact_Name,
+              dependency.group AS Dependency_Group,
+              dependency.name AS Dependency_Name,
+              dependency.version AS Dependency_Version
+            ORDER BY
+              artifact.group,
+              artifact.name,
+              dependency.group,
+              dependency.name,
+              dependency.version
+        ]]></cypher>
+    </concept>
+
+    <concept id="framstag:maven:MavenTestJarDependenciesVersion">
+        <description>Return for all test jars the dependencies and their version</description>
+        <cypher><![CDATA[
+            MATCH
+              (project:Maven:Project)
+              -[:CREATES]->(artifact:Artifact)
+              -[:DEPENDS_ON*]->(dependency:Artifact)
+            WHERE
+              artifact.type = "test-jar"
+            RETURN DISTINCT
+              artifact.group AS Artifact_Group,
+              artifact.name AS Artifact_Name,
+              dependency.group AS Dependency_Group,
+              dependency.name AS Dependency_Name,
+              dependency.version AS Dependency_Version
+            ORDER BY
+              artifact.group,
+              artifact.name,
+              dependency.group,
+              dependency.name,
+              dependency.version
+    ]]></cypher>
+    </concept>
+</jqassistant-rules>

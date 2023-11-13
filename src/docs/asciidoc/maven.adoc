@@ -1,0 +1,46 @@
+== Build Information
+
+=== Project Information
+
+The project uses Maven as build tool.
+
+include::jQAssistant:Rules[constraints="framstag:maven:IsMavenProject"]
+
+The project has the following Maven Coordinates:
+
+include::jQAssistant:Rules[concepts="framstag:maven:ProjectCoordinates"]
+
+The current project version is:
+
+include::jQAssistant:Rules[concepts="framstag:maven:ProjectVersion"]
+
+The project description is:
+
+include::jQAssistant:Rules[concepts="framstag:maven:ProjectDescription"]
+
+=== Maven Build Dependencies
+
+The main dependencies are as follows:
+
+- A JSON parser (yyson)
+- A command line argument parser (picocli)
+- A Logging framework (SLF4J + logback)
+- A Unit Test framework (JUnit 5)
+
+This is the complete tree for the explicitly stated **main** dependencies:
+
+include::jQAssistant:Rules[concepts="framstag:maven:MavenMainDependencies"]
+
+This the same for the explicitly stated **test** dependencies:
+
+include::jQAssistant:Rules[concepts="framstag:maven:MavenTestDependencies"]
+
+=== Dependency versions
+
+Currently, the following **main** dependencies are used (direct and transitive):
+
+include::jQAssistant:Rules[concepts="framstag:maven:MavenJarDependenciesVersion"]
+
+Currently, the following **test** dependencies are used (direct and transitive):
+
+include::jQAssistant:Rules[concepts="framstag:maven:MavenTestJarDependenciesVersion"]
