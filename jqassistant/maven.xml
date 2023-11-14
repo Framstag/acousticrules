@@ -24,12 +24,16 @@
         <includeConcept refId="framstag:maven:ProjectCoordinates"/>
         <includeConcept refId="framstag:maven:ProjectVersion"/>
         <includeConcept refId="framstag:maven:ProjectDescription"/>
-        <includeConcept refId="framstag:maven:MavenMainDependencies"/>
-        <includeConcept refId="framstag:maven:MavenTestDependencies"/>
-        <includeConcept refId="framstag:maven:MavenJarDependenciesVersion"/>
-        <includeConcept refId="framstag:maven:MavenTestJarDependenciesVersion"/>
+        <includeConcept refId="framstag:maven:Licenses"/>
+        <includeConcept refId="framstag:maven:CreatedArtifacts"/>
+        <includeConcept refId="framstag:maven:MainDependencies"/>
+        <includeConcept refId="framstag:maven:TestDependencies"/>
+        <includeConcept refId="framstag:maven:JarDependenciesVersion"/>
+        <includeConcept refId="framstag:maven:TestJarDependenciesVersion"/>
 
         <includeConstraint refId="framstag:maven:IsMavenProject"/>
+        <includeConstraint refId="framstag:maven:HasLicense"/>
+        <includeConstraint refId="framstag:maven:AllPluginsHaveExplicitVersion"/>
     </group>
 
     <constraint id="framstag:maven:IsMavenProject" severity="blocker">
@@ -75,7 +79,68 @@
     ]]></cypher>
     </concept>
 
-    <concept id="framstag:maven:MavenMainDependencies">
+    <constraint id="framstag:maven:HasLicense">
+        <description>HAs at least one license</description>
+        <cypher><![CDATA[
+            MATCH
+              (project:Project:Maven)
+              -[HAS_EFFECTIVE_MODEL]->(pom:Effective:Pom:Maven)
+              -[USES_LICENSE]->(license:License:Maven)
+            RETURN
+              license
+        ]]></cypher>
+        <verify>
+            <rowCount min="1"/>
+        </verify>
+    </constraint>
+
+    <concept id="framstag:maven:Licenses">
+        <description>List all licenses</description>
+        <cypher><![CDATA[
+            MATCH
+              (project:Project:Maven)
+              -[HAS_EFFECTIVE_MODEL]->(pom:Effective:Pom:Maven)
+              -[USES_LICENSE]->(license:License:Maven)
+            RETURN
+              license.name
+        ]]></cypher>
+    </concept>
+
+    <constraint id="framstag:maven:AllPluginsHaveExplicitVersion">
+        <description>Assure that all plugins have an explicit version</description>
+        <cypher><![CDATA[
+            MATCH
+              (project:Project:Maven)
+              -[HAS_MODEL]->(pom:Pom:Maven)
+              -[USES_PLUGIN]->(plugin:Plugin:Maven)
+              -[IS_ARTIFACT]->(artifact:Artifact:Maven)
+            WHERE
+              artifact.version IS NULL OR
+              artifact.version = "LATEST" OR
+              artifact.version = "RELEASE" OR
+              artifact.version ENDS WITH "SNAPSHOT"
+            RETURN artifact
+        ]]></cypher>
+    </constraint>
+
+    <concept id="framstag:maven:CreatedArtifacts">
+        <description>Return all created artifacts</description>
+        <cypher><![CDATA[
+            MATCH
+              (project:Maven:Project)
+              -[:CREATES]->(artifact:Artifact)
+            RETURN DISTINCT
+              artifact.group AS Group,
+              artifact.name AS Name,
+              artifact.type AS Type
+            ORDER BY
+              artifact.group,
+              artifact.name,
+              artifact.type
+        ]]></cypher>
+    </concept>
+
+    <concept id="framstag:maven:MainDependencies">
         <requiresConcept refId="java:PackageDependency" />
         <description>Build Dependency Tree</description>
         <cypher><![CDATA[
@@ -90,7 +155,7 @@
         <report type="plantuml-component-diagram"/>
     </concept>
 
-    <concept id="framstag:maven:MavenTestDependencies">
+    <concept id="framstag:maven:TestDependencies">
         <requiresConcept refId="java:PackageDependency" />
         <description>Build Dependency Tree</description>
         <cypher><![CDATA[
@@ -105,7 +170,7 @@
         <report type="plantuml-component-diagram"/>
     </concept>
 
-    <concept id="framstag:maven:MavenJarDependenciesVersion">
+    <concept id="framstag:maven:JarDependenciesVersion">
         <description>Return for all jars the dependencies and their version</description>
         <cypher><![CDATA[
             MATCH
@@ -129,7 +194,7 @@
         ]]></cypher>
     </concept>
 
-    <concept id="framstag:maven:MavenTestJarDependenciesVersion">
+    <concept id="framstag:maven:TestJarDependenciesVersion">
         <description>Return for all test jars the dependencies and their version</description>
         <cypher><![CDATA[
             MATCH

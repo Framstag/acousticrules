@@ -18,6 +18,22 @@ The project description is:
 
 include::jQAssistant:Rules[concepts="framstag:maven:ProjectDescription"]
 
+The project declares the following licenses:
+
+include::jQAssistant:Rules[constraints="framstag:maven:HasLicense"]
+
+include::jQAssistant:Rules[concepts="framstag:maven:Licenses"]
+
+=== Wellformed Maven Project
+
+include::jQAssistant:Rules[constraints="framstag:maven:AllPluginsHaveExplicitVersion"]
+
+=== Build artifacts
+
+The build creates the following artifacts:
+
+include::jQAssistant:Rules[concepts="framstag:maven:CreatedArtifacts"]
+
 === Maven Build Dependencies
 
 The main dependencies are as follows:
@@ -29,18 +45,18 @@ The main dependencies are as follows:
 
 This is the complete tree for the explicitly stated **main** dependencies:
 
-include::jQAssistant:Rules[concepts="framstag:maven:MavenMainDependencies"]
+include::jQAssistant:Rules[concepts="framstag:maven:MainDependencies"]
 
 This the same for the explicitly stated **test** dependencies:
 
-include::jQAssistant:Rules[concepts="framstag:maven:MavenTestDependencies"]
+include::jQAssistant:Rules[concepts="framstag:maven:TestDependencies"]
 
 === Dependency versions
 
 Currently, the following **main** dependencies are used (direct and transitive):
 
-include::jQAssistant:Rules[concepts="framstag:maven:MavenJarDependenciesVersion"]
+include::jQAssistant:Rules[concepts="framstag:maven:JarDependenciesVersion"]
 
 Currently, the following **test** dependencies are used (direct and transitive):
 
-include::jQAssistant:Rules[concepts="framstag:maven:MavenTestJarDependenciesVersion"]
+include::jQAssistant:Rules[concepts="framstag:maven:TestJarDependenciesVersion"]
