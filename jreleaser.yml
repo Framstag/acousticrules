@@ -29,7 +29,7 @@ catalog:
   sbom:
     cyclonedx:
       acousticrules:
-       active: ALWAYS
+        active: ALWAYS
 
 release:
   github:
