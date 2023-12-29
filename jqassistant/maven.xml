@@ -80,7 +80,7 @@
     </concept>
 
     <constraint id="framstag:maven:HasLicense">
-        <description>HAs at least one license</description>
+        <description>Has at least one license</description>
         <cypher><![CDATA[
             MATCH
               (project:Project:Maven)

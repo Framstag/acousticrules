@@ -20,12 +20,11 @@ This project uses:
 [opts="header"]
 |===
 |Tool|Link|Description
-|JQAssistant|https://github.com/jqassistant|For generation reports and checks
+|jQAssistant|https://github.com/jqassistant|For generation reports and checks
 |Asciidoc|https://docs.asciidoctor.org/asciidoc/latest/|For this documentation
-|jqassistant-asciidoctorj-extensions|https://github.com/jqassistant-tooling/jqassistant-asciidoctorj-extensions|As postprocessor to integrate JQAssistant output to Asciidoc
-|Freemaker|https://freemarker.apache.org/docs/index.html|As template engine between JQAssistant and Asdciidoc
+|jqassistant-asciidoctorj-extensions|https://github.com/jqassistant-tooling/jqassistant-asciidoctorj-extensions|As postprocessor to integrate jQAssistant output to Asciidoc
+|Freemaker|https://freemarker.apache.org/docs/index.html|As template engine between jQAssistant and Asdciidoc
 |===
-
 
 include::maven.adoc[]
 
