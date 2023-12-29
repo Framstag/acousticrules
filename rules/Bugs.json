@@ -17,13 +17,15 @@
         "denial-of-service",
         "lock-in",
         "multi-threading",
-        "unpredictable"
+        "unpredictable",
+        "redundant"
       ]
     },
     {
       "@processor": "SelectWithKey",
       "keys": [
-        "java:S5164"
+        "java:S5164",
+        "cpp:S5262"
       ]
     }
   ],

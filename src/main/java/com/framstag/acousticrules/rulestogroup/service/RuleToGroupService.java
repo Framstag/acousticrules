@@ -35,28 +35,6 @@ import java.util.Set;
 public class RuleToGroupService {
   private static final Logger log = LoggerFactory.getLogger(RuleToGroupService.class);
 
-  public Map<String, RuleDefinitionGroup> processRulesToGroups(RuleDefinitionGroup allRules,
-                                                               Iterable<ProcessingGroup> processingGroups) {
-    Map<String, RuleDefinitionGroup> rulesByGroup = new HashMap<>();
-
-    for (var group : processingGroups) {
-      log.info("Processing group '{}'...", group.getName());
-      var ruleDefinitionGroup = RuleDefinitionGroup.fromProcessingGroup(group);
-      ruleDefinitionGroup = selectRules(ruleDefinitionGroup, allRules, group.getSelectors());
-
-      if (ruleDefinitionGroup.isEmpty()) {
-        log.info("Group has no rules, skipping...");
-      } else {
-        ruleDefinitionGroup = filterRules(ruleDefinitionGroup, group.getFilters());
-        logRules(ruleDefinitionGroup);
-      }
-
-      rulesByGroup.put(group.getName(), ruleDefinitionGroup);
-    }
-
-    return rulesByGroup;
-  }
-
   private static RuleDefinitionGroup selectRules(RuleDefinitionGroup processingGroup,
                                           RuleDefinitionGroup allRules,
                                           List<Selector> selectors) {
@@ -117,6 +95,51 @@ public class RuleToGroupService {
         rule.getName(),
         String.join(", ", rule.getSysTags()));
     }
+  }
+
+  public Map<String, RuleDefinitionGroup> processRulesToGroups(RuleDefinitionGroup allRules,
+                                                               Iterable<ProcessingGroup> processingGroups) {
+    var allRulesSet = Set.copyOf(allRules.getRules());
+    var usedRulesSet = new HashSet<RuleDefinition>();
+    var unassignedRulesSet = new HashSet<RuleDefinition>();
+
+    Map<String, RuleDefinitionGroup> rulesByGroup = new HashMap<>();
+
+    for (var group : processingGroups) {
+      log.info("Processing group '{}'...", group.getName());
+      var ruleDefinitionGroup = RuleDefinitionGroup.fromProcessingGroup(group);
+      ruleDefinitionGroup = selectRules(ruleDefinitionGroup, allRules, group.getSelectors());
+
+      if (ruleDefinitionGroup.isEmpty()) {
+        log.info("Group has no rules, skipping...");
+      } else {
+        ruleDefinitionGroup = filterRules(ruleDefinitionGroup, group.getFilters());
+        logRules(ruleDefinitionGroup);
+        usedRulesSet.addAll(ruleDefinitionGroup.getRules());
+      }
+
+      rulesByGroup.put(group.getName(), ruleDefinitionGroup);
+    }
+
+    for (var rule : allRulesSet) {
+      if (!usedRulesSet.contains(rule)) {
+        unassignedRulesSet.add(rule);
+      }
+    }
+
+    if (!unassignedRulesSet.isEmpty()) {
+      log.warn("We have {} rules, that are not assigned to any group",unassignedRulesSet.size());
+      for (var rule : unassignedRulesSet) {
+        log.atInfo().log(" * {} {} {} {} ({})",
+                rule.getKey(),
+                rule.getSeverity(),
+                rule.getType(),
+                rule.getName(),
+                String.join(", ", rule.getSysTags()));
+      }
+    }
+
+    return rulesByGroup;
   }
 
 }

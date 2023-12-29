@@ -1,5 +1,21 @@
 # AcousticRules
 
+## Attention
+
+Some of the mechanism likely have to get adapted in the future, since SonarQube
+deprecated some of the feature we are currently rely on.
+
+See [Documentation regarding issues and their attributes](https://docs.sonarsource.com/sonarqube/latest/user-guide/issues/). Note especially deprecations regarding
+
+- issue types
+- issue severity
+- Categorisation regarding [Clean Code](https://docs.sonarsource.com/sonarqube/latest/user-guide/clean-code/)
+
+I also see, that there are some rules that have no tags, while may make them fall through the selection process, too.
+
+Since the new clean code based attributes are also available in the downloaded
+rule definition data, we can extend AcousticRules to have such information also available and add additional filter criteria to group rules based on this information, too. 
+
 ## What is AcousticRules?
 
 It a simple application that works on an exported sonar ruleset
@@ -172,7 +188,7 @@ where:
 
 | Placeholder  | Meaning                                                        |
 |--------------|----------------------------------------------------------------|
-| user_token   | Sonar user token for authentication                            |
+| user_token   | **Sonar** user token for authentication                        |
 | organisation | Name of the organisation the user belongs to (e.g. `framstag`) |
  | language     | name of the language, see below                                |
 | page         | Number of page                                                 |

@@ -38,6 +38,7 @@
 -r rules/CPPCoreGuidelines.json
 -r rules/Misra.json
 -r rules/MisraCPP2008.json
+-r rules/MisraCPP2023.json
 
 -r rules/AndroidImprovements.json
 -r rules/AndroidBugs.json

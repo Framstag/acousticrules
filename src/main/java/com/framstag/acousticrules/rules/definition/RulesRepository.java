@@ -33,6 +33,20 @@ import java.util.List;
 public class RulesRepository {
   private static final Logger log = LoggerFactory.getLogger(RulesRepository.class);
 
+  private static RulesDownloadFile loadRulesDownloadFile(Path filename) throws ParameterException {
+    var jsonbConfig = new JsonbConfig();
+
+    log.info("Loading rules download file '{}'", filename);
+    try (var jsonb = JsonbBuilder.create(jsonbConfig)) {
+      var configFileContent = Files.readString(filename);
+      var ruleSet = jsonb.fromJson(configFileContent, RulesDownloadFile.class);
+      log.info("{} rule(s) loaded.", ruleSet.getRuleCount());
+      return ruleSet;
+    } catch (Exception e) {
+      throw new ParameterException("Cannot load rules '%1$s'".formatted(filename), e);
+    }
+  }
+
   public RuleDefinitionList loadRulesFromRulesDownloadFiles(Iterable<Path> arguments) throws ParameterException {
     List<RulesDownloadFile> files = new LinkedList<>();
 
@@ -45,19 +59,5 @@ public class RulesRepository {
     log.info("{} rules over all files loaded.", definitionList.size());
 
     return definitionList;
-  }
-
-  private static RulesDownloadFile loadRulesDownloadFile(Path filename) throws ParameterException {
-    var jsonbConfig = new JsonbConfig();
-
-    log.info("Loading rules download file '{}'", filename);
-    try (var jsonb = JsonbBuilder.create(jsonbConfig)) {
-      var configFileContent = Files.readString(filename);
-      var ruleSet = jsonb.fromJson(configFileContent, RulesDownloadFile.class);
-      log.info("{} rule(s) loaded.", ruleSet.getRuleCount());
-      return ruleSet;
-    } catch (Exception e) {
-      throw new ParameterException("Cannot load rules", e);
-    }
   }
 }

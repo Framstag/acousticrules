@@ -299,6 +299,9 @@
       ]
     },
     {
+      "name": "Misra C++ 2023"
+    },
+    {
       "name": "Bugs",
       "modifier": [
         {

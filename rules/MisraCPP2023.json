@@ -1,0 +1,23 @@
+{
+  "name": "Misra C++ 2023",
+  "selectors": [
+    {
+      "@processor": "SelectWithTag",
+      "tags": [
+        "misra-c++2023"
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "@processor": "DropWithTag",
+      "tags": [
+        "since-c++11",
+        "cwe"
+      ]
+    },
+    {
+      "@processor": "RemoveDeprecated"
+    }
+  ]
+}
