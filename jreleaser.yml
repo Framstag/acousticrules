@@ -28,7 +28,6 @@ project:
 catalog:
   sbom:
     cyclonedx:
-      acousticrules:
         active: ALWAYS
 
 release:
