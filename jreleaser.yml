@@ -26,12 +26,9 @@ project:
     label: latest
 
 catalog:
-  active: ALWAYS
   sbom:
-    cyclonedx:
+    acousticrules:
       active: ALWAYS
-      pack:
-        enabled: true
 
 release:
   github:
