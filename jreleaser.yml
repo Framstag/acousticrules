@@ -27,8 +27,9 @@ project:
 
 catalog:
   sbom:
-    acousticrules:
-      active: ALWAYS
+    cyclonedx:
+      acousticrules:
+       active: ALWAYS
 
 release:
   github:
