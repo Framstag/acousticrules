@@ -31,8 +31,6 @@ catalog:
     active: ALWAYS
     cyclonedx:
       active: ALWAYS
-      app:
-        active: ALWAYS
 
 
 release:
