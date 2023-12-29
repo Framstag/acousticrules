@@ -28,6 +28,7 @@ project:
 catalog:
   active: ALWAYS
   sbom:
+    active: ALWAYS
     cyclonedx:
       active: ALWAYS
 
